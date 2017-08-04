@@ -1,0 +1,18 @@
+Package: rWind
+Encoding: UTF-8
+Type: Package
+Title: Download, Edit and Transform Wind Data from GFS
+Version: 0.2.0
+Date: 2017-06-13
+BugReports: http://allthiswasfield.blogspot.com.es/
+Author: Javier Fernández-López <jflopez@rjb.csic.es>
+Maintainer: Javier Fernández-López <jflopez@rjb.csic.es>
+Description: Tools for downloading, editing and transforming wind data from Global Forecast System (GFS, see <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>) of the USA's National Weather Service (NWS, see <http://www.weather.gov/>).
+URL: http://allthiswasfield.blogspot.com.es/
+License: GPL (>=3)
+LazyData: TRUE
+Imports:raster, shape, gdistance, Matrix
+Packaged: 2016-11-24 11:37:02 UTC; javi
+Depends: R (>= 2.10)
+NeedsCompilation: no
+Repository: none

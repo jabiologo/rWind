@@ -1,0 +1,72 @@
+\name{wind.dl}
+\alias{wind.dl}
+
+\title{
+Wind-data download
+}
+\description{
+wind.dl downloads wind data from the Global Forecast System (GFS) of the USA's National Weather Service (NWS) (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs). Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km), and wind is calculated for Earth surface, at 10 m. More metadata information: http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+}
+\usage{
+wind.dl(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2, type="read-data")
+}
+\arguments{
+  \item{yyyy}{
+Selected year from 2011 to current.
+}
+  \item{mm}{
+ Selected month
+}
+  \item{dd}{
+ Selected day
+}
+  \item{tt}{
+ Selected time. There are currently several options at the GFS database: 00 - 03 - 06 - 09 - 12 - 15 - 18 - 21
+}
+  \item{lon1}{
+ Western longitude
+}
+  \item{lon2}{
+ Eastern longitude
+}
+  \item{lat1}{
+ Southern latitude
+}
+  \item{lat2}{
+ Northern latitude
+}
+\item{type}{
+ Output type. "read-data" is selected by default, creating an R object. If you choose "csv", wind.dl create a a CSV file in your work directory named "wind_yyyy_mm_dd_tt.csv".
+}
+}
+\details{
+The output type is determined by type="csv" or type="read-data". If type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file that is downloaded at the work directory. If type="read-data" is selected, an R object (data.frame) is created.
+}
+\value{
+A data.frame or .csv file with U and V vector components for each coordenate in the study area defined by lon1/lon2 and lat1/lat2 and a column with time and date.
+}
+\references{
+http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
+
+http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
+}
+\author{
+Javier Fernández-López (jflopez@rjb.csic.es)
+}
+\note{
+U and V vector components allow you to create wind averages or tendences for each coordenate at the study area. Longitude coordenates are provided by GFS dataset in 0/360 notation. Note that if you want to obtain wind direction and speed from U and V vectors and a -180/180 longitude notation, you should use wind.fit function from rWind package.
+}
+
+
+\seealso{
+wind.fit, wind.mean
+}
+\examples{
+# Download wind for Spain region at 2015, February 12, 00:00
+
+wind.dl(2015,2,12,0,-10,5,35,45)
+
+}
+
+\keyword{ ~gfs }
+\keyword{ ~wind }

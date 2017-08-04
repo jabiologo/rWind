@@ -1,0 +1,3 @@
+exportPattern("^[[:alpha:]]+")
+import(raster, shape, gdistance, Matrix)
+importFrom("utils", "download.file", "read.csv", "write.csv")
