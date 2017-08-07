@@ -10,6 +10,12 @@ rWind contain tools for downloading, editing and transforming wind data from Glo
 * <http://www.weather.gov/>
 
 
-To install the latest released version of rWind `install.packages("rWind")`
+To install the latest released version of rWind on CRAN use `install.packages("rWind")`
+
+To install the latest development version `devtools::install_github("jabiologo/rWind")`
 
 For more information and examples, please check [my blog](http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html)
+
+License
+-------
+rWind is licensed under the GPL (>=3).
