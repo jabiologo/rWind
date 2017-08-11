@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jabiologo/rWind.svg?branch=master)](https://travis-ci.org/jabiologo/rWind)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/rWind)](https://cran.r-project.org/package=rWind)
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
