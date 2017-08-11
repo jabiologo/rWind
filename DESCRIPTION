@@ -2,8 +2,8 @@ Package: rWind
 Encoding: UTF-8
 Type: Package
 Title: Download, Edit and Transform Wind Data from GFS
-Version: 0.2.0
-Date: 2017-06-13
+Version: 0.2.1
+Date: 2017-08-11
 BugReports: http://allthiswasfield.blogspot.com.es/
 Author: Javier Fernández-López <jflopez@rjb.csic.es>
 Maintainer: Javier Fernández-López <jflopez@rjb.csic.es>
