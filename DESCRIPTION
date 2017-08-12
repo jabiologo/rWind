@@ -2,9 +2,9 @@ Package: rWind
 Encoding: UTF-8
 Type: Package
 Title: Download, Edit and Transform Wind Data from GFS
-Version: 0.2.1
-Date: 2017-08-11
-BugReports: http://allthiswasfield.blogspot.com.es/
+Version: 0.2.2
+Date: 2017-08-12
+BugReports: https://github.com/jabiologo/rWind
 Author: Javier Fernández-López <jflopez@rjb.csic.es>
 Maintainer: Javier Fernández-López <jflopez@rjb.csic.es>
 Description: Tools for downloading, editing and transforming wind data from Global Forecast System (GFS, see <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>) of the USA's National Weather Service (NWS, see <http://www.weather.gov/>).
