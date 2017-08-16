@@ -34,7 +34,7 @@ Javier Fernández-López (jflopez@rjb.csic.es)
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-wind.dl, wind.fit
+\code{\link{wind.dl}}, \code{\link{wind.fit}}
 }
 \examples{
 # Download wind for Spain region at 2016, April 14, 00:00

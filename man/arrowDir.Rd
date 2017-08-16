@@ -36,7 +36,7 @@ arrowDir function works always together with Arrowhead function from "shape" pac
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-wind.fit, Arrowhead
+\code{\link{wind.fit}}, \code{\link{Arrowhead}}
 }
 \examples{
 #Load "shape package

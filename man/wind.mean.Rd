@@ -33,7 +33,7 @@ For large time series, it could take a while.
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-wind.dl, wind.fit
+\code{\link{wind.dl}}, \code{\link{wind.fit}}
 }
 \examples{
 # First, you should create an empty list to store all the data

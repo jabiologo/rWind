@@ -12,7 +12,7 @@ flow.dispersion computes movement conductance through a flow either, sea or wind
 being HorizontalFactor a "function that incrementaly penalized angular deviations from the wind direction" (Felicisimo et al. 2008). The function returns conductance values (1/cost) to move betwen all cells in a raster having into account flow speed and direction obtained from wind.fit function("rWind" package). As wind or sea currents implies directionality, flow.dispersion produces an anisotropic conductance matrix (asimetric). Conductance values are used later to built a TransitionLayer object from "gdistance" package.
 }
 \usage{
-flow.dispersion(dl,sl,type)
+flow.dispersion(dl,sl,type="passive", output=c("raw", "transitionLayer", "igraph"))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,9 @@ Speed layer. Raster layer obtained from wind2raster function ("rWind"" package) 
 }
 \item{type}{
 Could be either "passive" or "active".In "passive" mode, movement cannot go against flow direction (it doesn't allow HorizontalFactor higher than 120). In "active" mode, the movement can go against flow direction, by increasing the cost.
+}
+\item{output}{ 
+BLA BLA
 }
 }
 \details{
@@ -47,7 +50,7 @@ Note that for large data sets, it could take a while. For large study areas is s
 }
 
 \seealso{
-wind.fit, wind2raster, TransitionLayer
+\code{\link{wind.fit}}, \code{\link{wind2raster}}, \code{\link{TransitionLayer}}
 }
 \examples{
 
@@ -59,7 +62,7 @@ w<-wind.fit(w)
 dl<-wind2raster(w)
 sl<-wind2raster(w, type="speed")
 
-Conductance<-flow.dispersion(dl,sl,"passive")
+Conductance<-flow.dispersion(dl,sl,"passive", "tr")
 
 transitionMatrix(Conductance)
 image(transitionMatrix(Conductance))
