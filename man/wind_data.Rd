@@ -8,13 +8,13 @@ Wind data example
 This is an example of wind data obtained with wind.dl function for the Iberian Peninsula coordetanes on 12/February/2015 at 00:00 (UTC)}
 \usage{data("wind_data")}
 \format{
-  A data frame with 652 observations on the following 5 variables.
+  A data.frame with 652 observations on the following 5 variables:
   \describe{
-    \item{\code{time}}{a factor with selected time of wind data }
-    \item{\code{latitude}}{a factor with latitude values }
-    \item{\code{longitude}}{a factor with longitude values }
-    \item{\code{ugrd10m}}{a factor with U component of wind data }
-    \item{\code{vgrd10m}}{a factor with V component of wind data }
+    \item{\code{time (UTC)}}{a factor with selected time of wind data }
+    \item{\code{latitude (degrees_north)}}{a factor with latitude values }
+    \item{\code{longitude (degrees_east)}}{a factor with longitude values }
+    \item{\code{ugrd10m (m s-1)}}{a factor with U component of wind data }
+    \item{\code{vgrd10m (m s-1)}}{a factor with V component of wind data }
   }
 }
 \details{
@@ -30,7 +30,7 @@ http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
 
 }
 \references{
-%%  ~~ possibly secondary sources and usages ~~
+http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 }
 \examples{
 data(wind_data)

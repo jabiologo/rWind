@@ -35,14 +35,16 @@ If you want to calculate wind average from multiple wind datasets using wind.mea
 \code{\link{wind.dl}}, \code{\link{wind.mean}}, \code{\link{wind2raster}}
 }
 \examples{
-# Download wind for Spain region at 2015, November 2, 00:00
-X <- wind.dl(2015,11,2,0,-10,5,35,45)
+# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
+# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
+
+data(wind_data)
 
 # Fit downloaded dataset to be plotted
-wind_data <- wind.fit(X)
+wind_fitted_data <- wind.fit(wind_data)
 
 # Export as CSV format in your work directory
-write.csv(wind_data, "wind_data_2015_11_2_Spain.csv")
+# write.csv(wind_fitted_data, "wind_data_2015_11_2_Iberian_Peninsula.csv")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

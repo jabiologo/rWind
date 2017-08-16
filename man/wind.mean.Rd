@@ -38,15 +38,18 @@ For large time series, it could take a while.
 \examples{
 # First, you should create an empty list to store all the data
 
-wind_serie<- list()
+# wind_serie<- list()
 
 # Then, you can use a wind.dl inside a for-in loop to download and store wind data of
-# the first 2 days of February 2015 at 00:00 around Spain. It could take a while...
+# the January 3rd 2015 at several hours around New Zealand.
 
-for (d in 1:2){
-  w<-wind.dl(2015,2,d,0,-9,4,36,44)
-  wind_serie[[d]]<-w
-}
+# t<-c(00 , 03 , 06 , 09 , 12 , 15 , 18 , 21)
+# for (tt in 1:8){
+#  w<-wind.dl(2015,1,3,t[tt],164,179,-48,-33)
+#  wind_serie[[tt]]<-w
+# }
+
+data(wind_serie)
 
 # Finally, you can implement wind.mean and wind.fit to compute the average of all winds
 # datasets in the list:

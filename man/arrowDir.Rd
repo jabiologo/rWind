@@ -39,19 +39,20 @@ arrowDir function works always together with Arrowhead function from "shape" pac
 \code{\link{wind.fit}}, \code{\link{Arrowhead}}
 }
 \examples{
-#Load "shape package
-require(shape)
+# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
+# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
 
-# Download wind for Spain region at 2015, November 30, 00:00
-X <- wind.dl(2015,11,30,0,-10,5,35,45)
+data(wind_data)
 
 # Fit downloaded dataset to be plotted
-wind_data <- wind.fit(X)
+wind_fitted_data <- wind.fit(wind_data)
 
 # Create a vector with wind direction (angles) adapted
-alpha=arrowDir(wind_data)
+alpha=arrowDir(wind_fitted_data)
 
 # Now, you can plot wind direction with Arrowhead function from shapes package
+#Load "shape package
+#require(shape)
 # plot(wind_data$lon, wind_data$lat, type="n")
 # Arrowhead(wind_data$lon, wind_data$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
 

@@ -37,14 +37,16 @@ Javier Fernández-López (jflopez@rjb.csic.es)
 \code{\link{wind.dl}}, \code{\link{wind.fit}}
 }
 \examples{
-# Download wind for Spain region at 2016, April 14, 00:00
-X <- wind.dl(2016,4,14,0,-10,5,35,45)
+# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
+# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
 
-# Fit downloaded dataset to be plotted or transformed to raster
-wind_data <- wind.fit(X)
+data(wind_data)
+
+# Fit downloaded dataset to be plotted
+wind_fitted_data <- wind.fit(wind_data)
 
 # Create raster file from the data.frame created by wind.fit, representing wind speed.
-wind2raster(wind_data, type="speed")
+wind2raster(wind_fitted_data, type="speed")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

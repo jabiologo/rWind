@@ -21,7 +21,7 @@ Selected year from 2011 to current.
  Selected day
 }
   \item{tt}{
- Selected time. There are currently several options at the GFS database: 00 - 03 - 06 - 09 - 12 - 15 - 18 - 21
+ Selected time. There are currently several options at the GFS database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC)
 }
   \item{lon1}{
  Western longitude
@@ -62,7 +62,7 @@ U and V vector components allow you to create wind averages or tendences for eac
 \code{\link{wind.fit}}, \code{\link{wind.mean}}
 }
 \examples{
-# Download wind for Spain region at 2015, February 12, 00:00
+# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 
 wind.dl(2015,2,12,0,-10,5,35,45)
 
