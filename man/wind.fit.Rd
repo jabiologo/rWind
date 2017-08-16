@@ -32,7 +32,7 @@ If you want to calculate wind average from multiple wind datasets using wind.mea
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-wind.dl, wind.mean, wind2raster
+\code{\link{wind.dl}}, \code{\link{wind.mean}}, \code{\link{wind2raster}}
 }
 \examples{
 # Download wind for Spain region at 2015, November 2, 00:00

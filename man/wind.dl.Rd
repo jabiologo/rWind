@@ -59,7 +59,7 @@ U and V vector components allow you to create wind averages or tendences for eac
 
 
 \seealso{
-wind.fit, wind.mean
+\code{\link{wind.fit}}, \code{\link{wind.mean}}
 }
 \examples{
 # Download wind for Spain region at 2015, February 12, 00:00
