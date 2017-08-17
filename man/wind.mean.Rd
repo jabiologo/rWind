@@ -46,7 +46,7 @@ For large time series, it could take a while.
 # t<-c(00 , 03 , 06 , 09 , 12 , 15 , 18 , 21)
 # for (tt in 1:8){
 #  w<-wind.dl(2015,1,3,t[tt],164,179,-48,-33)
-#  wind_series[[tt]]<-w
+#  wind_series[[tt]]<-w
 # }
 
 data(wind_series)
