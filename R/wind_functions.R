@@ -81,32 +81,19 @@ wind2raster<- function(W, type="dir"){
   return(ras)
 }
 
-wind.mean<-function(wind_serie){
 
-  wind_mean<<-cbind(data.frame(wind_serie[[1]][1:nrow(wind_serie[[1]]),1]),data.frame(wind_serie[[1]][1:nrow(wind_serie[[1]]),2]),data.frame(wind_serie[[1]][1:nrow(wind_serie[[1]]),3]))
-  umean=data.frame(1:(nrow(wind_serie[[1]])-1))
-  for (n in 2:nrow(wind_serie[[1]])){
-    row_mean_list=vector()
-    for (h in 1:length(wind_serie)){
-      u=as.numeric(as.character(wind_serie[[h]][n,4]))
-      row_mean_list[h]<-u
-      row_mean=mean(row_mean_list)
-    }
-    umean[n,1]<-row_mean
-  }
-  vmean=data.frame(1:(nrow(wind_serie[[1]])-1))
-  for (n in 2:nrow(wind_serie[[1]])){
-    row_mean_list=vector()
-    for (h in 1:length(wind_serie)){
-      v=as.numeric(as.character(wind_serie[[h]][n,5]))
-      row_mean_list[h]<-v
-      row_mean=mean(row_mean_list)
-    }
-    vmean[n,1]<-row_mean
-  }
-  wind_mean<-cbind(wind_mean,umean,vmean)
-  names(wind_mean)<-c("time","latitude","longitude","ugrd10m","vgrd10m")
-  return(wind_mean)
+wind.mean <- function(wind_serie){
+    wind_mean <- cbind(data.frame(wind_serie[[1]][,1]), data.frame(wind_serie[[1]][,2]), data.frame(wind_serie[[1]][,3]))
+    l <- length(wind_serie)
+    row_mean_matrix <- matrix(NA, nrow(wind_serie[[1]]), l)
+    for (h in 1:l) row_mean_matrix[,h] <- wind_serie[[h]][,4]
+    umean <- apply(row_mean_matrix, 1, mean)
+    row_mean_matrix[] <- NA
+    for (h in 1:l) row_mean_matrix[,h] <- wind_serie[[h]][,5]
+    vmean <- apply(row_mean_matrix, 1, mean)
+    wind_mean<-cbind(wind_mean,umean,vmean)
+    names(wind_mean)<-c("time","latitude","longitude","ugrd10m","vgrd10m")
+    return(wind_mean)
 }
 
 arrowDir <- function(W){
