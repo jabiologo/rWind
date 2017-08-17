@@ -82,14 +82,14 @@ wind2raster<- function(W, type="dir"){
 }
 
 
-wind.mean <- function(wind_serie){
-    wind_mean <- cbind(data.frame(wind_serie[[1]][,1]), data.frame(wind_serie[[1]][,2]), data.frame(wind_serie[[1]][,3]))
-    l <- length(wind_serie)
-    row_mean_matrix <- matrix(NA, nrow(wind_serie[[1]]), l)
-    for (h in 1:l) row_mean_matrix[,h] <- wind_serie[[h]][,4]
+wind.mean <- function(wind_series){
+    wind_mean <- cbind(data.frame(wind_series[[1]][,1]), data.frame(wind_series[[1]][,2]), data.frame(wind_series[[1]][,3]))
+    l <- length(wind_series)
+    row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
+    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,4]
     umean <- apply(row_mean_matrix, 1, mean)
     row_mean_matrix[] <- NA
-    for (h in 1:l) row_mean_matrix[,h] <- wind_serie[[h]][,5]
+    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,5]
     vmean <- apply(row_mean_matrix, 1, mean)
     wind_mean<-cbind(wind_mean,umean,vmean)
     names(wind_mean)<-c("time","latitude","longitude","ugrd10m","vgrd10m")

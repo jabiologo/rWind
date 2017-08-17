@@ -63,9 +63,9 @@ U and V vector components allow you to create wind averages or tendences for eac
 }
 \examples{
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-
+\dontrun{
 wind.dl(2015,2,12,0,-10,5,35,45)
-
+}
 }
 
 \keyword{ ~gfs }

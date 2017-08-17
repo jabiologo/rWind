@@ -56,8 +56,10 @@ Note that for large data sets, it could take a while. For large study areas is s
 
 require(gdistance)
 
-w<-wind.dl(2015,2,12,0,-9,-7,35,37)
-w<-wind.fit(w)
+# w<-wind.dl(2015,2,12,0,-10,5,35,45)
+
+data(wind_data)
+w<-wind.fit(wind_data)
 
 dl<-wind2raster(w)
 sl<-wind2raster(w, type="speed")

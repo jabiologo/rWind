@@ -1,13 +1,13 @@
-\name{wind_serie}
-\alias{wind_serie}
+\name{wind_series}
+\alias{wind_series}
 \docType{data}
 \title{
-Wind serie example
+Wind series example
 }
 \description{
-This is an example of a wind serie data obtained with a loop and wind.dl function for New Zealand area on 3/January/2015 at all the available times: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC)
+This is an example of a wind series data obtained with a loop and wind.dl function for New Zealand area on 3/January/2015 at all the available times: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC)
 }
-\usage{data("wind_serie")}
+\usage{data("wind_series")}
 \format{
   The format is a list of 8 data.frame. Each data.frame contain 652 observations on the following 5 variables:
 
@@ -29,8 +29,8 @@ http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
 http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 }
 \examples{
-data(wind_serie)
-str(wind_serie)
-wind_average<- wind.mean(wind_serie)
+data(wind_series)
+str(wind_series)
+wind_average<- wind.mean(wind_series)
 }
 \keyword{datasets}

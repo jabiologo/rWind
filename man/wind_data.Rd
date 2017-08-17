@@ -21,7 +21,7 @@ This is an example of wind data obtained with wind.dl function for the Iberian P
 
  This data set is the result of:
 
- wind_data<-wind.dl(2015,2,12,0,-10,5,35,45)
+ \code{wind_data<-wind.dl(2015,2,12,0,-10,5,35,45)}
 
 }
 \source{
