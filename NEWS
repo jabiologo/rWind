@@ -1,0 +1,16 @@
+rWind v0.3 (Release date: 2017-08-18)
+==============
+
+Changes:
+
+* wind.dl function have change the headers of each column. Now, they are just in one row.
+
+* wind.fit have improve his performance due to some vectorization in the data (it is much faster now). It also has been adapted to the new input provided by wind.dl function (just one row as header).
+
+* wind.mean have improve his performance (it is much faster now)
+
+* flow.dispersion have improve his performance, using matrix rather than raster objects to perform the maths (it is much faster now). Now you can also obtain as output either, a graph, a transitionLayer or a Sparse Matrix (see documentation)
+
+* Two new datasets has been added to improve the example code:
+    - "wind_data" is a downloaded data with wind.dl
+    - "wind_series" is a downloaded series of wind data with wind.dl
