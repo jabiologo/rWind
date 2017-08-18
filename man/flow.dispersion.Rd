@@ -17,16 +17,16 @@ flow.dispersion(dl,sl,type="passive", output="raw")
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dl}{
-Direction layer. Raster layer obtained from wind2raster function ("rWind"" package) with flow direction values.
+Direction layer. Raster layer obtained from wind2raster function ("rWind" package) with flow direction values.
 }
 \item{sl}{
-Speed layer. Raster layer obtained from wind2raster function ("rWind"" package) with flow speed values.
+Speed layer. Raster layer obtained from wind2raster function ("rWind" package) with flow speed values.
 }
 \item{type}{
-Could be either "passive" or "active".In "passive" mode, movement cannot go against flow direction (it doesn't allow HorizontalFactor higher than 120). In "active" mode, the movement can go against flow direction, by increasing the cost.
+Could be either "passive" or "active".In "passive" mode, movement cannot go against flow direction (it doesn't allow HorizontalFactor higher than 90). In "active" mode, the movement can go against flow direction, by increasing the cost.
 }
 \item{output}{
-BLA BLA
+This argument allows to select diferent kinds of output. "raw" mode creates a Sparse Matrix with transition costs between all cells in the raster. "transitionLayer" creates a transitionLayer object to be used with "gdistance" package. "igraph" creates an graph object with 3 columns: from - to - cost
 }
 }
 \details{
