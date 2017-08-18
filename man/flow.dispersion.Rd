@@ -14,7 +14,7 @@ being HorizontalFactor a "function that incrementaly penalized angular deviation
 \usage{
 flow.dispersion(dl,sl,type="passive", output="raw")
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{dl}{
 Direction layer. Raster layer obtained from wind2raster function ("rWind" package) with flow direction values.
@@ -26,7 +26,7 @@ Speed layer. Raster layer obtained from wind2raster function ("rWind" package) w
 Could be either "passive" or "active".In "passive" mode, movement cannot go against flow direction (it doesn't allow HorizontalFactor higher than 90). In "active" mode, the movement can go against flow direction, by increasing the cost.
 }
 \item{output}{
-This argument allows to select diferent kinds of output. "raw" mode creates a Sparse Matrix with transition costs between all cells in the raster. "transitionLayer" creates a transitionLayer object to be used with "gdistance" package. "igraph" creates an graph object with 3 columns: from - to - cost
+This argument allows to select diferent kinds of output. "raw" mode creates a matrix (class "dgCMatrix") with transition costs between all cells in the raster. "transitionLayer" creates a TransitionLayer object with conductance values to be used with "gdistance" package.
 }
 }
 \details{
@@ -64,7 +64,7 @@ w<-wind.fit(wind_data)
 dl<-wind2raster(w)
 sl<-wind2raster(w, type="speed")
 
-Conductance<-flow.dispersion(dl,sl,"passive", "tr")
+Conductance<-flow.dispersion(dl,sl,"passive", "transitionLayer")
 
 transitionMatrix(Conductance)
 image(transitionMatrix(Conductance))

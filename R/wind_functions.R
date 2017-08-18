@@ -103,7 +103,7 @@ arrowDir <- function(W){
 
 flow.dispersion <-function(dl, sl, type="passive", output="raw"){
 
-    output <- match.arg(output, c("raw", "transitionLayer", "igraph"))
+    output <- match.arg(output, c("raw", "transitionLayer"))
 
     DL <- as.matrix(dl)
     SL <- as.matrix(sl)
@@ -214,9 +214,7 @@ flow.dispersion <-function(dl, sl, type="passive", output="raw"){
 #        transitionMatrix(tl)<-replace(transitionMatrix(tl), is.infinite(transitionMatrix(tl)), 0)
         return(tmp)
     }
-    if(output == "igraph") {
-       return(graph_from_adjacency_matrix(tl))
-    }
+
     return(NULL)
 }
 
