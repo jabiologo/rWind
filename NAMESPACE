@@ -3,6 +3,5 @@ export(wind.fit, wind.dl, wind.mean, wind2raster, flow.dispersion, arrowDir)
 
 import(raster, shape, gdistance, Matrix)
 importFrom("utils", "download.file", "read.csv", "write.csv", "write.table")
-importFrom("igraph", "graph_from_adjacency_matrix")
 
 
