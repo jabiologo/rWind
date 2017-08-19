@@ -118,7 +118,7 @@ flow.dispersion <-function(dl, sl, type="passive", output="raw"){
         dif=(abs(wind-celda))
         dif[dif > 180] = 360 - dif[dif > 180]
         if (type=="passive"){
-            dif[dif >= 90] = 1e8 # check
+            dif[dif >= 90] = Inf # check
             dif[dif < 90] = 2 * dif[dif < 90]
             dif[dif==0] = 0.1
         }
