@@ -235,62 +235,47 @@ sea.dl<- function (yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data", ...
                                  mm, "_", dd, "_", tt, ".csv", sep = ""))
   }
   else {
-    return(read.csv(url_dir, ...))
+    header <- readLines(url_dir, n=2)
+    blub <- strsplit(header, ",")
+    header <- paste(blub[[1]], paste0("(", blub[[2]], ")"))
+    tmp<-read.csv(url_dir, header=FALSE, skip=2)
+    colnames(tmp) <- header
+    return(tmp)  
+#    return(read.csv(url_dir, ...))
   }
 }
 
-sea.fit<- function(X){
+
+sea.fit <- function(X){
 
   rad2deg <- function(rad) {
     (rad * 180)/(pi)
   }
 
-  bruto <- X
-  bruto <- data.frame(bruto[2:nrow(bruto), ])
-  bruto <- bruto[, 3:ncol(bruto)]
-  indx <- sapply(bruto, is.factor)
-  bruto[indx] <- lapply(bruto[indx], function(x) as.numeric(as.character(x)))
-  big_bruto <- data.frame(1:nrow(bruto))
+  X <- X[, 3:6]
+  names(X) <- c("lat", "lon", "ugrd10m", "vgrd10m")
 
-  names(bruto) <- c("lat", "lon", "ugrd10m", "vgrd10m")
-  big_bruto <- cbind(big_bruto, bruto)
-  big_bruto_dir <- data.frame(1:nrow(bruto))
-  names(big_bruto_dir) <- "V1"
-  big_bruto_speed <- data.frame(1:nrow(bruto))
-  names(big_bruto_speed) <- "V1"
-  for (g in 1:1) {
-    u <- "ugrd10m"
-    v <- "vgrd10m"
-    for (t in 1:nrow(big_bruto)) {
-      nugget <- atan2(big_bruto[t, u], big_bruto[t, v])
-      nugget <- rad2deg(nugget)
-      if (is.nan(nugget)) { big_bruto_dir[t,g] <- NaN}
-      else {if (nugget < 0) {
-        nugget <- 360 + nugget
-      }
-      }
-      big_bruto_dir[t, g] <- nugget
-    }
-  }
-  for (q in 1:1) {
-    u <- "ugrd10m"
-    v <- "vgrd10m"
-    for (w in 1:nrow(big_bruto)) {
-      mcpollo <- sqrt((big_bruto[w, u] * big_bruto[w, u]) +
-                        (big_bruto[w, v] * big_bruto[w, v]))
-      big_bruto_speed[w, q] <- mcpollo
-    }
-  }
-  big_bruto <- cbind(big_bruto[, 2:3], big_bruto_dir, big_bruto_speed)
-  big_bruto <- big_bruto[with(big_bruto, order(-lat)), ]
-  names(big_bruto) <- c("lat", "lon", "dir", "speed")
-  big_bruto$lon<-round(big_bruto$lon,6)
-  big_bruto<-big_bruto[big_bruto$lon != -0.025,]
-  big_bruto$lon[big_bruto$lon < 0] <-(big_bruto$lon[big_bruto$lon < 0]) + 0.025
-
-  return(big_bruto)
-
+  ###### DIRECTION
+  
+  direction <- atan2(X[,"ugrd10m"], X[,"vgrd10m"])
+  direction <- rad2deg(direction)
+  ind_na <- !is.na(direction)
+  dir_tmp <- direction[ind_na]
+  dir_tmp[dir_tmp < 0] <- 360 + dir_tmp[dir_tmp < 0]
+  direction[ind_na] <- dir_tmp
+  
+  ###### SPEED
+  
+  speed <- sqrt( (X[,"ugrd10m"] * X[,"ugrd10m"]) + (X[,"vgrd10m"] * X[,"vgrd10m"]))
+  
+  res <- cbind(X[,c("lat","lon")], dir=direction, speed=speed)
+  res <- res[with(res, order(-lat)), ]
+  res$lon <- round(res$lon, 6)
+  res <- res[res$lon != -0.025,]
+  res$lon[res$lon < 0] <- (res$lon[res$lon < 0]) + 0.025
+  return(res)
 }
+
 
 sea2raster<-function(SC, type="dir"){
   coordinates(SC) = ~lon+lat
