@@ -2,7 +2,7 @@ Package: rWind
 Encoding: UTF-8
 Type: Package
 Title: Download, Edit and Transform Wind Data from GFS
-Version: 0.3.1
+Version: 0.3.2
 Date: 2017-08-16
 BugReports: https://github.com/jabiologo/rWind
 Authors@R: c(person("Javier", "Fernández-López", email="jflopez@rjb.csic.es", role = c("aut", "cre")), 
