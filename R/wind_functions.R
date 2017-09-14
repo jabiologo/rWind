@@ -58,45 +58,55 @@ wind.dl<- function (yyyy,mm,dd,tt,lon1,lon2,lat1,lat2,type="read-data"){
   dd<-sprintf("%02d", dd)
   tt<-sprintf("%02d", tt)
 
-  if (lon1 < 0){
-    lon1<-360-(abs(lon1))
-  }
-  if (lon2 < 0){
-    lon2<-360-(abs(lon2))
-  }
+  testDate <- paste(yyyy,"-",mm,"-",dd, sep="")
 
-  if (lon1 > 180 && lon2 <180){
-    url_west<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-    url_east<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-    header <- readLines(url_west, n=2)
-    tmp<-rbind(read.csv(url_west, header=FALSE, skip=2),read.csv(url_east, header=FALSE, skip=2))
-    if (type == "csv"){
-      fname <- paste("wind_",yyyy,"_",mm,"_",dd,"_",tt,".csv", sep="")
-      writeLines(header, fname)
-      write.table(tmp, fname, append=TRUE, sep = ",", row.names = FALSE, col.names = FALSE, quote = FALSE)
+  tryCatch({
+    as.Date(testDate)
+    if (lon1 < 0){
+      lon1<-360-(abs(lon1))
     }
-    else{
-      blub <- strsplit(header, ",")
-      header <- paste(blub[[1]], paste0("(", blub[[2]], ")"))
-      colnames(tmp) <- header
-      return(tmp)
+    if (lon2 < 0){
+      lon2<-360-(abs(lon2))
     }
-  }
-  else {
-    url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-    if (type == "csv"){
-      download.file(url_dir, paste("wind_",yyyy,"_",mm,"_",dd,"_",tt,".csv", sep=""))
+
+    if (lon1 > 180 && lon2 <180){
+      url_west<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+      url_east<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+      header <- readLines(url_west, n=2)
+      tmp<-rbind(read.csv(url_west, header=FALSE, skip=2),read.csv(url_east, header=FALSE, skip=2))
+      if (type == "csv"){
+        fname <- paste("wind_",yyyy,"_",mm,"_",dd,"_",tt,".csv", sep="")
+        writeLines(header, fname)
+        write.table(tmp, fname, append=TRUE, sep = ",", row.names = FALSE, col.names = FALSE, quote = FALSE)
+      }
+      else{
+        blub <- strsplit(header, ",")
+        header <- paste(blub[[1]], paste0("(", blub[[2]], ")"))
+        colnames(tmp) <- header
+        return(tmp)
+      }
     }
-    else{
+    else {
+      url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy,"-",mm,"-",dd,"T",tt,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+      if (type == "csv"){
+        download.file(url_dir, paste("wind_",yyyy,"_",mm,"_",dd,"_",tt,".csv", sep=""))
+      }
+      else{
         header <- readLines(url_dir, n=2)
         blub <- strsplit(header, ",")
         header <- paste(blub[[1]], paste0("(", blub[[2]], ")"))
         tmp<-read.csv(url_dir, header=FALSE, skip=2)
         colnames(tmp) <- header
         return(tmp)
+      }
     }
-  }
+  },
+  error=function(e){cat("ERROR: database not found. Please, check server connection, date or geographical ranges \n")},
+  warning=function(w){cat("ERROR: database not found. Please, check server connection, date or geographical ranges  \n")}
+  )
+
 }
+
 
 
 
