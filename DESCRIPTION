@@ -1,13 +1,13 @@
 Package: rWind
 Encoding: UTF-8
 Type: Package
-Title: Download, Edit and Transform Wind Data from GFS
+Title: Download, edit and include wind data in ecological and evolutionary analysis.
 Version: 0.3.2
 BugReports: https://github.com/jabiologo/rWind
 Authors@R: c(person("Javier", "Fernández-López", email="jflopez@rjb.csic.es", role = c("aut", "cre")), 
     person("Klaus", "Schliep", email="klaus.schliep@gmail.com", role = c("aut")))
 Maintainer: Javier Fernández-López <jflopez@rjb.csic.es>
-Description: Tools for downloading, editing and transforming wind data from Global Forecast System (GFS, see <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>) of the USA's National Weather Service (NWS, see <http://www.weather.gov/>).
+Description: Tools for download and manage surface wind data from the Global Forecasting System and to compute wind connectivity between locations.
 URL: http://allthiswasfield.blogspot.com.es/
 License: GPL (>=3)
 LazyData: TRUE
