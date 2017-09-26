@@ -53,7 +53,7 @@ alpha=arrowDir(wind_fitted_data)
 colors..." Karline Soetaert
 }
 \seealso{
-\code{\link{wind.fit}}, \code{\link{Arrowhead}}
+\code{\link{wind.fit}}
 }
 \author{
 Javier Fernández-López
