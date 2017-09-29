@@ -2,7 +2,7 @@
 % Please edit documentation in R/wind_functions.R
 \name{arrowDir}
 \alias{arrowDir}
-\title{Arrow direction fitting for Arrowhead function}
+\title{Arrow direction fitting for Arrowhead function from "shape" package}
 \usage{
 arrowDir(W)
 }
@@ -18,7 +18,7 @@ arrowDir adapts wind direction value to be used by Arrowhead function from
 "shape" package to plot wind direction for each coordinate.
 }
 \details{
-Angle argument of Arrowhead function from "shape" package, needs to be fed
+Angle argument of Arrowhead function from "shape" package needs to be fed
 in an anti-clockwise way, relative to x-axis, in degrees [0,360]. arrowDir
 function adapts wind direction provided by wind.fit (clockwise, relative to
 y-axis ) to requirements of Arrowhead.
@@ -49,11 +49,12 @@ alpha=arrowDir(wind_fitted_data)
 
 }
 \references{
-"R Package shape: functions for plotting graphical shapes,
-colors..." Karline Soetaert
+Karline Soetaert (2017). shape: Functions for Plotting Graphical
+Shapes, Colors. R package version 1.4.3.
+https://CRAN.R-project.org/package=shape
 }
 \seealso{
-\code{\link{wind.fit}}
+\code{\link{wind.fit}}, \code{\link{Arrowhead}}
 }
 \author{
 Javier Fernández-López

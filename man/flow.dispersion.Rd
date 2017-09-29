@@ -2,7 +2,7 @@
 % Please edit documentation in R/wind_functions.R
 \name{flow.dispersion}
 \alias{flow.dispersion}
-\title{Flow dispersion}
+\title{Compute flow-based cost or conductance}
 \usage{
 flow.dispersion(dl, sl, type = "passive", output = "raw")
 }
@@ -14,8 +14,8 @@ flow.dispersion(dl, sl, type = "passive", output = "raw")
 ("rWind" package) with flow speed values.}
 
 \item{type}{Could be either "passive" or "active".In "passive" mode,
-movement cannot go against flow direction (it doesn't allow HorizontalFactor
-higher than 90). In "active" mode, the movement can go against flow
+movement against flow direction is not allowed (deviations from the wind
+direction higher than 90). In "active" mode, the movement can go against flow
 direction, by increasing the cost.}
 
 \item{output}{This argument allows to select diferent kinds of output. "raw"
@@ -24,27 +24,25 @@ cells in the raster. "transitionLayer" creates a TransitionLayer object with
 conductance values to be used with "gdistance" package.}
 }
 \value{
-A TransitionLayer object from "gdistance" package that could be used
-to compute least cost paths.
+In "transitionLayer" output, the function returns conductance values
+(1/cost)to move betwen all cells in a raster having into account flow speed
+and direction obtained from wind.fit function("rWind" package). As wind or
+sea currents implies directionality, flow.dispersion produces an anisotropic
+conductance matrix (asimetric). Conductance values are used later to built a
+TransitionLayer object from "gdistance" package.
+
+In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 }
 \description{
 flow.dispersion computes movement conductance through a flow either, sea or
-wind currents. It implements the formula described in Felicisimo et al.
+wind currents. It implements the formula described in Felícisimo et al.
 2008:
 }
 \details{
 Cost=(1/Speed)*(HorizontalFactor)
 
 being HorizontalFactor a "function that incrementaly penalized angular
-deviations from the wind direction" (Felicisimo et al. 2008). The function
-returns conductance values (1/cost) to move betwen all cells in a raster
-having into account flow speed and direction obtained from wind.fit
-function("rWind" package). As wind or sea currents implies directionality,
-flow.dispersion produces an anisotropic conductance matrix (asimetric).
-Conductance values are used later to built a TransitionLayer object from
-"gdistance" package.
-
-flow.dispersion creates a sparse Matrix with conductance values (1/cost).
+deviations from the wind direction" (Felicísimo et al. 2008).
 }
 \note{
 Note that for large data sets, it could take a while. For large study
@@ -66,8 +64,8 @@ sl<-wind2raster(w, type="speed")
 
 Conductance<-flow.dispersion(dl,sl,"passive", "transitionLayer")
 
-transitionMatrix(Conductance)
-image(transitionMatrix(Conductance))
+# transitionMatrix(Conductance)
+# image(transitionMatrix(Conductance))
 
 }
 \references{
@@ -75,15 +73,15 @@ Felicísimo, Á. M., Muñoz, J., & González-Solis, J. (2008). Ocean surface
 winds drive dynamics of transoceanic aerial movements. PLoS One, 3(8),
 e2928.
 
-van Etten, J. (2012). gdistance: Distances and routes on geographical grids.
-R package version 1.1–4. Available a t CRAN. R-project. org/package=
-gdistance.
+Jacob van Etten (2017). R Package gdistance: Distances and Routes on
+Geographical Grids. Journal of Statistical Software, 76(13), 1-21.
+doi:10.18637/jss.v076.i13
 }
 \seealso{
 \code{\link{wind.fit}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es); Jacob van Etten
+Javier Fernández-López; Klaus Schliep
 }
 \keyword{~anisotropy}
 \keyword{~conductance}

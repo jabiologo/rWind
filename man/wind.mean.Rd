@@ -19,7 +19,7 @@ the same region. To do this, wind.mean uses U and V vector components of
 several wind data.frames stored in a list. Note that, if you want to perform
 wind direction and speed average, first you should calculate the mean of U
 and V components and then transform it to direction and speed using wind.fit
-function from rWind package.
+function from "rWind" package.
 }
 \note{
 For large time series, it could take a while.

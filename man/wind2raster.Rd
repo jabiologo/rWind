@@ -22,7 +22,7 @@ area.
 }
 \description{
 wind2raster crates a raster file (gridded) from a data.frame created by
-wind.fit function from rWind package. Latitude and logitude values are used
+wind.fit function from "rWind" package. Latitude and logitude values are used
 to locate raster file and create raster resolution using rasterFromXYZ
 function from raster package. As raster files only can store one field of
 information, you should choose between direction (by default, type="dir")

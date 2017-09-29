@@ -4,11 +4,11 @@
 \name{rWind-package}
 \alias{rWind-package}
 \alias{rWind}
-\title{Download, edit and ese wind data from GFS}
+\title{Download, edit and include wind data in ecological and evolutionary analysis}
 \description{
 rWind contain tools for downloading, editing and transforming wind data from
 Global Forecast System (GFS). It also allows to use wind data to compute the
-minimum cost path taking into account wind speed and direction to perform
+minimum cost path from wind speed and direction to perform
 connectivity analysis.
 }
 \details{
@@ -21,6 +21,6 @@ Javier Fernández-López
 
 Klaus Schliep
 
-Maintainer: Javier Fernández-López <jflopez@rjb.csic.es>
+Maintainer: Javier Fernández-López <jflopez.bio@gmail.com>
 }
 \keyword{package}

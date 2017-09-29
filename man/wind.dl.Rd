@@ -58,7 +58,7 @@ U and V vector components allow you to create wind averages or
 tendences for each coordenate at the study area. Longitude coordenates are
 provided by GFS dataset in 0/360 notation. Note that if you want to obtain
 wind direction and speed from U and V vectors and a -180/180 longitude
-notation, you should use wind.fit function from rWind package.
+notation, you should use wind.fit function from "rWind" package.
 }
 \examples{
 
