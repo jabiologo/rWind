@@ -54,10 +54,9 @@ Shapes, Colors. R package version 1.4.3.
 https://CRAN.R-project.org/package=shape
 }
 \seealso{
-\code{\link{wind.fit}}, \code{\link{Arrowhead}}
+\code{\link{wind.fit}}
 }
 \author{
 Javier Fernández-López
 }
-\keyword{~Arrowhead}
 \keyword{~wind}

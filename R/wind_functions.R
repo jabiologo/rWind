@@ -305,11 +305,11 @@ wind.mean <- function(wind_series){
 #' @note arrowDir function works always together with Arrowhead function from
 #' "shape" package.
 #' @author Javier Fernández-López
-#' @seealso \code{\link{wind.fit}}, \code{\link{Arrowhead}}
+#' @seealso \code{\link{wind.fit}}
 #' @references Karline Soetaert (2017). shape: Functions for Plotting Graphical
 #' Shapes, Colors. R package version 1.4.3.
 #' https://CRAN.R-project.org/package=shape
-#' @keywords ~Arrowhead ~wind
+#' @keywords ~wind
 #' @examples
 #'
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
