@@ -386,8 +386,6 @@ arrowDir <- function(W){
 #' @keywords ~anisotropy ~conductance
 #' @examples
 #'
-#'  install.packages("raster")
-#'  library(raster)
 #'  require(gdistance)
 #'
 #'  w<-wind.dl(2015,2,12,0,-10,5,35,45)
