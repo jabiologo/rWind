@@ -19,8 +19,8 @@ bioc_required: false
 
 #after_success:
 #  - Rscript -e 'library(covr);codecov()'
-  
-  
+
+
 notifications:
   email:
     on_success: change
@@ -32,4 +32,10 @@ env:
     - R_CHECK_ARGS="--as-cran --timings"
     - R_CHECK_TIME="TRUE"
     - R_CHECK_TESTS="TRUE"
-    - _R_CHECK_TIMINGS_="0"  
+    - _R_CHECK_TIMINGS_="0"
+
+r_packages:
+  - covr
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
