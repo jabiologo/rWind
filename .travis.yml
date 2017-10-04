@@ -2,9 +2,8 @@
 
 language: r
 r:
-  - oldrel
   - release
-  - devel
+# - devel
 
 warnings_are_errors: false
 
@@ -15,11 +14,11 @@ cache: packages
 
 bioc_required: false
 
-#r_github_packages:
-#  - jimhester/covr
+r_github_packages:
+  - jimhester/covr
 
-#after_success:
-#  - Rscript -e 'library(covr);codecov()'
+after_success:
+  - Rscript -e 'library(covr);codecov()'
 
 
 notifications:
@@ -35,8 +34,3 @@ env:
     - R_CHECK_TESTS="TRUE"
     - _R_CHECK_TIMINGS_="0"
 
-r_packages:
-  - covr
-
-after_success:
-  - Rscript -e 'library(covr); codecov()'
