@@ -51,18 +51,19 @@ cluster.
 }
 \examples{
 
+ install.packages("raster")
+ library(raster)
+ require(gdistance)
 
-# require(gdistance)
+ w<-wind.dl(2015,2,12,0,-10,5,35,45)
 
-# w<-wind.dl(2015,2,12,0,-10,5,35,45)
+ data(wind_data)
+ w<-wind.fit(wind_data)
 
-# data(wind_data)
-# w<-wind.fit(wind_data)
+ dl<-wind2raster(w)
+ sl<-wind2raster(w, type="speed")
 
-# dl<-wind2raster(w)
-# sl<-wind2raster(w, type="speed")
-
-# Conductance<-flow.dispersion(dl,sl,"passive", "transitionLayer")
+ Conductance<-flow.dispersion(dl,sl,"passive", "transitionLayer")
 
 # transitionMatrix(Conductance)
 # image(transitionMatrix(Conductance))
