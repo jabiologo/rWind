@@ -12,6 +12,7 @@ URL: http://allthiswasfield.blogspot.com.es/
 License: GPL (>=3)
 LazyData: TRUE
 Imports: raster, gdistance, Matrix, sp
+Suggests: testthat
 Packaged: 2016-11-24 11:37:02 UTC; javi
 Depends: R (>= 2.10)
 NeedsCompilation: no
