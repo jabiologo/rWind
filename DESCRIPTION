@@ -11,10 +11,10 @@ Description: Tools for download and manage surface wind data from the Global For
 URL: http://allthiswasfield.blogspot.com.es/
 License: GPL (>=3)
 LazyData: TRUE
-Imports: raster, gdistance, Matrix, sp
+Imports: raster (>= 2.5-8), gdistance, Matrix, sp
 Suggests: testthat
 Packaged: 2016-11-24 11:37:02 UTC; javi
-Depends: R (>= 2.10)
+Depends: R (>= 3.4.1)
 NeedsCompilation: no
 Repository: none
 RoxygenNote: 6.0.1
