@@ -2,12 +2,9 @@
 % Please edit documentation in R/wind_functions.R
 \name{wind.dl}
 \alias{wind.dl}
-\alias{sea.dl}
 \title{Wind-data download}
 \usage{
 wind.dl(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2, type = "read-data")
-
-sea.dl(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data")
 }
 \arguments{
 \item{yyyy}{Selected year from 2011 to current.}

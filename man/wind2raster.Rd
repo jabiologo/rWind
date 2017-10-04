@@ -2,12 +2,9 @@
 % Please edit documentation in R/wind_functions.R
 \name{wind2raster}
 \alias{wind2raster}
-\alias{sea2raster}
 \title{Wind-data to raster file}
 \usage{
 wind2raster(x, type = "dir")
-
-sea2raster(x, type = "dir")
 }
 \arguments{
 \item{x}{a data.frame obtained by wind.fit}
