@@ -2,7 +2,9 @@
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/rWind)](https://cran.r-project.org/package=rWind)
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
-[![codecov](https://codecov.io/github/jabiologo/rWind/branch/master/graphs/badge.svg)](https://codecov.io/jabiologo/rWind) 
+[![codecov](https://codecov.io/gh/jabiologo/rWind/branch/master/graph/badge.svg)](https://codecov.io/gh/jabiologo/rWind)
+
+
 
 rWind
 -----
