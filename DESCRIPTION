@@ -2,7 +2,7 @@ Package: rWind
 Encoding: UTF-8
 Type: Package
 Title: Download, edit and include wind data in ecological and evolutionary analysis
-Version: 0.3.2
+Version: 0.4.0
 BugReports: https://github.com/jabiologo/rWind
 Authors@R: c(person("Javier", "Fernández-López", email="jflopez.bio@gmail.com", role = c("aut", "cre")), 
     person("Klaus", "Schliep", email="klaus.schliep@gmail.com", role = c("aut")))

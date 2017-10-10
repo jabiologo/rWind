@@ -1,3 +1,18 @@
+rWind v0.4 (Release date: 2017-10-10)
+==============
+
+Changes:
+
+o Including codecov badget into readme file.
+
+o Including a tests folder with some code tests.
+
+o Removing at the moment see currents functions.
+
+o Including roxygen code into wind_functions.R to create package documentation automaticaly.
+
+o Removing "shape" package as an Import
+
 rWind v0.3 (Release date: 2017-08-18)
 ==============
 

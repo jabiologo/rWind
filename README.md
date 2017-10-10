@@ -4,7 +4,7 @@
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
 [![codecov](https://codecov.io/github/jabiologo/rWind/branch/master/graphs/badge.svg)](https://codecov.io/jabiologo/rWind) 
 
-rWind   <img src="man/figures/hurricane.gif" align="right" />
+rWind
 -----
 rWind contain tools for downloading, editing and transforming wind data from Global Forecast System (GFS). It also allows to use wind data to compute the minimum cost path taking into account wind speed and direction to perform connectivity analysis. For more information about data source, please check:
 
