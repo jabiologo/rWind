@@ -4,18 +4,19 @@
 \alias{wind2raster}
 \title{Wind-data to raster file}
 \usage{
-wind2raster(x, type = "dir")
+wind2raster(x, type = "stack")
 }
 \arguments{
 \item{x}{a data.frame obtained by wind.fit}
 
 \item{type}{Feature represented by raster file. "dir" (wind direction) is
 selected by default. If you choose "speed", wind speed will be represented
-by raster file.}
+by raster file. If "stack" is selected, a raster stack with both layers is
+returned}
 }
 \value{
-A raster file representing wind direction or wind speed of the study
-area.
+A raster file representing wind direction, wind speed or both of the
+study area.
 }
 \description{
 wind2raster crates a raster file (gridded) from a data.frame created by

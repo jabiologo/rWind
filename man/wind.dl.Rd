@@ -30,9 +30,9 @@ object. If you choose "csv", wind.dl create a a CSV file in your work
 directory named "wind_yyyy_mm_dd_tt.csv".}
 }
 \value{
-A data.frame or .csv file with U and V vector components for each
-coordenate in the study area defined by lon1/lon2 and lat1/lat2 and a column
-with time and date.
+"rWind data.frame" class object or .csv file with U and V vector
+components for each coordenate in the study area defined by lon1/lon2 and
+lat1/lat2 and a column with time and date.
 }
 \description{
 wind.dl downloads wind data from the Global Forecast System (GFS) of the

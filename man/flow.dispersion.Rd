@@ -4,14 +4,11 @@
 \alias{flow.dispersion}
 \title{Compute flow-based cost or conductance}
 \usage{
-flow.dispersion(dl, sl, type = "passive", output = "raw")
+flow.dispersion(stack, type = "passive", output = "raw")
 }
 \arguments{
-\item{dl}{Direction layer. Raster layer obtained from wind2raster function
-("rWind" package) with flow direction values.}
-
-\item{sl}{Speed layer. Raster layer obtained from wind2raster function
-("rWind" package) with flow speed values.}
+\item{stack}{RasterStack object with layers obtained from wind2raster
+function ("rWind" package) with direction and speed flow values.}
 
 \item{type}{Could be either "passive" or "active".In "passive" mode,
 movement against flow direction is not allowed (deviations from the wind
@@ -58,10 +55,9 @@ cluster.
  data(wind_data)
  w<-wind.fit(wind_data)
 
- dl<-wind2raster(w)
- sl<-wind2raster(w, type="speed")
+ wind <- wind2raster(w, type="stack")
 
- Conductance<-flow.dispersion(dl,sl,"passive", "transitionLayer")
+ Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 
 # transitionMatrix(Conductance)
 # image(transitionMatrix(Conductance))
