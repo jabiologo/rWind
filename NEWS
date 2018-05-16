@@ -1,3 +1,18 @@
+rWind v0.4.2 (Release date: 2017-05-1)
+==============
+
+Changes:
+
+o wind.dl retunrns now a "rWind data.frame" object
+
+o wind.fit retunrns now a "rWind data.frame" object
+
+o wind2raster returns by default a "RasterStack" object with two raster layers: wind.direction and wind.speed.
+
+o flow.dispersion takes now as an imput a RasterStack produced by wind2raster with wind.direction and wind.speed layers.
+
+o Including "raster,stack" as an Import function
+
 rWind v0.4 (Release date: 2017-10-10)
 ==============
 
