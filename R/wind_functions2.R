@@ -15,13 +15,13 @@
 #' that is downloaded at the work directory. If type="read-data" is selected,
 #' an R object (data.frame) is created.
 #'
-#' @param yyyy Selected year from 2011 to current (FROM).
+#' @param yyyy Selected year (FROM).
 #' @param mm Selected month (FROM).
 #' @param dd Selected day (FROM).
 #' @param tt Selected time. There are currently several options at the GFS
 #' database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 #' (UTC) (FROM).
-#' @param yyyy2 Selected year from 2011 to current (TO).
+#' @param yyyy2 Selected year (TO).
 #' @param mm2 Selected month (TO).
 #' @param dd2 Selected day (TO).
 #' @param tt2 Selected time. There are currently several options at the GFS
@@ -35,14 +35,16 @@
 #' @param type Output type. "read-data" is selected by default, creating an R
 #' object. If you choose "csv", wind.dl create a a CSV file in your work
 #' directory named "wind_yyyy_mm_dd_tt.csv".
-#' @param trace Trace downloaded files
-#' @return "rWind list" class object or .csv file with U and V vector
-#' components and wind direction and speed for each coordenate in the study area
-#' defined by lon1/lon2 and lat1/lat2 for the whole time series defined by the
-#' user
-#' @note U and V vector components allow you to create wind averages or
-#' tendences for each coordenate at the study area. Longitude coordenates are
-#' provided by GFS dataset in 0/360 notation and transformed internaly.
+#' @param trace if trace = 1 (by default) track downloaded files
+#' @return "rWind list" class object (a list of data.frames) or .csv file/s with
+#' U and V vector  components and wind direction and speed for each coordenate
+#' in the study area defined by lon1/lon2 and lat1/lat2.
+#' @note wind.dl requires two dates that represent the boundaries of the time
+#' lapse to download wind series data.
+#' U and V vector components allow you to create wind averages or tendences
+#' for each coordenate at the study area. Longitude coordenates are
+#' provided by GFS dataset in 0/360 notation and transformed internaly into
+#' -180/180.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster2}}
 #' @references
@@ -54,6 +56,7 @@
 #'
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 #' \dontrun{
+#'
 #' wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 #' }
 #'
