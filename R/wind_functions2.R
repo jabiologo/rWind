@@ -239,19 +239,17 @@ wind2raster_int<- function(x){
 
 #' Wind-data to raster file
 #'
-#' wind2raste crates a raster file (gridded) from a data.frame created by
-#' wind.fit function from "rWind" package. Latitude and logitude values are used
-#' to locate raster file and create raster resolution using rasterFromXYZ
-#' function from raster package. As raster files only can store one field of
-#' information, you should choose between direction (by default, type="dir")
-#' and speed (type="speed") to be represented by the new raster file.
+#' wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
+#' wind direction from the output of wind.dl function from "rWind" package.
+#' Latitude and logitude values are used to locate raster file and to create
+#' raster using rasterFromXYZ function from raster package.
 #'
 #' WGS84 datum (non-projected) CRS is selected by default to build the raster
 #' file.
 #'
-#' @param x a data.frame obtained by wind.fit
-#' @return A raster file representing wind direction, wind speed or both of the
-#' study area.
+#' @param x an "rWind list" obtained by wind.fit
+#' @return A raster stack or a list of raster stacks representing wind direction
+#' and speed.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}
 #' @keywords ~gfs ~wind
@@ -272,7 +270,7 @@ wind2raster_int<- function(x){
 #'
 #' @rdname wind2raster2
 #' @export wind2raster2
-wind2raster2<- function(x){
+wind2raster<- function(x){
   X <- lapply(x , wind2raster_int)
   if (length(x) == 1) return (X[[1]])
   X
