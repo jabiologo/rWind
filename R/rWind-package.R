@@ -90,7 +90,7 @@ NULL
 #'
 #' data(wind_series)
 #' str(wind_series)
-#' wind_average<- wind.mean(wind_series)
+#' #wind_average<- wind.mean(wind_series)
 #'
 NULL
 
