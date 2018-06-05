@@ -11,7 +11,7 @@ w<- list(X)
 #dl <- wind2raster(w, type="dir")
 #sl <- wind2raster(w, type="speed")
 
-wind <- wind2raster2(w)
+wind <- wind2raster(w)
 
 # This is not working because in flow.dispersion_int, the function as.matrix
 # is obtained from base rather than raster package. We have put @importMethodsFrom

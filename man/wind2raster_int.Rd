@@ -40,7 +40,7 @@ data(wind_data)
 
 }
 \seealso{
-\code{\link{wind.dl}}, \code{\link{wind2raster2}}
+\code{\link{wind.dl}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

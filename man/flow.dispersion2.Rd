@@ -73,7 +73,7 @@ Geographical Grids. Journal of Statistical Software, 76(13), 1-21.
 doi:10.18637/jss.v076.i13
 }
 \seealso{
-\code{\link{wind.dl}}, \code{\link{wind2raster2}}
+\code{\link{wind.dl}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López; Klaus Schliep

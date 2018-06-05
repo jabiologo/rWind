@@ -8,23 +8,23 @@ wind.dl(yyyy, mm, dd, tt, yyyy2, mm2, dd2, tt2, lon1, lon2, lat1, lat2,
   by = "3 hours", type = "read-data", trace = 1)
 }
 \arguments{
-\item{yyyy}{Selected year from 2011 to current (FROM).}
+\item{yyyy}{Selected start year (FROM).}
 
-\item{mm}{Selected month (FROM).}
+\item{mm}{Selected start month (FROM).}
 
-\item{dd}{Selected day (FROM).}
+\item{dd}{Selected start day (FROM).}
 
-\item{tt}{Selected time. There are currently several options at the GFS
+\item{tt}{Selected start time. There are currently several options at the GFS
 database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 (UTC) (FROM).}
 
-\item{yyyy2}{Selected year from 2011 to current (TO).}
+\item{yyyy2}{Selected finish year (TO).}
 
-\item{mm2}{Selected month (TO).}
+\item{mm2}{Selected finish month (TO).}
 
-\item{dd2}{Selected day (TO).}
+\item{dd2}{Selected finish day (TO).}
 
-\item{tt2}{Selected time. There are currently several options at the GFS
+\item{tt2}{Selected finish time. There are currently several options at the GFS
 database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 (UTC) (TO).}
 
@@ -42,13 +42,12 @@ database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 object. If you choose "csv", wind.dl create a a CSV file in your work
 directory named "wind_yyyy_mm_dd_tt.csv".}
 
-\item{trace}{Trace downloaded files}
+\item{trace}{if trace = 1 (by default) track downloaded files}
 }
 \value{
-"rWind list" class object or .csv file with U and V vector
-components and wind direction and speed for each coordenate in the study area
-defined by lon1/lon2 and lat1/lat2 for the whole time series defined by the
-user
+"rWind list" class object (a list of data.frames) or .csv file/s with
+U and V vector  components and wind direction and speed for each coordenate
+in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
 wind.dl downloads wind data from the Global Forecast System (GFS) of the
@@ -67,14 +66,18 @@ that is downloaded at the work directory. If type="read-data" is selected,
 an R object (data.frame) is created.
 }
 \note{
-U and V vector components allow you to create wind averages or
-tendences for each coordenate at the study area. Longitude coordenates are
-provided by GFS dataset in 0/360 notation and transformed internaly.
+wind.dl requires two dates that represent the boundaries of the time
+lapse to download wind series data.
+U and V vector components allow you to create wind averages or tendences
+for each coordenate at the study area. Longitude coordenates are
+provided by GFS dataset in 0/360 notation and transformed internaly into
+-180/180.
 }
 \examples{
 
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 \dontrun{
+
 wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 }
 
@@ -85,7 +88,7 @@ http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster2}}
+\code{\link{wind.stats}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

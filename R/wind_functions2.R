@@ -46,7 +46,7 @@
 #' provided by GFS dataset in 0/360 notation and transformed internaly into
 #' -180/180.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster2}}
+#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
@@ -160,7 +160,7 @@ wind.dl<- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' @note This function is used internaly by wind.dl
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind.stats}},
-#' \code{\link{wind2raster2}}
+#' \code{\link{wind2raster}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~wind ~gfs
 #' @examples
@@ -208,7 +208,7 @@ wind.fit_int <- function (tmpx) {
 #' @return A raster file representing wind direction, wind speed or both of the
 #' study area.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster2}}
+#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @keywords ~gfs ~wind
 #' @examples
 #'
@@ -268,8 +268,8 @@ wind2raster_int<- function(x){
 #'
 #' @importFrom raster rasterFromXYZ stack
 #'
-#' @rdname wind2raster2
-#' @export wind2raster2
+#' @rdname wind2raster
+#' @export wind2raster
 wind2raster<- function(x){
   X <- lapply(x , wind2raster_int)
   if (length(x) == 1) return (X[[1]])
@@ -319,7 +319,6 @@ wind2raster<- function(x){
 #'
 #' # wind.fit(wind_average)
 #'
-#'
 #' @export wind.stats
 wind.stats <- function(wind_series, fun=mean){
   options(scipen = 999)
@@ -344,7 +343,6 @@ wind.stats <- function(wind_series, fun=mean){
   tmp <- wind.fit_int(wind_mean)
   return(tmp)
 }
-
 
 
 #' Arrow direction fitting for Arrowhead function from "shape" package
@@ -395,7 +393,6 @@ arrowDir <- function(W){
 }
 
 
-
 #' Compute flow-based cost or conductance
 #'
 #' flow.dispersion_int computes movement conductance through a flow either, sea or
@@ -429,7 +426,7 @@ arrowDir <- function(W){
 #' areas is strongly adviced perform the analysis in a remote computer or a
 #' cluster.
 #' @author Javier Fernández-López; Klaus Schliep
-#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster2}}
+#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @references
 #'
 #' Felicísimo, Á. M., Muñoz, J., & González-Solis, J. (2008). Ocean surface
@@ -615,7 +612,7 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' areas is strongly adviced perform the analysis in a remote computer or a
 #' cluster.
 #' @author Javier Fernández-López; Klaus Schliep
-#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster2}}
+#' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @references
 #'
 #' Felicísimo, Á. M., Muñoz, J., & González-Solis, J. (2008). Ocean surface

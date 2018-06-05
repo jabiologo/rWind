@@ -50,7 +50,6 @@ For large time series, it could take a while.
 
 # wind.fit(wind_average)
 
-
 }
 \references{
 https://en.wikipedia.org/wiki/Cross_product
