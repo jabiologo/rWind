@@ -8,7 +8,7 @@ wind.dl_2(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1)
 }
 \arguments{
 \item{time}{a scalar or vector of POSIXt or Date objects or an character 
-which can transfored into those, see example. 
+which can transfored into those, see example below. 
 There are currently these options at the GFS database for the hours: 
 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC) (TO).}
 
@@ -62,6 +62,7 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 
 wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 
+library(lubridate)
 dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
 wind.dl_2(dt,-10,5,35,45)
@@ -75,7 +76,8 @@ http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}}
+\code{\link{wind.stats}}, \code{\link{wind2raster}}, 
+\code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

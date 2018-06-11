@@ -157,14 +157,14 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' and wind is calculated for Earth surface, at 10 m. More metadata
 #' information:
 #' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
-#'
+#' 
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
 #' that is downloaded at the work directory. If type="read-data" is selected,
 #' an R object (data.frame) is created.
 #'
 #' @param time a scalar or vector of POSIXt or Date objects or an character 
-#' which can transfored into those, see example. 
+#' which can transfored into those, see example below. 
 #' There are currently these options at the GFS database for the hours: 
 #' 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC) (TO).
 #' @param lon1 Western longitude
@@ -185,7 +185,8 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' provided by GFS dataset in 0/360 notation and transformed internaly into
 #' -180/180.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}, 
+#' \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}} 
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
@@ -198,6 +199,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #'
 #' wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 #' 
+#' library(lubridate)
 #' dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
 #'           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
 #' wind.dl_2(dt,-10,5,35,45)
@@ -205,7 +207,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' }
 #'
 #' @importFrom utils write.table read.csv download.file
-#' @importFrom lubridate ymd_h year month day hour
+#' @importFrom lubridate ymd_h year month day hour as_datetime
 #' @rdname wind.dl_2
 #' @export wind.dl_2
 wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
@@ -625,9 +627,9 @@ arrowDir <- function(W){
 #' # data(wind_data)
 #' # w<-wind.fit(wind_data)
 #'
-#'  #wind <- wind2raster(w, type="stack")
+#' # wind <- wind2raster(w, type="stack")
 #'
-#' #  Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+#' # Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 #'
 #' # transitionMatrix(Conductance)
 #' # image(transitionMatrix(Conductance))
@@ -825,6 +827,9 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' @export flow.dispersion
 #'
 flow.dispersion <- function(x, type = "passive", output = "raw") {
+    if(inherits(x, "RasterStack")){ 
+        return(flow.dispersion_int(x, type=type, output=output))
+    }
     lapply(x, flow.dispersion_int, type=type, output=output)
 }
 

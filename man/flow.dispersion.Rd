@@ -50,12 +50,11 @@ cluster.
 
 # require(gdistance)
 
-w<-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
+# w<-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
 
 # data(wind_data)
-# w<-wind.fit(wind_data)
 
-wind <- wind2raster(w)
+# wind <- wind2raster(w)
 
 # Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 
