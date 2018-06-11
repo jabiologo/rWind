@@ -55,9 +55,9 @@ cluster.
 # data(wind_data)
 # w<-wind.fit(wind_data)
 
- #wind <- wind2raster(w, type="stack")
+# wind <- wind2raster(w, type="stack")
 
-#  Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+# Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 
 # transitionMatrix(Conductance)
 # image(transitionMatrix(Conductance))

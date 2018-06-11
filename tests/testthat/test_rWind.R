@@ -17,11 +17,11 @@ wind <- wind2raster(w)
 # is obtained from base rather than raster package. We have put @importMethodsFrom
 # but is not working... try to fix (5 - June - 2018)
 
-#fl1 <- flow.dispersion2(wind, "passive", "raw")
-#fl2 <- flow.dispersion2(wind, "active", "raw")
+#fl1 <- flow.dispersion(wind, "passive", "raw")
+#fl2 <- flow.dispersion(wind, "active", "raw")
 
-#fl3 <- flow.dispersion2(wind, "passive", "transitionLayer")
-#fl4 <- flow.dispersion2(wind, "active", "transitionLayer")
+#fl3 <- flow.dispersion(wind, "passive", "transitionLayer")
+#fl4 <- flow.dispersion(wind, "active", "transitionLayer")
 
 
 test_that("rWind works as expected", {
