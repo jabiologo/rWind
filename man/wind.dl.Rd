@@ -78,7 +78,7 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 \dontrun{
 
-wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+#wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 }
 
 }
