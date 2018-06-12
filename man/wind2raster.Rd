@@ -17,7 +17,9 @@ and speed.
 wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
 wind direction from the output of wind.dl function from "rWind" package.
 Latitude and logitude values are used to locate raster file and to create
-raster using rasterFromXYZ function from raster package.
+raster using rasterFromXYZ function from raster package. If input file is a
+list of wind data created by wind.dl, a list of raster stacks will be
+returned
 }
 \details{
 WGS84 datum (non-projected) CRS is selected by default to build the raster
@@ -26,15 +28,14 @@ file.
 \examples{
 
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
+# wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 
-#data(wind_data)
+data(wind.data)
 
-# Fit downloaded dataset to be plotted
-#wind_fitted_data <- wind.fit(wind_data)
+# Create raster stack from the downloaded data with wind directon and speed
+# layers
 
-# Create raster file from the data.frame created by wind.fit, representing wind speed.
-#wind2raster(wind_fitted_data, type="speed")
+wind2raster(wind.data)
 
 }
 \seealso{

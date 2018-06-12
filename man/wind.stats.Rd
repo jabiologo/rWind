@@ -9,46 +9,30 @@ wind.stats(wind_series, fun = mean)
 \arguments{
 \item{wind_series}{A list of data.frames downloaded by wind.dl function.}
 
-\item{fun}{any stat function.}
+\item{fun}{any stats function.}
 }
 \value{
-A data.frame with a similar format as resulted by wind.dl, prepared
-to be transformed by wind.fit.
+A data.frame with a similar format as resulted by wind.dl
 }
 \description{
-wind.stats computes the mean (average) of a time series dataset of winds in
-the same region. To do this, wind.mean uses U and V vector components of
-several wind data.frames stored in a list. Note that, if you want to perform
-wind direction and speed average, first you should calculate the mean of U
-and V components and then transform it to direction and speed using wind.fit
-function from "rWind" package.
-}
-\note{
-For large time series, it could take a while.
+wind.stats computes any stats (mean, max, min, etc.) of a time series dataset
+of winds in the same region. To do this, wind.stats uses U and V vector
+components of several wind data.frames stored in a list.
 }
 \examples{
 
-# First, you should create an empty list to store all the data
 
-# wind_series<- list()
-
-# Then, you can use a wind.dl inside a for-in loop to download and store wind data of
+# Use wind.dl to download and store wind data of
 # the January 3rd 2015 at several hours around New Zealand.
 
-# t<-c(00 , 03 , 06 , 09 , 12 , 15 , 18 , 21)
-# for (tt in 1:8){
-#  w<-wind.dl(2015,1,3,t[tt],164,179,-48,-33)
-#  wind_series[[tt]]<-w
-# }
+data(wind.series)
 
-#data(wind_series)
+# Use wind.stats to compute several measures:
 
-# Finally, you can implement wind.mean and wind.fit to compute the average of all winds
-# datasets in the list:
+wind.mean<- wind.stats(wind.series, fun=mean)
+wind.median<- wind.stats(wind.series, fun=median)
+wind.max<- wind.stats(wind.series, fun=max)
 
-#wind_average<- wind.mean(wind_series)
-
-# wind.fit(wind_average)
 
 }
 \references{

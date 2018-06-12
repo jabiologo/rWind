@@ -7,9 +7,9 @@
 ds2uv(d, s)
 }
 \arguments{
-\item{u}{direction (degrees).}
+\item{d}{direction (degrees).}
 
-\item{v}{speed (m/s).}
+\item{s}{speed (m/s).}
 }
 \value{
 "ds2uv" returns a matrix with U and V values
