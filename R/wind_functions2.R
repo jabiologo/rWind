@@ -333,7 +333,7 @@ wind.fit_int <- function (tmpx) {
   names(tmpx)<- c("time", "lat","lon", "ugrd10m", "vgrd10m")
   res <- cbind(tmpx, dir=direction, speed=speed)
   res <- res[with(res, order(-lat)), ]
-  res[,1] <- ymd_hms(res[,1])
+  res[,1] <- ymd_hms(res[,1], truncated = 3)
   return(res)
 }
 
@@ -378,8 +378,8 @@ uv2ds <- function (u,v) {
 #' Transform direction and speed in U and V components
 #'
 #'
-#' @param u direction (degrees).
-#' @param v speed (m/s).
+#' @param d direction (degrees).
+#' @param s speed (m/s).
 #' @return "ds2uv" returns a matrix with U and V values
 #' @note Multiple speed and direction values can be procesed.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
@@ -457,7 +457,9 @@ wind2raster_int<- function(x){
 #' wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
 #' wind direction from the output of wind.dl function from "rWind" package.
 #' Latitude and logitude values are used to locate raster file and to create
-#' raster using rasterFromXYZ function from raster package.
+#' raster using rasterFromXYZ function from raster package. If input file is a
+#' list of wind data created by wind.dl, a list of raster stacks will be
+#' returned
 #'
 #' WGS84 datum (non-projected) CRS is selected by default to build the raster
 #' file.
@@ -471,15 +473,14 @@ wind2raster_int<- function(x){
 #' @examples
 #'
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-#' # wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
+#' # wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 #'
-#' #data(wind_data)
+#' data(wind.data)
 #'
-#' # Fit downloaded dataset to be plotted
-#' #wind_fitted_data <- wind.fit(wind_data)
+#' # Create raster stack from the downloaded data with wind directon and speed
+#' # layers
 #'
-#' # Create raster file from the data.frame created by wind.fit, representing wind speed.
-#' #wind2raster(wind_fitted_data, type="speed")
+#' wind2raster(wind.data)
 #'
 #' @importFrom raster rasterFromXYZ stack
 #'
@@ -493,46 +494,31 @@ wind2raster<- function(x){
 
 #' Wind-data stats
 #'
-#' wind.stats computes the mean (average) of a time series dataset of winds in
-#' the same region. To do this, wind.mean uses U and V vector components of
-#' several wind data.frames stored in a list. Note that, if you want to perform
-#' wind direction and speed average, first you should calculate the mean of U
-#' and V components and then transform it to direction and speed using wind.fit
-#' function from "rWind" package.
-#'
+#' wind.stats computes any stats (mean, max, min, etc.) of a time series dataset
+#' of winds in the same region. To do this, wind.stats uses U and V vector
+#' components of several wind data.frames stored in a list.
 #'
 #' @param wind_series A list of data.frames downloaded by wind.dl function.
-#' @param fun any stat function.
-#' @return A data.frame with a similar format as resulted by wind.dl, prepared
-#' to be transformed by wind.fit.
-#' @note For large time series, it could take a while.
+#' @param fun any stats function.
+#' @return A data.frame with a similar format as resulted by wind.dl
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~kwd1 ~kwd2
 #' @examples
 #'
-#' # First, you should create an empty list to store all the data
 #'
-#' # wind_series<- list()
-#'
-#' # Then, you can use a wind.dl inside a for-in loop to download and store wind data of
+#' # Use wind.dl to download and store wind data of
 #' # the January 3rd 2015 at several hours around New Zealand.
 #'
-#' # t<-c(00 , 03 , 06 , 09 , 12 , 15 , 18 , 21)
-#' # for (tt in 1:8){
-#' #  w<-wind.dl(2015,1,3,t[tt],164,179,-48,-33)
-#' #  wind_series[[tt]]<-w
-#' # }
+#' data(wind.series)
 #'
-#' #data(wind_series)
+#' # Use wind.stats to compute several measures:
 #'
-#' # Finally, you can implement wind.mean and wind.fit to compute the average of all winds
-#' # datasets in the list:
+#' wind.mean<- wind.stats(wind.series, fun=mean)
+#' wind.median<- wind.stats(wind.series, fun=median)
+#' wind.max<- wind.stats(wind.series, fun=max)
 #'
-#' #wind_average<- wind.mean(wind_series)
-#'
-#' # wind.fit(wind_average)
 #'
 #' @export wind.stats
 wind.stats <- function(wind_series, fun=mean){
