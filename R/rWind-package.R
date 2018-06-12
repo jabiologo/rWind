@@ -40,8 +40,8 @@ NULL
 #' data } \item{list("latitude (degrees_north)")}{a numeric with latitude values
 #' } \item{list("longitude (degrees_east)")}{a numeric with longitude values }
 #' \item{list("ugrd10m (m s-1)")}{a numeric with U component of wind data }
-#' \item{list("vgrd10m (m s-1)")}{a numeric with V component of wind data } }
-#' \item{list("dir")}{a numeric with direction of wind data } }
+#' \item{list("vgrd10m (m s-1)")}{a numeric with V component of wind data }
+#' \item{list("dir")}{a numeric with direction of wind data }
 #' \item{list("speed")}{a numeric with speed of wind data } }
 #' @references
 #' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
@@ -56,4 +56,5 @@ NULL
 #' head(wind.data[[1]])
 #'
 NULL
+
 
