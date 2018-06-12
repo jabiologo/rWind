@@ -57,7 +57,8 @@
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 #' \dontrun{
 #'
-#' #wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+#' wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+#'
 #' }
 #'
 #' @importFrom utils write.table read.csv download.file
@@ -199,10 +200,10 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #'
 #' wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 #'
-#' library(lubridate)
-#' dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-#'           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-#' wind.dl_2(dt,-10,5,35,45)
+#' # library(lubridate)
+#' # dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
+#' #           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
+#' #  wind.dl_2(dt,-10,5,35,45)
 #'
 #' }
 #'
@@ -210,6 +211,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' @importFrom lubridate ymd_h year month day hour as_datetime
 #' @rdname wind.dl_2
 #' @export wind.dl_2
+#'
 wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 
     type <- match.arg(type, c("read-data", "csv"))
@@ -290,17 +292,8 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
     return(resultados)
 }
 
-# time = "2018/6/8 9:00:00"
-# wind.dl_2(time,-10,5,35,45)
 
-# Create a sequence with all dates available between selected dates
-#    dt <- seq(ymd_h(paste(yyyy,mm,dd,tt, sep="-")),
-#              ymd_h(paste(yyyy2,mm2,dd2,tt2, sep="-")),by="3 hours")
-#    dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-#              ymd_h(paste(2018,1,2,00, sep="-")),by="3 hours")
-
-
-#' Wind-data fit_int
+#' wind.fit_int
 #'
 #' wind.fit_int is used internaly by wind.dl to transform downloaded data from
 #' GFS. wind.fit_int applies trigonometry tools to transform U and V vector wind
@@ -318,7 +311,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @keywords ~wind ~gfs
 #' @examples
 #'
-#' wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+#' # wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 #'
 #' @importFrom lubridate ymd_hms
 #' @rdname wind.fit_int
@@ -344,6 +337,26 @@ wind.fit_int <- function (tmpx) {
   return(res)
 }
 
+#' Transform U and V components in direction and speed
+#'
+#'
+#' @param u U component.
+#' @param v U component.
+#' @return "uv2ds" returns a matrix with direction and speed values
+#' @note Multiple U and V values can be procesed.
+#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @keywords ~wind
+#' @examples
+#'
+#' \dontrun{
+#'
+#' uv2ds(c(1,1,3,1), c(1,1.7,3,1))
+#'
+#' }
+#'
+#' @rdname uv2ds
+#' @export uv2ds
 
 uv2ds <- function (u,v) {
     rad2deg <- function(rad) {(rad * 180) / (pi)}

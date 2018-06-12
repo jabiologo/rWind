@@ -2,6 +2,7 @@
 
 export(arrowDir)
 export(flow.dispersion)
+export(uv2ds)
 export(wind.dl)
 export(wind.dl_2)
 export(wind.stats)

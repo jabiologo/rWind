@@ -62,10 +62,10 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 
 wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 
-library(lubridate)
-dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-          ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-wind.dl_2(dt,-10,5,35,45)
+# library(lubridate)
+# dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
+#           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
+#  wind.dl_2(dt,-10,5,35,45)
 
 }
 

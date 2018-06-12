@@ -2,7 +2,7 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind.fit_int}
 \alias{wind.fit_int}
-\title{Wind-data fit_int}
+\title{wind.fit_int}
 \usage{
 wind.fit_int(tmpx)
 }
@@ -24,7 +24,7 @@ This function is used internaly by wind.dl
 }
 \examples{
 
-wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+# wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
 
 }
 \references{
