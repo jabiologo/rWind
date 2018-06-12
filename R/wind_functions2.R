@@ -375,6 +375,27 @@ uv2ds <- function (u,v) {
 }
 
 
+#' Transform direction and speed in U and V components
+#'
+#'
+#' @param u direction (degrees).
+#' @param v speed (m/s).
+#' @return "ds2uv" returns a matrix with U and V values
+#' @note Multiple speed and direction values can be procesed.
+#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @keywords ~wind
+#' @examples
+#'
+#' \dontrun{
+#'
+#' ds2uv(c(32,78,300,234),c(6,2,8,3.2))
+#'
+#' }
+#'
+#' @rdname ds2uv
+#' @export ds2uv
+
 ds2uv <- function(d,s){
     deg2rad <- function(deg) {(deg * pi) / (180)}
     d <- d %% 360
