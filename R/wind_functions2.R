@@ -542,7 +542,9 @@ wind.stats <- function(wind_series, fun=mean){
 
   wind_mean<-cbind(wind_mean,umean,vmean)
   tmp <- wind.fit_int(wind_mean)
-  return(tmp)
+  tmp_list <- list()
+  tmp_list[[1]]<-tmp
+  return(tmp_list)
 }
 
 
