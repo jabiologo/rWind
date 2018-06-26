@@ -494,13 +494,14 @@ wind2raster<- function(x){
 
 #' Wind-data stats
 #'
-#' wind.stats computes any stats (mean, max, min, etc.) of a time series dataset
+#' wind.stats computes stats (mean, median, etc.) of a time series dataset
 #' of winds in the same region. To do this, wind.stats uses U and V vector
 #' components of several wind data.frames stored in a list.
 #'
 #' @param wind_series A list of data.frames downloaded by wind.dl function.
 #' @param fun any stats function.
 #' @return A data.frame with a similar format as resulted by wind.dl
+#' @note Date and time are given by the first element of the time series
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
@@ -517,12 +518,12 @@ wind2raster<- function(x){
 #'
 #' wind.mean<- wind.stats(wind.series, fun=mean)
 #' wind.median<- wind.stats(wind.series, fun=median)
-#' wind.max<- wind.stats(wind.series, fun=max)
 #'
 #'
 #' @export wind.stats
 wind.stats <- function(wind_series, fun=mean){
   options(scipen = 999)
+
   wind_mean <- cbind(data.frame(wind_series[[1]][,1]),
                      data.frame(wind_series[[1]][,2]),
                      data.frame(wind_series[[1]][,3]))
@@ -545,6 +546,44 @@ wind.stats <- function(wind_series, fun=mean){
   tmp_list <- list()
   tmp_list[[1]]<-tmp
   return(tmp_list)
+}
+
+#' Wind speed boundaries
+#'
+#' speed.boundaries computes limits (min and max) of a time series dataset
+#' of wind speeds in the same region. Note that to compute this boundaries for
+#' wind direction makes no sens, so directions are not used.
+#'
+#' @param wind_series A list of data.frames downloaded by wind.dl function.
+#' @param fun min or max.
+#' @return A numeric vector with max or min speed por each cell in the study
+#' area for this time series.
+#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @seealso \code{\link{wind.dl}}
+#' @references https://en.wikipedia.org/wiki/Cross_product
+#' @keywords ~kwd1 ~kwd2
+#' @examples
+#'
+#'
+#' # Use wind.dl to download and store wind data of
+#' # the January 3rd 2015 at several hours around New Zealand.
+#'
+#' data(wind.series)
+#'
+#' # Use wind.stats to compute several measures:
+#'
+#' max.speed <- speed.boundaries(wind.series, fun=max)
+#' min.speed<- speed.boundaries(wind.series, fun=min)
+#'
+#'
+#' @export speed.boundaries
+speed.boundaries <- function(wind_series, fun=max){
+  options(scipen = 999)
+  l <- length(wind_series)
+  row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
+  for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,7]
+  speed <- apply(row_mean_matrix, 1, fun)
+  return(speed)
 }
 
 

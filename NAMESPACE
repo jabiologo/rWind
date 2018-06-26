@@ -3,6 +3,7 @@
 export(arrowDir)
 export(ds2uv)
 export(flow.dispersion)
+export(speed.boundaries)
 export(uv2ds)
 export(wind.dl)
 export(wind.dl_2)
