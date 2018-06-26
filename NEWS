@@ -1,17 +1,35 @@
-rWind v0.4.2 (Release date: 2017-05-1)
+rWind v1.1.0 (Release date: 2018-06-26)
 ==============
 
 Changes:
 
-o wind.dl retunrns now a "rWind data.frame" object
+o wind.dl can be used with a time series.
 
-o wind.fit retunrns now a "rWind data.frame" object
+o wind.fit is deleted and integrated in wind.dl.
+
+o wind2raster is addapted to work with lists.
+
+o flow.dispersion is addapted to work with lists.
+
+o wind.stats is addapted to allow user-defined functions for mean, median, etc.
+
+o speed.boundaries is created to compute min and max wind speeds from a time series
+
+
+rWind v0.4.2 (Release date: 2018-05-1)
+==============
+
+Changes:
+
+o wind.dl retunrns now a "rWind data.frame" object.
+
+o wind.fit retunrns now a "rWind data.frame" object.
 
 o wind2raster returns by default a "RasterStack" object with two raster layers: wind.direction and wind.speed.
 
 o flow.dispersion takes now as an imput a RasterStack produced by wind2raster with wind.direction and wind.speed layers.
 
-o Including "raster,stack" as an Import function
+o Including "raster,stack" as an Import function.
 
 rWind v0.4 (Release date: 2017-10-10)
 ==============
@@ -26,7 +44,7 @@ o Removing at the moment see currents functions.
 
 o Including roxygen code into wind_functions.R to create package documentation automaticaly.
 
-o Removing "shape" package as an Import
+o Removing "shape" package as an Import.
 
 rWind v0.3 (Release date: 2017-08-18)
 ==============
@@ -37,9 +55,9 @@ o wind.dl function have change the headers of each column. Now, they are just in
 
 o wind.fit have improve his performance due to some vectorization in the data (it is much faster now). It also has been adapted to the new input provided by wind.dl function (just one row as header).
 
-o wind.mean have improve his performance (it is much faster now)
+o wind.mean have improve his performance (it is much faster now).
 
-o flow.dispersion have improve his performance, using matrix rather than raster objects to perform the maths (it is much faster now). Now you can also obtain as output either, a graph, a transitionLayer or a Sparse Matrix (see documentation)
+o flow.dispersion have improve his performance, using matrix rather than raster objects to perform the maths (it is much faster now). Now you can also obtain as output either, a graph, a transitionLayer or a Sparse Matrix (see documentation).
 
 o Two new datasets has been added to improve the example code:
     - "wind_data" is a downloaded data with wind.dl
