@@ -48,18 +48,18 @@ cluster.
 }
 \examples{
 
-# require(gdistance)
+require(gdistance)
 
-# w<-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
+# wind.data <-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
 
-# data(wind_data)
+data(wind.data)
 
-# wind <- wind2raster(w)
+wind <- wind2raster(wind.data)
 
-# Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 
-# transitionMatrix(Conductance)
-# image(transitionMatrix(Conductance))
+transitionMatrix(Conductance)
+image(transitionMatrix(Conductance))
 
 }
 \references{
