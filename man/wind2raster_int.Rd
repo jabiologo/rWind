@@ -25,17 +25,6 @@ and speed (type="speed") to be represented by the new raster file.
 WGS84 datum (non-projected) CRS is selected by default to build the raster
 file.
 }
-\examples{
-
-# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)
-
-data(wind.data)
-
-# Create raster file from the data.frame created by wind.fit
-wind2raster(wind_fitted_data, type="speed")
-
-}
 \seealso{
 \code{\link{wind.dl}}, \code{\link{wind2raster}}
 }
