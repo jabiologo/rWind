@@ -37,12 +37,14 @@ data(wind.data)
 # Create a vector with wind direction (angles) adapted
 alpha <- arrowDir(wind.data[[1]])
 
+\dontrun{
 # Now, you can plot wind direction with Arrowhead function from shapes package
 # Load "shape package
-# require(shape)
-# plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
-# Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
-
+require(shape)
+plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
+Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, 
+          arr.length = 0.1, arr.type="curved")
+}
 
 }
 \references{

@@ -84,7 +84,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
   dt <- seq(ymd_h(paste(yyyy,mm,dd,tt, sep="-")),
             ymd_h(paste(yyyy2,mm2,dd2,tt2, sep="-")),by=by)
 
-  for (id in 1:length(dt)) {
+  for (id in 1:seq_along(dt)) {
 
     yyyy_c <- year(dt[id])
     mm_c <- sprintf("%02d",month(dt[id]))
@@ -606,12 +606,14 @@ speed.boundaries <- function(wind_series, fun=max){
 #' # Create a vector with wind direction (angles) adapted
 #' alpha <- arrowDir(wind.data[[1]])
 #'
+#' \dontrun{
 #' # Now, you can plot wind direction with Arrowhead function from shapes package
 #' # Load "shape package
-#' # require(shape)
-#' # plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
-#' # Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
-#'
+#' require(shape)
+#' plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
+#' Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, 
+#'           arr.length = 0.1, arr.type="curved")
+#' }
 #'
 #' @export arrowDir
 arrowDir <- function(W){
@@ -710,13 +712,13 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
     dif=(abs(wind-celda))
     dif[dif > 180] = 360 - dif[dif > 180]
     if (type=="passive"){
-      dif[dif >= 90] = Inf # check
-      dif[dif < 90] = 2 * dif[dif < 90]
-      dif[dif==0] = 0.1
+      dif[dif >= 90] <- Inf # check
+      dif[dif < 90] <- 2 * dif[dif < 90]
+      dif[dif==0] <- 0.1
     }
     else {
-      dif[dif < 90] = 2 * dif[dif < 90]
-      dif[dif==0] = 0.1
+      dif[dif < 90] <- 2 * dif[dif < 90]
+      dif[dif==0] <- 0.1
     }
     dif
   }
@@ -732,7 +734,7 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 
   north.west.from <- as.vector(M[-1,-1])
   north.west.to <- as.vector(M[-nr,-nc])
-  north.west.cost <-cost.Felicisimo(DL[-1,-1],directions[1], type) / SL[-1,-1]
+  north.west.cost <- cost.Felicisimo(DL[-1,-1],directions[1], type) / SL[-1,-1]
 
   ###################################################################
 
@@ -803,7 +805,7 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
   if(output == "transitionLayer") {
     tmp <- transition(stack$wind.direction, transitionFunction=function(x) 0, directions=8)
     transitionMatrix(tmp)<-sparseMatrix(i=ii, j=jj, x= 1 / xx)
-    #        transitionMatrix(tl)<-replace(transitionMatrix(tl), is.infinite(transitionMatrix(tl)), 0)
+    #  transitionMatrix(tl)<-replace(transitionMatrix(tl), is.infinite(transitionMatrix(tl)), 0)
     return(tmp)
   }
 
@@ -812,8 +814,8 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 
 #' Compute flow-based cost or conductance
 #'
-#' flow.dispersion_int computes movement conductance through a flow either, sea or
-#' wind currents. It implements the formula described in Felícisimo et al.
+#' flow.dispersion_int computes movement conductance through a flow either, sea 
+#' or wind currents. It implements the formula described in Felícisimo et al.
 #' 2008:
 #'
 #' Cost=(1/Speed)*(HorizontalFactor)
