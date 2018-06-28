@@ -12,7 +12,7 @@ wind.stats(wind_series, fun = mean)
 \item{fun}{any stats function.}
 }
 \value{
-A data.frame with a similar format as resulted by wind.dl
+An object of class "rWind"
 }
 \description{
 wind.stats computes stats (mean, median, etc.) of a time series dataset

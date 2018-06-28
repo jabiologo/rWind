@@ -7,7 +7,7 @@
 arrowDir(W)
 }
 \arguments{
-\item{W}{A data.frame obtained by function wind.fit. It should content a
+\item{W}{An object of class "rWind" or a data.frame which should content a
 column named "dir".}
 }
 \value{
@@ -30,21 +30,18 @@ arrowDir function works always together with Arrowhead function from
 \examples{
 
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
+# wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)
 
-#data(wind_data)
-
-# Fit downloaded dataset to be plotted
-#wind_fitted_data <- wind.fit(wind_data)
+data(wind.data)
 
 # Create a vector with wind direction (angles) adapted
-#alpha=arrowDir(wind_fitted_data)
+alpha <- arrowDir(wind.data[[1]])
 
 # Now, you can plot wind direction with Arrowhead function from shapes package
-#Load "shape package
-#require(shape)
-# plot(wind_data$lon, wind_data$lat, type="n")
-# Arrowhead(wind_data$lon, wind_data$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
+# Load "shape package
+# require(shape)
+# plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
+# Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
 
 
 }

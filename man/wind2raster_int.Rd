@@ -7,7 +7,7 @@
 wind2raster_int(x)
 }
 \arguments{
-\item{x}{a data.frame obtained by wind.fit}
+\item{x}{an object of class \code{rWind}}
 }
 \value{
 A raster file representing wind direction, wind speed or both of the
@@ -24,20 +24,6 @@ and speed (type="speed") to be represented by the new raster file.
 \details{
 WGS84 datum (non-projected) CRS is selected by default to build the raster
 file.
-}
-\examples{
-
-# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
-
-data(wind_data)
-
-# Fit downloaded dataset to be plotted
-#wind_fitted_data <- wind.fit(wind_data)
-
-# Create raster file from the data.frame created by wind.fit, representing wind speed.
-#wind2raster(wind_fitted_data, type="speed")
-
 }
 \seealso{
 \code{\link{wind.dl}}, \code{\link{wind2raster}}

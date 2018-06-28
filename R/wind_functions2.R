@@ -419,25 +419,12 @@ ds2uv <- function(d,s){
 #' WGS84 datum (non-projected) CRS is selected by default to build the raster
 #' file.
 #'
-#' @param x a data.frame obtained by wind.fit
+#' @param x an object of class \code{rWind}
 #' @return A raster file representing wind direction, wind speed or both of the
 #' study area.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @keywords ~gfs ~wind
-#' @examples
-#'
-#' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-#' # wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
-#'
-#' data(wind_data)
-#'
-#' # Fit downloaded dataset to be plotted
-#' #wind_fitted_data <- wind.fit(wind_data)
-#'
-#' # Create raster file from the data.frame created by wind.fit, representing wind speed.
-#' #wind2raster(wind_fitted_data, type="speed")
-#'
 #' @importFrom raster rasterFromXYZ stack
 #'
 #' @rdname wind2raster_int
@@ -455,10 +442,10 @@ wind2raster_int<- function(x){
 #' Wind-data to raster file
 #'
 #' wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
-#' wind direction from the output of wind.dl function from "rWind" package.
+#' wind direction for an object of \code{rWind}.
 #' Latitude and logitude values are used to locate raster file and to create
-#' raster using rasterFromXYZ function from raster package. If input file is a
-#' list of wind data created by wind.dl, a list of raster stacks will be
+#' raster using rasterFromXYZ function from raster package. If the input file is 
+#' a list of wind data created by wind.dl, a list of raster stacks will be
 #' returned
 #'
 #' WGS84 datum (non-projected) CRS is selected by default to build the raster
@@ -500,7 +487,7 @@ wind2raster<- function(x){
 #'
 #' @param wind_series A list of data.frames downloaded by wind.dl function.
 #' @param fun any stats function.
-#' @return A data.frame with a similar format as resulted by wind.dl
+#' @return An object of class "rWind"
 #' @note Date and time are given by the first element of the time series
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}
@@ -545,6 +532,7 @@ wind.stats <- function(wind_series, fun=mean){
   tmp <- wind.fit_int(wind_mean)
   tmp_list <- list()
   tmp_list[[1]]<-tmp
+  class(tmp_list) <- c("rWind", "list")
   return(tmp_list)
 }
 
@@ -597,7 +585,7 @@ speed.boundaries <- function(wind_series, fun=max){
 #' function adapts wind direction provided by wind.fit (clockwise, relative to
 #' y-axis ) to requirements of Arrowhead.
 #'
-#' @param W A data.frame obtained by function wind.fit. It should content a
+#' @param W An object of class "rWind" or a data.frame which should content a
 #' column named "dir".
 #' @return A vector with angles for each arrow to be plotted by Arrowhead.
 #' @note arrowDir function works always together with Arrowhead function from
@@ -611,25 +599,26 @@ speed.boundaries <- function(wind_series, fun=max){
 #' @examples
 #'
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-#' # wind_data <- wind.dl(2015,2,12,0,-10,5,35,45)
+#' # wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)
 #'
-#' #data(wind_data)
-#'
-#' # Fit downloaded dataset to be plotted
-#' #wind_fitted_data <- wind.fit(wind_data)
+#' data(wind.data)
 #'
 #' # Create a vector with wind direction (angles) adapted
-#' #alpha=arrowDir(wind_fitted_data)
+#' alpha <- arrowDir(wind.data[[1]])
 #'
 #' # Now, you can plot wind direction with Arrowhead function from shapes package
-#' #Load "shape package
-#' #require(shape)
-#' # plot(wind_data$lon, wind_data$lat, type="n")
-#' # Arrowhead(wind_data$lon, wind_data$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
+#' # Load "shape package
+#' # require(shape)
+#' # plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
+#' # Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, arr.length = 0.1, arr.type="curved")
 #'
 #'
 #' @export arrowDir
 arrowDir <- function(W){
+  if(inherits(W, "rWind")){
+    if(length(W)>1) message("W contained a time series, just took first time point!")
+    W <- W[[1]]  
+  }       
   aDir<-(360-W$dir) + 90
   return(aDir)
 }
@@ -685,8 +674,8 @@ arrowDir <- function(W){
 #'
 #' # w<-wind.dl(2015,2,12,0,-10,5,35,45)
 #'
-#' # data(wind_data)
-#' # w<-wind.fit(wind_data)
+#' # data(wind.data)
+#' # w<-wind.fit(wind.data)
 #'
 #' # wind <- wind2raster(w, type="stack")
 #'
@@ -867,18 +856,18 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' @keywords ~anisotropy ~conductance
 #' @examples
 #'
-#' # require(gdistance)
+#' require(gdistance)
 #'
-#' # w<-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
+#' # wind.data <-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
 #'
-#' # data(wind_data)
+#' data(wind.data)
 #'
-#' # wind <- wind2raster(w)
+#' wind <- wind2raster(wind.data)
 #'
-#' # Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+#' Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 #'
-#' # transitionMatrix(Conductance)
-#' # image(transitionMatrix(Conductance))
+#' transitionMatrix(Conductance)
+#' image(transitionMatrix(Conductance))
 #'
 #' @importClassesFrom raster RasterLayer
 #' @importFrom raster ncell

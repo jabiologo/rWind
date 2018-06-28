@@ -52,8 +52,8 @@ cluster.
 
 # w<-wind.dl(2015,2,12,0,-10,5,35,45)
 
-# data(wind_data)
-# w<-wind.fit(wind_data)
+# data(wind.data)
+# w<-wind.fit(wind.data)
 
 # wind <- wind2raster(w, type="stack")
 
