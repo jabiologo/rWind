@@ -31,7 +31,7 @@ This function is used internaly by wind.dl
 https://en.wikipedia.org/wiki/Cross_product
 }
 \seealso{
-\code{\link{wind.dl}}, \code{\link{wind.stats}},
+\code{\link{wind.dl}}, \code{\link{wind.mean}},
 \code{\link{wind2raster}}
 }
 \author{

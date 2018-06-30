@@ -30,7 +30,7 @@ NULL
 #'
 #' This data set is the result of:
 #'
-#' \code{wind.data <- wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)}
+#' \code{wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)}
 #'
 #' @name wind.data
 #' @docType data
@@ -66,7 +66,10 @@ NULL
 #'
 #' This data set is the result of:
 #'
-#' \code{wind.series <- wind.dl(2015,1,3,0,2015,1,3,21,164,179,-48,-33)}
+#' \code{library(lubridate)}
+#' \code{dt <- seq(ymd_h(paste(2015,1,3,00, sep="-")),}
+#' \code{          ymd_h(paste(2015,1,3,21, sep="-")),by="3 hours")}
+#' \code{wind.series <- wind.dl_2(dt, 164, 179, -48, -33)}
 #'
 #' @name wind.series
 #' @docType data
@@ -89,7 +92,7 @@ NULL
 #' @examples
 #'
 #' data(wind.series)
-#' str(wind.series)
+#' str(tidy(wind.series))
 #'
 #'
 NULL

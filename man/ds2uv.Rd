@@ -30,7 +30,7 @@ ds2uv(c(32,78,300,234),c(6,2,8,3.2))
 
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}}
+\code{\link{wind.mean}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

@@ -2,10 +2,13 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind.dl}
 \alias{wind.dl}
+\alias{read.rWind}
 \title{Wind-data download}
 \usage{
-wind.dl(yyyy, mm, dd, tt, yyyy2, mm2, dd2, tt2, lon1, lon2, lat1, lat2,
-  by = "3 hours", type = "read-data", trace = 1)
+wind.dl(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2, type = "read-data",
+  trace = 1)
+
+read.rWind(file)
 }
 \arguments{
 \item{yyyy}{Selected start year (FROM).}
@@ -18,16 +21,6 @@ wind.dl(yyyy, mm, dd, tt, yyyy2, mm2, dd2, tt2, lon1, lon2, lat1, lat2,
 database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 (UTC) (FROM).}
 
-\item{yyyy2}{Selected finish year (TO).}
-
-\item{mm2}{Selected finish month (TO).}
-
-\item{dd2}{Selected finish day (TO).}
-
-\item{tt2}{Selected finish time. There are currently several options at the GFS
-database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
-(UTC) (TO).}
-
 \item{lon1}{Western longitude}
 
 \item{lon2}{Eastern longitude}
@@ -36,13 +29,13 @@ database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 
 \item{lat2}{Northern latitude}
 
-\item{by}{Time lapse between downloaded data (from 3 hours)}
-
 \item{type}{Output type. "read-data" is selected by default, creating an R
 object. If you choose "csv", wind.dl create a a CSV file in your work
 directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
+
+\item{file}{file name of one of the saved ".csv" files.}
 }
 \value{
 "rWind list" class object (a list of data.frames) or .csv file/s with
@@ -89,7 +82,7 @@ http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}}
+\code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

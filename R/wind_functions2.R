@@ -1,3 +1,15 @@
+# some trigonemetric functions
+rad2deg <- function(rad) {(rad * 180) / (pi)}
+deg2rad <- function(deg) {(deg * pi) / (180)}
+
+# https://en.wikipedia.org/wiki/Mean_of_circular_quantities
+circ.mean <- function(deg){
+    rad.m <- (deg * pi) / (180)
+    mean.cos <- mean(cos(rad.m))
+    mean.sin <- mean(sin(rad.m))
+    rad2deg(atan(mean.sin/mean.cos))
+}
+
 
 #' Wind-data download
 #'
@@ -21,21 +33,15 @@
 #' @param tt Selected start time. There are currently several options at the GFS
 #' database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 #' (UTC) (FROM).
-#' @param yyyy2 Selected finish year (TO).
-#' @param mm2 Selected finish month (TO).
-#' @param dd2 Selected finish day (TO).
-#' @param tt2 Selected finish time. There are currently several options at the GFS
-#' database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
-#' (UTC) (TO).
 #' @param lon1 Western longitude
 #' @param lon2 Eastern longitude
 #' @param lat1 Southern latitude
 #' @param lat2 Northern latitude
-#' @param by Time lapse between downloaded data (from 3 hours)
 #' @param type Output type. "read-data" is selected by default, creating an R
 #' object. If you choose "csv", wind.dl create a a CSV file in your work
 #' directory named "wind_yyyy_mm_dd_tt.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
+#' @param file file name of one of the saved ".csv" files.
 #' @return "rWind list" class object (a list of data.frames) or .csv file/s with
 #' U and V vector  components and wind direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
@@ -46,7 +52,7 @@
 #' provided by GFS dataset in 0/360 notation and transformed internaly into
 #' -180/180.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
@@ -65,88 +71,84 @@
 #' @importFrom lubridate ymd_h year month day hour
 #' @rdname wind.dl
 #' @export wind.dl
-
-wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
-                     by="3 hours",type="read-data", trace=1){
-
-  type <- match.arg(type, c("read-data", "csv"))
-  resultados <- list() # We will store each date and time in a list
-
-  mm<-sprintf("%02d", mm)
-  dd<-sprintf("%02d", dd)
-  tt<-sprintf("%02d", tt)
-
-  mm2<-sprintf("%02d", mm2)
-  dd2<-sprintf("%02d", dd2)
-  tt2<-sprintf("%02d", tt2)
-
-  # Create a sequence with all dates available between selected dates
-  dt <- seq(ymd_h(paste(yyyy,mm,dd,tt, sep="-")),
-            ymd_h(paste(yyyy2,mm2,dd2,tt2, sep="-")),by=by)
-
-  for (id in 1:seq_along(dt)) {
-
-    yyyy_c <- year(dt[id])
-    mm_c <- sprintf("%02d",month(dt[id]))
-    dd_c <- sprintf("%02d",day(dt[id]))
-    tt_c <- sprintf("%02d",hour(dt[id]))
-
+wind.dl <- function (yyyy,mm,dd,tt,lon1,lon2,lat1,lat2,
+                         type="read-data", trace=1){
+    
+    type <- match.arg(type, c("read-data", "csv"))
+    
+    mm<-sprintf("%02d", mm)
+    dd<-sprintf("%02d", dd)
+    tt<-sprintf("%02d", tt)
+    
+    # Create a sequence with all dates available between selected dates
+    dt <- ymd_h(paste(yyyy,mm,dd,tt, sep="-"))
+    
+    yyyy_c <- year(dt)
+    mm_c <- sprintf("%02d",month(dt))
+    dd_c <- sprintf("%02d",day(dt))
+    tt_c <- sprintf("%02d",hour(dt))
+    
     testDate <- paste(yyyy_c,"-",mm_c,"-",dd_c, sep="")
-
+    print(testDate)
     if(trace)print(paste( ymd_h(paste(yyyy_c,mm_c,dd_c,tt_c, sep="-")),
                           "downloading...", sep= " "))
-
+    
     tryCatch({
-      as.Date(testDate)
-      if (lon1 < 0){
-        lon1<-360-(abs(lon1))
-      }
-      if (lon2 < 0){
-        lon2<-360-(abs(lon2))
-      }
-
-      if (lon1 > 180 && lon2 <180){
-        url_west<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-        url_east<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-        tmp<-rbind(read.csv(url_west, header=FALSE, skip=2, stringsAsFactors=FALSE),
-                   read.csv(url_east, header=FALSE, skip=2, stringsAsFactors=FALSE))
-        tmp <- wind.fit_int(tmp)
-        if (type == "csv"){
-          fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                         "_",tt_c,".csv", sep="")
-          write.table(tmp, fname, sep = ",", row.names = FALSE,
-                      col.names = TRUE, quote = FALSE)
+        as.Date(testDate)
+        if (lon1 < 0){
+            lon1<-360-(abs(lon1))
         }
-        else{
-          resultados[[id]] <- tmp
+        if (lon2 < 0){
+            lon2<-360-(abs(lon2))
         }
-      }
-
-      else {
-        url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-        tmp <- read.csv(url_dir, header=FALSE, skip=2, stringsAsFactors=FALSE)
-        tmp <- wind.fit_int(tmp)
-        if (type == "csv"){
-          fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                         "_",tt_c,".csv", sep="")
-          write.table(tmp, fname, sep = ",", row.names = FALSE,
-                      col.names = TRUE, quote = FALSE)
+        
+        if (lon1 > 180 && lon2 <180){
+            url_west<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+            url_east<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+            tmp<-rbind(read.csv(url_west, header=FALSE, skip=2, stringsAsFactors=FALSE),
+                       read.csv(url_east, header=FALSE, skip=2, stringsAsFactors=FALSE))
+            tmp <- wind.fit_int(tmp)
+            
+            if (type == "csv"){
+                fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
+                               "_",tt_c,".csv", sep="")
+                write.table(tmp, fname, sep = ",", row.names = FALSE,
+                            col.names = TRUE, quote = FALSE)
+            }
         }
-        else{
-          resultados[[id]] <- tmp
+        
+        else {
+            url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
+            tmp <- read.csv(url_dir, header=FALSE, skip=2, stringsAsFactors=FALSE)
+            tmp <- wind.fit_int(tmp)
+            if (type == "csv"){
+                fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
+                               "_",tt_c,".csv", sep="")
+                write.table(tmp, fname, sep = ",", row.names = FALSE,
+                            col.names = TRUE, quote = FALSE)
+            }
         }
-      }
     },
     error=function(e){cat("ERROR: database not found. Please, check server
-                          connection, date or geographical ranges \n")},
+                      connection, date or geographical ranges \n")},
     warning=function(w){cat("ERROR: database not found. Please, check server
-                            connection, date or geographical ranges  \n")}
+                        connection, date or geographical ranges  \n")}
     )
-
-  }
-  class(resultados) <-  c("rWind", "list")
-  return(resultados)
+    class(tmp) <-  c("rWind", "data.frame")
+    return(tmp)
 }
+
+
+#' @rdname wind.dl
+#' @export
+read.rWind <- function(file){
+    tmp <- read.csv(file, colClasses = c("POSIXct", "numeric", "numeric", 
+                                 "numeric", "numeric", "numeric", "numeric"))
+    class(tmp) <- c("rWind", "data.frame")
+    tmp
+}
+
+
 
 #' Wind-data download
 #'
@@ -162,7 +164,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
 #' that is downloaded at the work directory. If type="read-data" is selected,
-#' an R object (data.frame) is created.
+#' an \code{rWind_series} object is created.
 #'
 #' @param time a scalar or vector of POSIXt or Date objects or an character
 #' which can transfored into those, see example below.
@@ -176,8 +178,8 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' object. If you choose "csv", wind.dl create a a CSV file in your work
 #' directory named "wind_yyyy_mm_dd_tt.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
-#' @return "rWind list" class object (a list of data.frames) or .csv file/s with
-#' U and V vector  components and wind direction and speed for each coordenate
+#' @return an object of class \code{rWind_series} or .csv file/s with
+#' U and V vector components and wind direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @note wind.dl requires two dates that represent the boundaries of the time
 #' lapse to download wind series data.
@@ -186,7 +188,7 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' provided by GFS dataset in 0/360 notation and transformed internaly into
 #' -180/180.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}},
+#' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}},
 #' \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
@@ -213,28 +215,26 @@ wind.dl <- function (yyyy,mm,dd,tt,yyyy2,mm2,dd2,tt2,lon1,lon2,lat1,lat2,
 #' @export wind.dl_2
 #'
 wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
-
+    
     type <- match.arg(type, c("read-data", "csv"))
-    resultados <- list() # We will store each date and time in a list
-
+    
     dt <- as_datetime(time)
-
-# Create a sequence with all dates available between selected dates
-#    dt <- seq(ymd_h(paste(yyyy,mm,dd,tt, sep="-")),
-#              ymd_h(paste(yyyy2,mm2,dd2,tt2, sep="-")),by="3 hours")
-
+    # We will store each date and time in a list
+    resultados <- vector("list", length(dt)) 
+    names(resultados) <- dt
+    
     for (id in seq_along(dt)) {
-
+        
         yyyy_c <- year(dt[id])
         mm_c <- sprintf("%02d",month(dt[id]))
         dd_c <- sprintf("%02d",day(dt[id]))
         tt_c <- sprintf("%02d",hour(dt[id]))
-
+        
         testDate <- paste(yyyy_c,"-",mm_c,"-",dd_c, sep="")
-
+        
         if(trace)print(paste( ymd_h(paste(yyyy_c,mm_c,dd_c,tt_c, sep="-")),
                               "downloading...", sep= " "))
-
+        
         tryCatch({
             as.Date(testDate)
             if (lon1 < 0){
@@ -243,41 +243,42 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
             if (lon2 < 0){
                 lon2<-360-(abs(lon2))
             }
-
+            
             if (lon1 > 180 && lon2 <180){
                 url_west<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
                 url_east<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-
+                
                 tmp<-rbind(read.csv(url_west, header=FALSE, skip=2,
                                     stringsAsFactors=FALSE),
                            read.csv(url_east, header=FALSE, skip=2,
                                     stringsAsFactors=FALSE))
-                tmp <- wind.fit_int(tmp)
+                
                 if (type == "csv"){
+                    tmp <- wind.fit_int(tmp)
                     fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
                                    "_",tt_c,".csv", sep="")
                     write.table(tmp, fname, sep = ",", row.names = FALSE,
                                 col.names = TRUE, quote = FALSE)
                 }
                 else{
-                    resultados[[id]] <- tmp
+                    resultados[[id]] <- tmp[, 4:5]
                 }
             }
-
+            
             else {
                 url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
                 tmp <- read.csv(url_dir, header=FALSE, skip=2,
                                 colClasses = c("POSIXct", "double", "double", "double", "double"))
-
-                tmp <- wind.fit_int(tmp)
+                
                 if (type == "csv"){
+                    tmp <- wind.fit_int(tmp)
                     fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
                                    "_",tt_c,".csv", sep="")
                     write.table(tmp, fname, sep = ",", row.names = FALSE,
                                 col.names = TRUE, quote = FALSE)
                 }
                 else{
-                    resultados[[id]] <- tmp
+                    resultados[[id]] <- tmp[, 4:5]
                 }
             }
         },
@@ -286,11 +287,16 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
         warning=function(w){cat("ERROR: database not found. Please, check server
                             connection, date or geographical ranges  \n")}
         )
-
+        
     }
-    class(resultados) <-  c("rWind", "list")
+    
+    if(type == "csv") return(NULL)
+    attr(resultados, "lat_lon") <- tmp[,2:3]
+    class(resultados) <-  c("rWind_series", "list")
     return(resultados)
 }
+
+
 
 
 #' wind.fit_int
@@ -305,7 +311,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @return data.frame
 #' @note This function is used internaly by wind.dl
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl}}, \code{\link{wind.stats}},
+#' @seealso \code{\link{wind.dl}}, \code{\link{wind.mean}},
 #' \code{\link{wind2raster}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~wind ~gfs
@@ -317,7 +323,6 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @rdname wind.fit_int
 #' @keywords internal
 wind.fit_int <- function (tmpx) {
-  rad2deg <- function(rad) {(rad * 180) / (pi)}
   tmpx[,3] <- tmpx[,3] %% 360
   tmpx[tmpx[,3]>=180,3] <- tmpx[tmpx[,3]>=180,3] - 360
 
@@ -345,7 +350,7 @@ wind.fit_int <- function (tmpx) {
 #' @return "uv2ds" returns a matrix with direction and speed values
 #' @note Multiple U and V values can be procesed.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}}
 #' @keywords ~wind
 #' @examples
 #'
@@ -359,8 +364,6 @@ wind.fit_int <- function (tmpx) {
 #' @export uv2ds
 
 uv2ds <- function (u,v) {
-    rad2deg <- function(rad) {(rad * 180) / (pi)}
-
     ###### DIRECTION
     direction <- atan2(u, v)
     direction <- rad2deg(direction)
@@ -383,7 +386,7 @@ uv2ds <- function (u,v) {
 #' @return "ds2uv" returns a matrix with U and V values
 #' @note Multiple speed and direction values can be procesed.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.stats}}, \code{\link{wind2raster}}
+#' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}}
 #' @keywords ~wind
 #' @examples
 #'
@@ -397,7 +400,6 @@ uv2ds <- function (u,v) {
 #' @export ds2uv
 
 ds2uv <- function(d,s){
-    deg2rad <- function(deg) {(deg * pi) / (180)}
     d <- d %% 360
     r <- deg2rad(d)
     u <- sin(r) * s
@@ -474,105 +476,16 @@ wind2raster_int<- function(x){
 #' @rdname wind2raster
 #' @export wind2raster
 wind2raster<- function(x){
-  X <- lapply(x , wind2raster_int)
-  if (length(x) == 1) return (X[[1]])
+  if(inherits(x, "rWind_series"))X <- lapply(x , wind2raster_int)
+  else return (wind2raster_int(x))
   X
 }
 
-#' Wind-data stats
-#'
-#' wind.stats computes stats (mean, median, etc.) of a time series dataset
-#' of winds in the same region. To do this, wind.stats uses U and V vector
-#' components of several wind data.frames stored in a list.
-#'
-#' @param wind_series A list of data.frames downloaded by wind.dl function.
-#' @param fun any stats function.
-#' @return An object of class "rWind"
-#' @note Date and time are given by the first element of the time series
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl}}
-#' @references https://en.wikipedia.org/wiki/Cross_product
-#' @keywords ~kwd1 ~kwd2
-#' @examples
-#'
-#'
-#' # Use wind.dl to download and store wind data of
-#' # the January 3rd 2015 at several hours around New Zealand.
-#'
-#' data(wind.series)
-#'
-#' # Use wind.stats to compute several measures:
-#'
-#' wind.mean<- wind.stats(wind.series, fun=mean)
-#' wind.median<- wind.stats(wind.series, fun=median)
-#'
-#'
-#' @export wind.stats
-wind.stats <- function(wind_series, fun=mean){
-  options(scipen = 999)
 
-  wind_mean <- cbind(data.frame(wind_series[[1]][,1]),
-                     data.frame(wind_series[[1]][,2]),
-                     data.frame(wind_series[[1]][,3]))
+#
+# wind.mean
+#
 
-  l <- length(wind_series)
-  row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
-
-  for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,4]
-
-  umean <- apply(row_mean_matrix, 1, fun)
-
-  row_mean_matrix[] <- NA
-
-  for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,5]
-
-  vmean <- apply(row_mean_matrix, 1, fun)
-
-  wind_mean<-cbind(wind_mean,umean,vmean)
-  tmp <- wind.fit_int(wind_mean)
-  tmp_list <- list()
-  tmp_list[[1]]<-tmp
-  class(tmp_list) <- c("rWind", "list")
-  return(tmp_list)
-}
-
-#' Wind speed boundaries
-#'
-#' speed.boundaries computes limits (min and max) of a time series dataset
-#' of wind speeds in the same region. Note that to compute this boundaries for
-#' wind direction makes no sens, so directions are not used.
-#'
-#' @param wind_series A list of data.frames downloaded by wind.dl function.
-#' @param fun min or max.
-#' @return A numeric vector with max or min speed por each cell in the study
-#' area for this time series.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl}}
-#' @references https://en.wikipedia.org/wiki/Cross_product
-#' @keywords ~kwd1 ~kwd2
-#' @examples
-#'
-#'
-#' # Use wind.dl to download and store wind data of
-#' # the January 3rd 2015 at several hours around New Zealand.
-#'
-#' data(wind.series)
-#'
-#' # Use wind.stats to compute several measures:
-#'
-#' max.speed <- speed.boundaries(wind.series, fun=max)
-#' min.speed<- speed.boundaries(wind.series, fun=min)
-#'
-#'
-#' @export speed.boundaries
-speed.boundaries <- function(wind_series, fun=max){
-  options(scipen = 999)
-  l <- length(wind_series)
-  row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
-  for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,7]
-  speed <- apply(row_mean_matrix, 1, fun)
-  return(speed)
-}
 
 
 #' Arrow direction fitting for Arrowhead function from "shape" package
@@ -677,7 +590,6 @@ arrowDir <- function(W){
 #' # w<-wind.dl(2015,2,12,0,-10,5,35,45)
 #'
 #' # data(wind.data)
-#' # w<-wind.fit(wind.data)
 #'
 #' # wind <- wind2raster(w, type="stack")
 #'
@@ -885,3 +797,75 @@ flow.dispersion <- function(x, type = "passive", output = "raw") {
     lapply(x, flow.dispersion_int, type=type, output=output)
 }
 
+
+#' Transforming a rWind_series object into a data.frame
+#' 
+#' The output of tidy is always a data.frame. It is therefore suited for further
+#' manipulation by packages like dplyr, reshape2, ggplot2 and ggvis.
+#' 
+#' @examples
+#' data(wind.series)
+#' df <- tidy(wind.series)
+#' @rdname tidy.rWind_series
+#' @export tidy.rWind_series
+tidy.rWind_series <- function(x, ...){
+    l <- length(x)
+    res <- x[[1]]
+    if(l>1)for(i in 2:l)res <- rbind(res, x[[i]])
+    res
+}
+
+#' @rdname tidy.rWind_series
+#' @export tidy
+tidy <- function (x, ...) UseMethod("tidy")
+
+
+
+#' Wind-data mean
+#'
+#' wind.mean computes the mean (average) of a time series dataset of winds in
+#' the same region. To do this, wind.mean uses U and V vector components of
+#' several wind data.frames stored in a list. Note that, if you want to perform
+#' wind direction and speed average, first you should calculate the mean of U
+#' and V components and then transform it to direction and speed using wind.fit
+#' function from "rWind" package.
+#'
+#'
+#' @param x An object of class \code{rWind_series} 
+#' @return An object of class \code{rWind}, which is a \code{data.frame}
+#' @note For large time series, it could take a while.
+#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @seealso \code{\link{wind.dl}}
+#' @references https://en.wikipedia.org/wiki/Cross_product
+#' @keywords ~kwd1 ~kwd2
+#' @examples
+#'
+#'
+#' data(wind_series)
+#'
+#' #wind_average<- wind.mean(wind_series)
+#'
+#'
+#' @export wind.mean
+wind.mean <- function(x){
+    wind_mean <- cbind(data.frame(wind_series[[1]][,1]), data.frame(wind_series[[1]][,2]), data.frame(wind_series[[1]][,3]))
+    l <- length(wind_series)
+    row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
+    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,4]
+    umean <- apply(row_mean_matrix, 1, mean)
+    row_mean_matrix[] <- NA
+    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,5]
+    vmean <- apply(row_mean_matrix, 1, mean)
+    wind_mean<-cbind(wind_mean,umean,vmean)
+    names(wind_mean)<-c("time","latitude","longitude","ugrd10m","vgrd10m")
+    return(wind_mean)
+}
+
+
+"[[.rWind_series" <- function(x, i, exact=TRUE){
+    tt <- as_datetime(names(x)[i]) 
+    tmp <- cbind(tt, attr(x, "lat_lon"), unclass(x)[[i]])
+    tmp <- wind.fit_int(tmp)
+    class(tmp) <-  c("rWind", "data.frame")
+    tmp
+}

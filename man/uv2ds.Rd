@@ -30,7 +30,7 @@ uv2ds(c(1,1,3,1), c(1,1.7,3,1))
 
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}}
+\code{\link{wind.mean}}, \code{\link{wind2raster}}
 }
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)

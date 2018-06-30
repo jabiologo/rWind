@@ -27,8 +27,8 @@ directory named "wind_yyyy_mm_dd_tt.csv".}
 \item{trace}{if trace = 1 (by default) track downloaded files}
 }
 \value{
-"rWind list" class object (a list of data.frames) or .csv file/s with
-U and V vector  components and wind direction and speed for each coordenate
+an object of class \code{rWind_series} or .csv file/s with
+U and V vector components and wind direction and speed for each coordenate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -45,7 +45,7 @@ http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 The output type is determined by type="csv" or type="read-data". If
 type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
 that is downloaded at the work directory. If type="read-data" is selected,
-an R object (data.frame) is created.
+an \code{rWind_series} object is created.
 }
 \note{
 wind.dl requires two dates that represent the boundaries of the time
@@ -76,7 +76,7 @@ http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}},
+\code{\link{wind.mean}}, \code{\link{wind2raster}},
 \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 }
 \author{

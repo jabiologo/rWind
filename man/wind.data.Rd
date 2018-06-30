@@ -23,7 +23,7 @@ Iberian Peninsula coordenates on 12/February/2015 at 00:00 (UTC)
 \details{
 This data set is the result of:
 
-\code{wind.data <- wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)}
+\code{wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)}
 }
 \examples{
 
