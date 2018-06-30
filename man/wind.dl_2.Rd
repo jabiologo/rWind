@@ -2,9 +2,12 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind.dl_2}
 \alias{wind.dl_2}
+\alias{[[.rWind_series}
 \title{Wind-data download}
 \usage{
 wind.dl_2(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1)
+
+\method{[[}{rWind_series}(x, i, exact = TRUE)
 }
 \arguments{
 \item{time}{a scalar or vector of POSIXt or Date objects or an character

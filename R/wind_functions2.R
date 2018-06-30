@@ -63,7 +63,7 @@ circ.mean <- function(deg){
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 #' \dontrun{
 #'
-#' wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
+#' wind.dl(2015,2,12,0,-10,5,35,45)
 #'
 #' }
 #'
@@ -297,6 +297,15 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 }
 
 
+#' @rdname wind.dl_2
+#' @export
+"[[.rWind_series" <- function(x, i, exact=TRUE){
+    tt <- as_datetime(names(x)[i]) 
+    tmp <- cbind(tt, attr(x, "lat_lon"), unclass(x)[[i]])
+    tmp <- wind.fit_int(tmp)
+    class(tmp) <-  c("rWind", "data.frame")
+    tmp
+}
 
 
 #' wind.fit_int
@@ -461,9 +470,6 @@ wind2raster_int<- function(x){
 #' @keywords ~gfs ~wind
 #' @examples
 #'
-#' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-#' # wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
-#'
 #' data(wind.data)
 #'
 #' # Create raster stack from the downloaded data with wind directon and speed
@@ -498,8 +504,8 @@ wind2raster<- function(x){
 #' function adapts wind direction provided by wind.fit (clockwise, relative to
 #' y-axis ) to requirements of Arrowhead.
 #'
-#' @param W An object of class "rWind" or a data.frame which should content a
-#' column named "dir".
+#' @param W An object of class \code{rWind} or a data.frame which should content 
+#' a column named "dir".
 #' @return A vector with angles for each arrow to be plotted by Arrowhead.
 #' @note arrowDir function works always together with Arrowhead function from
 #' "shape" package.
@@ -510,10 +516,6 @@ wind2raster<- function(x){
 #' https://CRAN.R-project.org/package=shape
 #' @keywords ~wind
 #' @examples
-#'
-#' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-#' # wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)
-#'
 #' data(wind.data)
 #'
 #' # Create a vector with wind direction (angles) adapted
@@ -523,18 +525,18 @@ wind2raster<- function(x){
 #' # Now, you can plot wind direction with Arrowhead function from shapes package
 #' # Load "shape package
 #' require(shape)
-#' plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
-#' Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, 
+#' plot(wind.data$lon, wind.data$lat, type="n")
+#' Arrowhead(wind.data$lon, wind.data$lat, angle=alpha, 
 #'           arr.length = 0.1, arr.type="curved")
 #' }
 #'
 #' @export arrowDir
 arrowDir <- function(W){
-  if(inherits(W, "rWind")){
+  if(inherits(W, "rWind_series")){
     if(length(W)>1) message("W contained a time series, just took first time point!")
     W <- W[[1]]  
   }       
-  aDir<-(360-W$dir) + 90
+  aDir <- (360 - W$dir) + 90
   return(aDir)
 }
 
@@ -621,8 +623,8 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
   # Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
 
   cost.Felicisimo<- function(wind,celda,type="passive"){
-    dif=(abs(wind-celda))
-    dif[dif > 180] = 360 - dif[dif > 180]
+    dif <- (abs(wind-celda))
+    dif[dif > 180] <- 360 - dif[dif > 180]
     if (type=="passive"){
       dif[dif >= 90] <- Inf # check
       dif[dif < 90] <- 2 * dif[dif < 90]
@@ -806,8 +808,13 @@ flow.dispersion <- function(x, type = "passive", output = "raw") {
 #' @examples
 #' data(wind.series)
 #' df <- tidy(wind.series)
+#' head(df)
 #' @rdname tidy.rWind_series
-#' @export tidy.rWind_series
+#' @export tidy
+tidy <- function (x, ...) UseMethod("tidy")
+
+#' @rdname tidy.rWind_series
+#' @export
 tidy.rWind_series <- function(x, ...){
     l <- length(x)
     res <- x[[1]]
@@ -815,9 +822,7 @@ tidy.rWind_series <- function(x, ...){
     res
 }
 
-#' @rdname tidy.rWind_series
-#' @export tidy
-tidy <- function (x, ...) UseMethod("tidy")
+
 
 
 
@@ -841,9 +846,9 @@ tidy <- function (x, ...) UseMethod("tidy")
 #' @examples
 #'
 #'
-#' data(wind_series)
+#' data(wind.series)
 #'
-#' #wind_average<- wind.mean(wind_series)
+#' #wind_average<- wind.mean(wind.series)
 #'
 #'
 #' @export wind.mean
@@ -861,11 +866,3 @@ wind.mean <- function(x){
     return(wind_mean)
 }
 
-
-"[[.rWind_series" <- function(x, i, exact=TRUE){
-    tt <- as_datetime(names(x)[i]) 
-    tmp <- cbind(tt, attr(x, "lat_lon"), unclass(x)[[i]])
-    tmp <- wind.fit_int(tmp)
-    class(tmp) <-  c("rWind", "data.frame")
-    tmp
-}

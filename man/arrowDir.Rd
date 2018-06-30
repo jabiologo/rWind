@@ -7,8 +7,8 @@
 arrowDir(W)
 }
 \arguments{
-\item{W}{An object of class "rWind" or a data.frame which should content a
-column named "dir".}
+\item{W}{An object of class \code{rWind} or a data.frame which should content 
+a column named "dir".}
 }
 \value{
 A vector with angles for each arrow to be plotted by Arrowhead.
@@ -28,10 +28,6 @@ arrowDir function works always together with Arrowhead function from
 "shape" package.
 }
 \examples{
-
-# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind.data <- wind.dl(2015,2,12,0,-10,5,35,45)
-
 data(wind.data)
 
 # Create a vector with wind direction (angles) adapted
@@ -41,8 +37,8 @@ alpha <- arrowDir(wind.data[[1]])
 # Now, you can plot wind direction with Arrowhead function from shapes package
 # Load "shape package
 require(shape)
-plot(wind.data[[1]]$lon, wind.data[[1]]$lat, type="n")
-Arrowhead(wind.data[[1]]$lon, wind.data[[1]]$lat, angle=alpha, 
+plot(wind.data$lon, wind.data$lat, type="n")
+Arrowhead(wind.data$lon, wind.data$lat, angle=alpha, 
           arr.length = 0.1, arr.type="curved")
 }
 
