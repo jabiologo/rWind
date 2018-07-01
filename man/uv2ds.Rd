@@ -2,31 +2,38 @@
 % Please edit documentation in R/wind_functions2.R
 \name{uv2ds}
 \alias{uv2ds}
-\title{Transform U and V components in direction and speed}
+\alias{ds2uv}
+\title{Transform U and V components in direction and speed and vice versa}
 \usage{
 uv2ds(u, v)
+
+ds2uv(d, s)
 }
 \arguments{
 \item{u}{U component.}
 
 \item{v}{U component.}
+
+\item{d}{direction (degrees).}
+
+\item{s}{speed (m/s).}
 }
 \value{
 "uv2ds" returns a matrix with direction and speed values
+
+"ds2uv" returns a matrix with U and V values
 }
 \description{
-Transform U and V components in direction and speed
+Transform U and V components in direction and speed and vice versa
 }
 \note{
 Multiple U and V values can be procesed.
 }
 \examples{
 
-\dontrun{
+( ds <- uv2ds(c(1,1,3,1), c(1,1.7,3,1)) )
+ds2uv(ds[,1], ds[,2])
 
-uv2ds(c(1,1,3,1), c(1,1.7,3,1))
-
-}
 
 }
 \seealso{

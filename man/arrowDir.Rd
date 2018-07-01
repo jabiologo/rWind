@@ -31,7 +31,7 @@ arrowDir function works always together with Arrowhead function from
 data(wind.data)
 
 # Create a vector with wind direction (angles) adapted
-alpha <- arrowDir(wind.data[[1]])
+alpha <- arrowDir(wind.data)
 
 \dontrun{
 # Now, you can plot wind direction with Arrowhead function from shapes package

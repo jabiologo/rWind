@@ -50,8 +50,6 @@ cluster.
 
 require(gdistance)
 
-# wind.data <-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
-
 data(wind.data)
 
 wind <- wind2raster(wind.data)

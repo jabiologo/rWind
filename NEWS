@@ -1,19 +1,15 @@
-rWind v1.1.0 (Release date: 2018-06-26)
+rWind v1.1.0 (Release date: 2018-06-30)
 ==============
 
 Changes:
 
-o wind.dl can be used with a time series.
+o wind.dl_2 can be used with a time series.
 
 o wind.fit is deleted and integrated in wind.dl.
 
 o wind2raster is addapted to work with lists.
 
 o flow.dispersion is addapted to work with lists.
-
-o wind.stats is addapted to allow user-defined functions for mean, median, etc.
-
-o speed.boundaries is created to compute min and max wind speeds from a time series
 
 
 rWind v0.4.2 (Release date: 2018-05-1)
