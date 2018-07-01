@@ -48,19 +48,15 @@ cluster.
 }
 \examples{
 
-# require(gdistance)
+data(wind.data)
+wind <- wind2raster(wind.data)
+Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 
-# w<-wind.dl(2015,2,12,0,-10,5,35,45)
-
-# data(wind.data)
-
-# wind <- wind2raster(w, type="stack")
-
-# Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
-
-# transitionMatrix(Conductance)
-# image(transitionMatrix(Conductance))
-
+\dontrun{
+require(gdistance)
+transitionMatrix(Conductance)
+image(transitionMatrix(Conductance))
+}
 }
 \references{
 Felicísimo, Á. M., Muñoz, J., & González-Solis, J. (2008). Ocean surface

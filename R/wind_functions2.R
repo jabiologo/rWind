@@ -2,12 +2,17 @@
 rad2deg <- function(rad) {(rad * 180) / (pi)}
 deg2rad <- function(deg) {(deg * pi) / (180)}
 
+# circular mean
 # https://en.wikipedia.org/wiki/Mean_of_circular_quantities
 circ.mean <- function(deg){
     rad.m <- (deg * pi) / (180)
     mean.cos <- mean(cos(rad.m))
     mean.sin <- mean(sin(rad.m))
-    rad2deg(atan(mean.sin/mean.cos))
+    
+    theta <- rad2deg(atan(mean.sin/mean.cos))
+    if(mean.cos < 0) theta <- theta + 180
+    if((mean.sin < 0) & (mean.cos > 0)) theta <- theta + 360
+    theta    
 }
 
 
@@ -202,10 +207,10 @@ read.rWind <- function(file){
 #'
 #' wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 #'
-#' # library(lubridate)
-#' # dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-#' #           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-#' #  wind.dl_2(dt,-10,5,35,45)
+#' library(lubridate)
+#' dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
+#'           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
+#' wind.dl_2(dt,-10,5,35,45)
 #'
 #' }
 #'
@@ -298,6 +303,9 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 
 
 #' @rdname wind.dl_2
+#' @param x object from which to extract element(s).
+#' @param i indices specifying elements to extract.
+#' @param exact Controls possible partial matching (not used yet). 
 #' @export
 "[[.rWind_series" <- function(x, i, exact=TRUE){
     tt <- as_datetime(names(x)[i]) 
@@ -324,10 +332,6 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' \code{\link{wind2raster}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~wind ~gfs
-#' @examples
-#'
-#' # wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
-#'
 #' @importFrom lubridate ymd_hms
 #' @rdname wind.fit_int
 #' @keywords internal
@@ -351,7 +355,7 @@ wind.fit_int <- function (tmpx) {
   return(res)
 }
 
-#' Transform U and V components in direction and speed
+#' Transform U and V components in direction and speed and vice versa
 #'
 #'
 #' @param u U component.
@@ -363,11 +367,9 @@ wind.fit_int <- function (tmpx) {
 #' @keywords ~wind
 #' @examples
 #'
-#' \dontrun{
+#' ( ds <- uv2ds(c(1,1,3,1), c(1,1.7,3,1)) )
+#' ds2uv(ds[,1], ds[,2])
 #'
-#' uv2ds(c(1,1,3,1), c(1,1.7,3,1))
-#'
-#' }
 #'
 #' @rdname uv2ds
 #' @export uv2ds
@@ -387,25 +389,10 @@ uv2ds <- function (u,v) {
 }
 
 
-#' Transform direction and speed in U and V components
-#'
-#'
 #' @param d direction (degrees).
 #' @param s speed (m/s).
 #' @return "ds2uv" returns a matrix with U and V values
-#' @note Multiple speed and direction values can be procesed.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}}
-#' @keywords ~wind
-#' @examples
-#'
-#' \dontrun{
-#'
-#' ds2uv(c(32,78,300,234),c(6,2,8,3.2))
-#'
-#' }
-#'
-#' @rdname ds2uv
+#' @rdname uv2ds
 #' @export ds2uv
 
 ds2uv <- function(d,s){
@@ -519,7 +506,7 @@ wind2raster<- function(x){
 #' data(wind.data)
 #'
 #' # Create a vector with wind direction (angles) adapted
-#' alpha <- arrowDir(wind.data[[1]])
+#' alpha <- arrowDir(wind.data)
 #'
 #' \dontrun{
 #' # Now, you can plot wind direction with Arrowhead function from shapes package
@@ -587,19 +574,15 @@ arrowDir <- function(W){
 #' @keywords ~anisotropy ~conductance
 #' @examples
 #'
-#' # require(gdistance)
+#' data(wind.data)
+#' wind <- wind2raster(wind.data)
+#' Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
 #'
-#' # w<-wind.dl(2015,2,12,0,-10,5,35,45)
-#'
-#' # data(wind.data)
-#'
-#' # wind <- wind2raster(w, type="stack")
-#'
-#' # Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
-#'
-#' # transitionMatrix(Conductance)
-#' # image(transitionMatrix(Conductance))
-#'
+#' \dontrun{
+#' require(gdistance)
+#' transitionMatrix(Conductance)
+#' image(transitionMatrix(Conductance))
+#' }
 #' @importClassesFrom raster RasterLayer
 #' @importFrom raster ncell
 #' @importMethodsFrom raster as.matrix
@@ -774,8 +757,6 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #'
 #' require(gdistance)
 #'
-#' # wind.data <-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
-#'
 #' data(wind.data)
 #'
 #' wind <- wind2raster(wind.data)
@@ -791,7 +772,7 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @export flow.dispersion
-#'
+
 flow.dispersion <- function(x, type = "passive", output = "raw") {
     if(inherits(x, "RasterStack")){
         return(flow.dispersion_int(x, type=type, output=output))
@@ -805,10 +786,20 @@ flow.dispersion <- function(x, type = "passive", output = "raw") {
 #' The output of tidy is always a data.frame. It is therefore suited for further
 #' manipulation by packages like dplyr, reshape2, ggplot2 and ggvis.
 #' 
+#' @param x	An object to be converted into a tidy data.frame
+#' @param ... extra arguments
 #' @examples
 #' data(wind.series)
 #' df <- tidy(wind.series)
 #' head(df)
+#' \dontrun{
+#' # use the tidyverse 
+#' library(dplyr)
+#' mean_speed <- tidy(wind.series) %>% group_by(lat, lon) %>% 
+#'     summarise(speed=mean(speed))
+#' wind_average2 <- wind.mean(wind.series)
+#' all.equal(wind_average2$speed, mean_speed$speed)   
+#' }
 #' @rdname tidy.rWind_series
 #' @export tidy
 tidy <- function (x, ...) UseMethod("tidy")
@@ -828,14 +819,14 @@ tidy.rWind_series <- function(x, ...){
 
 #' Wind-data mean
 #'
-#' wind.mean computes the mean (average) of a time series dataset of winds in
-#' the same region. To do this, wind.mean uses U and V vector components of
-#' several wind data.frames stored in a list. Note that, if you want to perform
-#' wind direction and speed average, first you should calculate the mean of U
-#' and V components and then transform it to direction and speed using wind.fit
-#' function from "rWind" package.
-#'
-#'
+#' wind.mean computes the mean (average) wind speed and wind direction of a time 
+#' series dataset of winds of the same region. 
+#' Summaries of time series are not trivial to compute. We compute the 
+#' arithmetic mean for the wind speed. 
+#' The direction as the circular mean, see 
+#' \url{https://en.wikipedia.org/wiki/Mean_of_circular_quantities}
+#' for more details. The U and V componenats are afterwards transformed from 
+#' these values. 
 #' @param x An object of class \code{rWind_series} 
 #' @return An object of class \code{rWind}, which is a \code{data.frame}
 #' @note For large time series, it could take a while.
@@ -844,25 +835,32 @@ tidy.rWind_series <- function(x, ...){
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~kwd1 ~kwd2
 #' @examples
-#'
-#'
 #' data(wind.series)
-#'
-#' #wind_average<- wind.mean(wind.series)
+#' wind_average<- wind.mean(wind.series)
 #'
 #'
 #' @export wind.mean
 wind.mean <- function(x){
-    wind_mean <- cbind(data.frame(wind_series[[1]][,1]), data.frame(wind_series[[1]][,2]), data.frame(wind_series[[1]][,3]))
-    l <- length(wind_series)
-    row_mean_matrix <- matrix(NA, nrow(wind_series[[1]]), l)
-    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,4]
-    umean <- apply(row_mean_matrix, 1, mean)
-    row_mean_matrix[] <- NA
-    for (h in 1:l) row_mean_matrix[,h] <- wind_series[[h]][,5]
-    vmean <- apply(row_mean_matrix, 1, mean)
-    wind_mean<-cbind(wind_mean,umean,vmean)
-    names(wind_mean)<-c("time","latitude","longitude","ugrd10m","vgrd10m")
-    return(wind_mean)
+    if(!inherits(x, "rWind_series")) stop("x needs to be of class rWind_series")
+    
+    tt <- as_datetime(names(x)[1]) 
+    res <- cbind(tt, attr(x, "lat_lon"))
+
+    x <- unclass(x) 
+    l <- length(x)
+    tmpD <- tmpS <- matrix(0, nrow(x[[1]]), l)
+    for(i in seq_len(l)){
+        tmp <- uv2ds(x[[i]][,1], x[[i]][,2])
+        tmpD[,i] <- tmp[,1]
+        tmpS[,i] <- tmp[,2]
+    }
+    smean <- apply(tmpS, 1, mean)
+    dmean <- apply(tmpD, 1, circ.mean)
+    res <- cbind(res, ds2uv(dmean, smean), dmean, smean)
+    
+    colnames(res) <- c("time", "lat", "lon", "ugrd10m", "vgrd10m", "dir", 
+                       "speed")
+    class(res) <-  c("rWind", "data.frame")
+    return(res)
 }
 

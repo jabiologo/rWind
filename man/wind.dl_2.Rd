@@ -28,6 +28,12 @@ object. If you choose "csv", wind.dl create a a CSV file in your work
 directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
+
+\item{x}{object from which to extract element(s).}
+
+\item{i}{indices specifying elements to extract.}
+
+\item{exact}{Controls possible partial matching (not used yet).}
 }
 \value{
 an object of class \code{rWind_series} or .csv file/s with
@@ -65,10 +71,10 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 
 wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 
-# library(lubridate)
-# dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-#           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-#  wind.dl_2(dt,-10,5,35,45)
+library(lubridate)
+dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
+          ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
+wind.dl_2(dt,-10,5,35,45)
 
 }
 

@@ -9,6 +9,11 @@ tidy(x, ...)
 
 \method{tidy}{rWind_series}(x, ...)
 }
+\arguments{
+\item{x}{An object to be converted into a tidy data.frame}
+
+\item{...}{extra arguments}
+}
 \description{
 The output of tidy is always a data.frame. It is therefore suited for further
 manipulation by packages like dplyr, reshape2, ggplot2 and ggvis.
@@ -17,4 +22,12 @@ manipulation by packages like dplyr, reshape2, ggplot2 and ggvis.
 data(wind.series)
 df <- tidy(wind.series)
 head(df)
+\dontrun{
+# use the tidyverse 
+library(dplyr)
+mean_speed <- tidy(wind.series) \%>\% group_by(lat, lon) \%>\% 
+    summarise(speed=mean(speed))
+wind_average2 <- wind.mean(wind.series)
+all.equal(wind_average2$speed, mean_speed$speed)   
+}
 }

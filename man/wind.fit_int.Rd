@@ -22,11 +22,6 @@ Moreover, it cleans dates names and sorts the data by latitude.
 \note{
 This function is used internaly by wind.dl
 }
-\examples{
-
-# wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
-
-}
 \references{
 https://en.wikipedia.org/wiki/Cross_product
 }
