@@ -31,8 +31,8 @@ TransitionLayer object from "gdistance" package.
 In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 }
 \description{
-flow.dispersion_int computes movement conductance through a flow either, sea or
-wind currents. It implements the formula described in Felícisimo et al.
+flow.dispersion_int computes movement conductance through a flow either, sea 
+or wind currents. It implements the formula described in Felícisimo et al.
 2008:
 }
 \details{
@@ -49,8 +49,6 @@ cluster.
 \examples{
 
 require(gdistance)
-
-# wind.data <-wind.dl_2("2015/2/12 00:00:00",-10,5,35,45)
 
 data(wind.data)
 

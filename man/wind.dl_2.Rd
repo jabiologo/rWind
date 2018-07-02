@@ -2,9 +2,12 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind.dl_2}
 \alias{wind.dl_2}
+\alias{[[.rWind_series}
 \title{Wind-data download}
 \usage{
 wind.dl_2(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1)
+
+\method{[[}{rWind_series}(x, i, exact = TRUE)
 }
 \arguments{
 \item{time}{a scalar or vector of POSIXt or Date objects or an character
@@ -25,10 +28,16 @@ object. If you choose "csv", wind.dl create a a CSV file in your work
 directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
+
+\item{x}{object from which to extract element(s).}
+
+\item{i}{indices specifying elements to extract.}
+
+\item{exact}{Controls possible partial matching (not used yet).}
 }
 \value{
-"rWind list" class object (a list of data.frames) or .csv file/s with
-U and V vector  components and wind direction and speed for each coordenate
+an object of class \code{rWind_series} or .csv file/s with
+U and V vector components and wind direction and speed for each coordenate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -45,7 +54,7 @@ http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 The output type is determined by type="csv" or type="read-data". If
 type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
 that is downloaded at the work directory. If type="read-data" is selected,
-an R object (data.frame) is created.
+an \code{rWind_series} object is created.
 }
 \note{
 wind.dl requires two dates that represent the boundaries of the time
@@ -62,10 +71,10 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 
 wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 
-# library(lubridate)
-# dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-#           ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-#  wind.dl_2(dt,-10,5,35,45)
+library(lubridate)
+dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
+          ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
+wind.dl_2(dt,-10,5,35,45)
 
 }
 
@@ -76,7 +85,7 @@ http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
-\code{\link{wind.stats}}, \code{\link{wind2raster}},
+\code{\link{wind.mean}}, \code{\link{wind2raster}},
 \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 }
 \author{

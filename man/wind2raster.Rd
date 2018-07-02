@@ -27,9 +27,6 @@ file.
 }
 \examples{
 
-# Download wind for Iberian Peninsula region at 2015, February 12, 00:00
-# wind.dl(2015,2,12,0,2015,2,12,0,-10,5,35,45)
-
 data(wind.data)
 
 # Create raster stack from the downloaded data with wind directon and speed
