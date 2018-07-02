@@ -23,11 +23,11 @@ data(wind.series)
 df <- tidy(wind.series)
 head(df)
 \dontrun{
-# use the tidyverse 
+# use the tidyverse
 library(dplyr)
-mean_speed <- tidy(wind.series) \%>\% group_by(lat, lon) \%>\% 
+mean_speed <- tidy(wind.series) \%>\% group_by(lat, lon) \%>\%
     summarise(speed=mean(speed))
 wind_average2 <- wind.mean(wind.series)
-all.equal(wind_average2$speed, mean_speed$speed)   
+all.equal(wind_average2$speed, mean_speed$speed)
 }
 }

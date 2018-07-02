@@ -7,7 +7,7 @@
 arrowDir(W)
 }
 \arguments{
-\item{W}{An object of class \code{rWind} or a data.frame which should content 
+\item{W}{An object of class \code{rWind} or a data.frame which should content
 a column named "dir".}
 }
 \value{
@@ -38,7 +38,7 @@ alpha <- arrowDir(wind.data)
 # Load "shape package
 require(shape)
 plot(wind.data$lon, wind.data$lat, type="n")
-Arrowhead(wind.data$lon, wind.data$lat, angle=alpha, 
+Arrowhead(wind.data$lon, wind.data$lat, angle=alpha,
           arr.length = 0.1, arr.type="curved")
 }
 

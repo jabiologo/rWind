@@ -13,13 +13,13 @@ wind.mean(x)
 An object of class \code{rWind}, which is a \code{data.frame}
 }
 \description{
-wind.mean computes the mean (average) wind speed and wind direction of a time 
-series dataset of winds of the same region. 
-Summaries of time series are not trivial to compute. We compute the 
-arithmetic mean for the wind speed. 
-The direction as the circular mean, see 
+wind.mean computes the mean (average) wind speed and wind direction of a time
+series dataset of winds of the same region.
+Summaries of time series are not trivial to compute. We compute the
+arithmetic mean for the wind speed.
+The direction as the circular mean, see
 \url{https://en.wikipedia.org/wiki/Mean_of_circular_quantities}
-for more details. The U and V componenats are afterwards transformed from 
+for more details. The U and V componenats are afterwards transformed from
 these values.
 }
 \note{

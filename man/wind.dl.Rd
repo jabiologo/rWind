@@ -11,15 +11,15 @@ wind.dl(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2, type = "read-data",
 read.rWind(file)
 }
 \arguments{
-\item{yyyy}{Selected start year (FROM).}
+\item{yyyy}{Selected year.}
 
-\item{mm}{Selected start month (FROM).}
+\item{mm}{Selected month.}
 
-\item{dd}{Selected start day (FROM).}
+\item{dd}{Selected day.}
 
-\item{tt}{Selected start time. There are currently several options at the GFS
+\item{tt}{Selected time. There are currently several options at the GFS
 database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
-(UTC) (FROM).}
+(UTC).}
 
 \item{lon1}{Western longitude}
 
@@ -30,16 +30,16 @@ database: 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00
 \item{lat2}{Northern latitude}
 
 \item{type}{Output type. "read-data" is selected by default, creating an R
-object. If you choose "csv", wind.dl create a a CSV file in your work
+object. If you choose "csv", wind.dl create a a CSV file in your working
 directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
 
-\item{file}{file name of one of the saved ".csv" files.}
+\item{file}{file name of the saved ".csv" files.}
 }
 \value{
-"rWind list" class object (a list of data.frames) or .csv file/s with
-U and V vector  components and wind direction and speed for each coordenate
+"rWind" and "data.frame" class object or .csv file with U and V
+vector  components and wind direction and speed for each coordenate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -59,12 +59,8 @@ that is downloaded at the work directory. If type="read-data" is selected,
 an R object (data.frame) is created.
 }
 \note{
-wind.dl requires two dates that represent the boundaries of the time
-lapse to download wind series data.
-U and V vector components allow you to create wind averages or tendences
-for each coordenate at the study area. Longitude coordenates are
-provided by GFS dataset in 0/360 notation and transformed internaly into
--180/180.
+Longitude coordenates are provided by GFS dataset in 0/360 notation
+and transformed internaly into -180/180.
 }
 \examples{
 

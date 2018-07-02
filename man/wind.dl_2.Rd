@@ -41,8 +41,8 @@ U and V vector components and wind direction and speed for each coordenate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
-wind.dl_2 downloads wind data from the Global Forecast System (GFS) of the
-USA's National Weather Service (NWS)
+wind.dl_2 downloads time-series wind data from the Global Forecast System
+(GFS) of the USA's National Weather Service (NWS)
 (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
 Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
@@ -51,13 +51,15 @@ information:
 http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 }
 \details{
+To get the same format as wind.dl, you should run \code{tidy} function from
+wind.dl_2 output.
 The output type is determined by type="csv" or type="read-data". If
 type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
 that is downloaded at the work directory. If type="read-data" is selected,
 an \code{rWind_series} object is created.
 }
 \note{
-wind.dl requires two dates that represent the boundaries of the time
+wind.dl_2 requires two dates that represent the boundaries of the time
 lapse to download wind series data.
 U and V vector components allow you to create wind averages or tendences
 for each coordenate at the study area. Longitude coordenates are
@@ -72,9 +74,10 @@ provided by GFS dataset in 0/360 notation and transformed internaly into
 wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
 
 library(lubridate)
-dt <- seq(ymd_h(paste(2018,1,1,00, sep="-")),
-          ymd_h(paste(2018,1,2,21, sep="-")),by="3 hours")
-wind.dl_2(dt,-10,5,35,45)
+dt <- seq(ymd_hms(paste(2018,1,1,00,00,00, sep="-")),
+          ymd_hms(paste(2018,1,2,21,00,00, sep="-")),by="3 hours")
+ww <- wind.dl_2(dt,-10,5,35,45)
+tidy (ww)
 
 }
 
