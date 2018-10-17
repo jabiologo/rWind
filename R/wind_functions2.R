@@ -520,6 +520,28 @@ arrowDir <- function(W){
 }
 
 
+
+###################################################################
+# Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
+
+# celda should be cell (direction), speed should be in too
+
+cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
+    dif <- (abs(wind.direction - cell))
+    dif[dif > 180] <- 360 - dif[dif > 180]
+    if (type=="passive"){
+        dif[dif >= 90] <- Inf # check
+        dif[dif < 90] <- 2 * dif[dif < 90]
+        dif[dif==0] <- 0.1
+    }
+    else {
+        dif[dif < 90] <- 2 * dif[dif < 90]
+        dif[dif==0] <- 0.1
+    }
+    dif / wind.speed
+}
+
+
 #' Compute flow-based cost or conductance
 #'
 #' flow.dispersion_int computes movement conductance through a flow either, sea or
@@ -581,6 +603,106 @@ arrowDir <- function(W){
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @keywords internal
+
+
+flow.dispersion_int2 <-function(stack, fun=cost.Felicisimo, output="raw", ...){
+    
+    output <- match.arg(output, c("raw", "transitionLayer"))
+    
+    DL <- as.matrix(stack$wind.direction)
+    SL <- as.matrix(stack$wind.speed)
+    M <- matrix(as.integer(1:ncell(stack$wind.direction)),
+                nrow = nrow(stack$wind.direction), byrow=TRUE)
+    nr <- nrow(M)
+    nc <- ncol(M)
+    
+    
+    ###################################################################
+    
+    directions <- c(315 ,0, 45, 270, 90, 225, 180,135 )
+    
+    
+    ###################################################################
+    
+    # Go Nortwest
+    
+    north.west.from <- as.vector(M[-1,-1])
+    north.west.to <- as.vector(M[-nr,-nc])
+    north.west.cost <- fun(DL[-1,-1], SL[-1,-1], directions[1], ...) 
+    
+    ###################################################################
+    
+    # Go North
+    
+    north.from <- as.vector(M[-1,])
+    north.to <- as.vector(M[-nr,])
+    north.cost <- as.vector( fun(DL[-1,], SL[-1,], directions[2], ...) )
+    
+    
+    ###################################################################
+    
+    # Go Norteast
+    
+    north.east.from <- as.vector(M[-1,-nc])
+    north.east.to <- as.vector(M[-nr,-1])
+    north.east.cost <- as.vector( fun(DL[-1,-nc], SL[-1,-nc], directions[3], ...) )
+    
+    ###################################################################
+    
+    # Go West
+    
+    west.from <- as.vector(M[,-1])
+    west.to <- as.vector(M[,-nc])
+    west.cost <- as.vector( fun(DL[,-1], SL[,-1], directions[4], ...) )
+    
+    ###################################################################
+    
+    # Go East
+    
+    east.from <- as.vector(M[,-nc])
+    east.to <- as.vector(M[,-1])
+    east.cost <- as.vector( fun(DL[,-nc], SL[,-nc], directions[5], ...) )
+    
+    ###################################################################
+    
+    # Go Southwest
+    
+    south.west.from <- as.vector(M[-nr,-1])
+    south.west.to <- as.vector(M[-1,-nc])
+    south.west.cost <- as.vector( fun(DL[-nr,-1], SL[-nr,-1], directions[6], ...) )
+    
+    ###################################################################
+    
+    # Go South
+    
+    south.from <- as.vector(M[-nr,])
+    south.to <- as.vector(M[-1,])
+    south.cost <- as.vector( fun(DL[-nr,], SL[-nr,], directions[7], ...) )
+    
+    ###################################################################
+    
+    # Go Southeast
+    
+    south.east.from <- as.vector(M[-nr,-nc])
+    south.east.to <- as.vector(M[-1,-1])
+    south.east.cost <- as.vector( fun(DL[-nr,-nc], SL[-nr,-nc], directions[8], ...)  )
+    
+    ###################################################################
+    
+    ii <- c(north.west.from, north.from, north.east.from, west.from, east.from, south.west.from, south.from, south.east.from)
+    jj <- c(north.west.to, north.to, north.east.to, west.to, east.to, south.west.to, south.to, south.east.to)
+    xx <- c(north.west.cost, north.cost, north.east.cost, west.cost, east.cost, south.west.cost, south.cost, south.east.cost)
+    
+    tl <- sparseMatrix(i=ii, j=jj, x=xx)
+    if(output == "raw") return(tl)
+    if(output == "transitionLayer") {
+        tmp <- transition(stack$wind.direction, transitionFunction=function(x) 0, directions=8)
+        transitionMatrix(tmp)<-sparseMatrix(i=ii, j=jj, x= 1 / xx)
+        return(tmp)
+    }
+    return(NULL)
+}
+
 
 flow.dispersion_int <-function(stack, type="passive", output="raw"){
 
@@ -770,6 +892,14 @@ flow.dispersion <- function(x, type = "passive", output = "raw") {
         return(flow.dispersion_int(x, type=type, output=output))
     }
     lapply(x, flow.dispersion_int, type=type, output=output)
+}
+
+#' @export flow.dispersion2 
+flow.dispersion2 <- function(x, fun = cost.Felicisimo, output = "raw", ...) {
+    if(inherits(x, "RasterStack")){
+        return(flow.dispersion_int2(x, fun=fun, output=output, ...))
+    }
+    lapply(x, flow.dispersion_int2, fun=fun, output=output, ...)
 }
 
 
