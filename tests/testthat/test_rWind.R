@@ -10,17 +10,12 @@ data("wind.series")
 wind <- wind2raster(X)
 wind_s <- wind2raster(wind.series)
 
-data("wind.series")
 
-# This is not working because in flow.dispersion_int, the function as.matrix
-# is obtained from base rather than raster package. We have put @importMethodsFrom
-# but is not working... try to fix (5 - June - 2018)
+fl1 <- flow.dispersion(wind, type = "passive", output = "raw")
+fl2 <- flow.dispersion(wind, type = "active", output = "raw")
 
-fl1 <- flow.dispersion(wind, "passive", "raw")
-fl2 <- flow.dispersion(wind, "active", "raw")
-
-fl3 <- flow.dispersion(wind, "passive", "transitionLayer")
-fl4 <- flow.dispersion(wind, "active", "transitionLayer")
+fl3 <- flow.dispersion(wind, type = "passive", output = "transitionLayer")
+fl4 <- flow.dispersion(wind, type = "active", output = "transitionLayer")
 
 
 test_that("rWind works as expected", {
