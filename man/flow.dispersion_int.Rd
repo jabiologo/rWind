@@ -4,21 +4,22 @@
 \alias{flow.dispersion_int}
 \title{Compute flow-based cost or conductance}
 \usage{
-flow.dispersion_int(stack, type = "passive", output = "raw")
+flow.dispersion_int(stack, fun = cost.FMGS, output = "transitionLayer",
+  ...)
 }
 \arguments{
 \item{stack}{RasterStack object with layers obtained from wind2raster
 function ("rWind" package) with direction and speed flow values.}
 
-\item{type}{Could be either "passive" or "active".In "passive" mode,
-movement against flow direction is not allowed (deviations from the wind
-direction higher than 90). In "active" mode, the movement can go against flow
-direction, by increasing the cost.}
+\item{fun}{A function to compute the cost to move between cells. The default
+is \code{cost.FMGS} from Felicísimo et al. (2008), see details.}
 
 \item{output}{This argument allows to select diferent kinds of output. "raw"
 mode creates a matrix (class "dgCMatrix") with transition costs between all
 cells in the raster. "transitionLayer" creates a TransitionLayer object with
 conductance values to be used with "gdistance" package.}
+
+\item{...}{Further arguments passed to or from other methods.}
 }
 \value{
 In "transitionLayer" output, the function returns conductance values
@@ -31,8 +32,8 @@ TransitionLayer object from "gdistance" package.
 In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 }
 \description{
-flow.dispersion_int computes movement conductance through a flow either, sea or
-wind currents. It implements the formula described in Felícisimo et al.
+flow.dispersion_int computes movement conductance through a flow either, sea 
+or wind currents. It implements the formula described in Felícisimo et al.
 2008:
 }
 \details{
@@ -50,7 +51,7 @@ cluster.
 
 data(wind.data)
 wind <- wind2raster(wind.data)
-Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+Conductance <- flow.dispersion(wind, type="passive")
 
 \dontrun{
 require(gdistance)
