@@ -24,7 +24,6 @@ suppressPackageStartupMessages(library(lubridate))
 foo <- packageDescription("rWind")
 ```
 
-## LOADING PACKAGES
 
 First, we load the main packages we will use in this vignette. This vignette 
 was written under the rWind version `r foo$Version`

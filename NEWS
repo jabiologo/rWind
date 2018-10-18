@@ -1,3 +1,13 @@
+rWind v1.0.3 (Release date: 2018-06-30)
+==============
+
+o function cost.FMGS (Felicísimo et al. 2008) is now defined outside of 
+  
+  flow.dispersion
+
+o new vignette
+
+
 rWind v1.0.0 (Release date: 2018-06-30)
 ==============
 
@@ -7,9 +17,9 @@ o wind.dl_2 can be used with a time series.
 
 o wind.fit is deleted and integrated in wind.dl.
 
-o wind2raster is addapted to work with lists.
+o wind2raster is adapted to work with lists.
 
-o flow.dispersion is addapted to work with lists.
+o flow.dispersion is adapted to work with lists.
 
 
 rWind v0.4.2 (Release date: 2018-05-1)
@@ -17,13 +27,13 @@ rWind v0.4.2 (Release date: 2018-05-1)
 
 Changes:
 
-o wind.dl retunrns now a "rWind data.frame" object.
+o wind.dl returns now a "rWind data.frame" object.
 
-o wind.fit retunrns now a "rWind data.frame" object.
+o wind.fit returns now a "rWind data.frame" object.
 
 o wind2raster returns by default a "RasterStack" object with two raster layers: wind.direction and wind.speed.
 
-o flow.dispersion takes now as an imput a RasterStack produced by wind2raster with wind.direction and wind.speed layers.
+o flow.dispersion takes now as an input a RasterStack produced by wind2raster with wind.direction and wind.speed layers.
 
 o Including "raster,stack" as an Import function.
 
@@ -32,13 +42,13 @@ rWind v0.4 (Release date: 2017-10-10)
 
 Changes:
 
-o Including codecov badget into readme file.
+o Including codecov badge into readme file.
 
 o Including a tests folder with some code tests.
 
 o Removing at the moment see currents functions.
 
-o Including roxygen code into wind_functions.R to create package documentation automaticaly.
+o Including roxygen code into wind_functions.R to create package documentation automatically.
 
 o Removing "shape" package as an Import.
 

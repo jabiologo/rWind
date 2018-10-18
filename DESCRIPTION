@@ -13,6 +13,7 @@ License: GPL (>=3)
 LazyData: TRUE
 Imports: raster (>= 2.5-8), gdistance, Matrix, lubridate, 
 Suggests: testthat, rmarkdown, knitr
+VignetteBuilder: knitr
 Packaged: 2016-11-24 11:37:02 UTC; javi
 Depends: R (>= 3.4)
 NeedsCompilation: no
