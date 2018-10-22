@@ -145,6 +145,7 @@ wind.dl <- function (yyyy,mm,dd,tt,lon1,lon2,lat1,lat2,
 read.rWind <- function(file){
     tmp <- read.csv(file, colClasses = c("POSIXct", "numeric", "numeric",
                                  "numeric", "numeric", "numeric", "numeric"))
+    tmp[,1] <- ymd_hms(tmp[,1], truncated = 3)
     class(tmp) <- c("rWind", "data.frame")
     tmp
 }
