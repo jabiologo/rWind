@@ -1,8 +1,8 @@
-rWind v1.0.3 (Release date: 2018-06-30)
+rWind v1.0.3 (Release date: 2018-10-23)
 ==============
 
-o function cost.FMGS (Felicísimo et al. 2008) is now defined outside of 
-  
+o function cost.FMGS (Felicísimo et al. 2008) is now defined outside of
+
   flow.dispersion
 
 o new vignette
