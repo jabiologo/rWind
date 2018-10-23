@@ -145,6 +145,7 @@ wind.dl <- function (yyyy,mm,dd,tt,lon1,lon2,lat1,lat2,
 read.rWind <- function(file){
     tmp <- read.csv(file, colClasses = c("POSIXct", "numeric", "numeric",
                                  "numeric", "numeric", "numeric", "numeric"))
+    tmp[,1] <- ymd_hms(tmp[,1], truncated = 3)
     class(tmp) <- c("rWind", "data.frame")
     tmp
 }
@@ -520,14 +521,11 @@ arrowDir <- function(W){
 }
 
 
-
-###################################################################
 # Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
-
-# celda should be cell (direction), speed should be in too
-
-cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
-    dif <- (abs(wind.direction - cell))
+#' @rdname flow.dispersion
+#' @export
+cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
+    dif <- (abs(wind.direction - target))
     dif[dif > 180] <- 360 - dif[dif > 180]
     if (type=="passive"){
         dif[dif >= 90] <- Inf # check
@@ -544,8 +542,8 @@ cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
 
 #' Compute flow-based cost or conductance
 #'
-#' flow.dispersion_int computes movement conductance through a flow either, sea or
-#' wind currents. It implements the formula described in Felícisimo et al.
+#' flow.dispersion_int computes movement conductance through a flow either, sea 
+#' or wind currents. It implements the formula described in Felícisimo et al.
 #' 2008:
 #'
 #' Cost=(1/Speed)*(HorizontalFactor)
@@ -555,14 +553,13 @@ cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
 #'
 #' @param stack RasterStack object with layers obtained from wind2raster
 #' function ("rWind" package) with direction and speed flow values.
-#' @param type Could be either "passive" or "active".In "passive" mode,
-#' movement against flow direction is not allowed (deviations from the wind
-#' direction higher than 90). In "active" mode, the movement can go against flow
-#' direction, by increasing the cost.
+#' @param fun A function to compute the cost to move between cells. The default  
+#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.  
 #' @param output This argument allows to select diferent kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
+#' @param ... Further arguments passed to or from other methods.
 #' @return In "transitionLayer" output, the function returns conductance values
 #' (1/cost)to move betwen all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
@@ -590,7 +587,7 @@ cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
 #'
 #' data(wind.data)
 #' wind <- wind2raster(wind.data)
-#' Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+#' Conductance <- flow.dispersion(wind, type="passive")
 #'
 #' \dontrun{
 #' require(gdistance)
@@ -603,9 +600,8 @@ cost.Felicisimo <- function(wind.direction, wind.speed, cell, type="active"){
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @keywords internal
-
-
-flow.dispersion_int2 <-function(stack, fun=cost.Felicisimo, output="raw", ...){
+flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
+                                ...){
     
     output <- match.arg(output, c("raw", "transitionLayer"))
     
@@ -616,11 +612,9 @@ flow.dispersion_int2 <-function(stack, fun=cost.Felicisimo, output="raw", ...){
     nr <- nrow(M)
     nc <- ncol(M)
     
-    
     ###################################################################
     
     directions <- c(315 ,0, 45, 270, 90, 225, 180,135 )
-    
     
     ###################################################################
     
@@ -637,7 +631,6 @@ flow.dispersion_int2 <-function(stack, fun=cost.Felicisimo, output="raw", ...){
     north.from <- as.vector(M[-1,])
     north.to <- as.vector(M[-nr,])
     north.cost <- as.vector( fun(DL[-1,], SL[-1,], directions[2], ...) )
-    
     
     ###################################################################
     
@@ -704,124 +697,6 @@ flow.dispersion_int2 <-function(stack, fun=cost.Felicisimo, output="raw", ...){
 }
 
 
-flow.dispersion_int <-function(stack, type="passive", output="raw"){
-
-  type <- match.arg(type, c("passive", "active"))
-  output <- match.arg(output, c("raw", "transitionLayer"))
-
-  DL <- as.matrix(stack$wind.direction)
-  SL <- as.matrix(stack$wind.speed)
-  M <- matrix(as.integer(1:ncell(stack$wind.direction)),
-              nrow = nrow(stack$wind.direction), byrow=TRUE)
-  nr <- nrow(M)
-  nc <- ncol(M)
-
-  ###################################################################
-  # Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
-
-  cost.Felicisimo<- function(wind,celda,type="passive"){
-    dif <- (abs(wind-celda))
-    dif[dif > 180] <- 360 - dif[dif > 180]
-    if (type=="passive"){
-      dif[dif >= 90] <- Inf # check
-      dif[dif < 90] <- 2 * dif[dif < 90]
-      dif[dif==0] <- 0.1
-    }
-    else {
-      dif[dif < 90] <- 2 * dif[dif < 90]
-      dif[dif==0] <- 0.1
-    }
-    dif
-  }
-
-  ###################################################################
-
-  directions <- c(315 ,0, 45, 270, 90, 225, 180,135 )
-
-
-  ###################################################################
-
-  # Go Nortwest
-
-  north.west.from <- as.vector(M[-1,-1])
-  north.west.to <- as.vector(M[-nr,-nc])
-  north.west.cost <- cost.Felicisimo(DL[-1,-1],directions[1], type) / SL[-1,-1]
-
-  ###################################################################
-
-  # Go North
-
-  north.from <- as.vector(M[-1,])
-  north.to <- as.vector(M[-nr,])
-  north.cost <- as.vector( cost.Felicisimo(DL[-1,],directions[2], type) / SL[-1,] )
-
-
-  ###################################################################
-
-  # Go Norteast
-
-  north.east.from <- as.vector(M[-1,-nc])
-  north.east.to <- as.vector(M[-nr,-1])
-  north.east.cost <- as.vector( cost.Felicisimo(DL[-1,-nc],directions[3], type) / SL[-1,-nc] )
-
-  ###################################################################
-
-  # Go West
-
-  west.from <- as.vector(M[,-1])
-  west.to <- as.vector(M[,-nc])
-  west.cost <- as.vector( cost.Felicisimo(DL[,-1],directions[4], type) / SL[,-1] )
-
-  ###################################################################
-
-  # Go East
-
-  east.from <- as.vector(M[,-nc])
-  east.to <- as.vector(M[,-1])
-  east.cost <- as.vector( cost.Felicisimo(DL[,-nc],directions[5], type) / SL[,-nc] )
-
-  ###################################################################
-
-  # Go Southwest
-
-  south.west.from <- as.vector(M[-nr,-1])
-  south.west.to <- as.vector(M[-1,-nc])
-  south.west.cost <- as.vector( cost.Felicisimo(DL[-nr,-1],directions[6], type) / SL[-nr,-1] )
-
-  ###################################################################
-
-  # Go South
-
-  south.from <- as.vector(M[-nr,])
-  south.to <- as.vector(M[-1,])
-  south.cost <- as.vector( cost.Felicisimo(DL[-nr,],directions[7], type) / SL[-nr,] )
-
-  ###################################################################
-
-  # Go Southeast
-
-  south.east.from <- as.vector(M[-nr,-nc])
-  south.east.to <- as.vector(M[-1,-1])
-  south.east.cost <- as.vector( cost.Felicisimo(DL[-nr,-nc],directions[8], type) / SL[-nr,-nc] )
-
-  ###################################################################
-
-  ii <- c(north.west.from, north.from, north.east.from, west.from, east.from, south.west.from, south.from, south.east.from)
-  jj <- c(north.west.to, north.to, north.east.to, west.to, east.to, south.west.to, south.to, south.east.to)
-  xx <- c(north.west.cost, north.cost, north.east.cost, west.cost, east.cost, south.west.cost, south.cost, south.east.cost)
-
-
-  tl <- sparseMatrix(i=ii, j=jj, x=xx)
-  if(output == "raw") return(tl)
-  if(output == "transitionLayer") {
-    tmp <- transition(stack$wind.direction, transitionFunction=function(x) 0, directions=8)
-    transitionMatrix(tmp)<-sparseMatrix(i=ii, j=jj, x= 1 / xx)
-    #  transitionMatrix(tl)<-replace(transitionMatrix(tl), is.infinite(transitionMatrix(tl)), 0)
-    return(tmp)
-  }
-
-  return(NULL)
-}
 
 #' Compute flow-based cost or conductance
 #'
@@ -834,16 +709,23 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' being HorizontalFactor a "function that incrementaly penalized angular
 #' deviations from the wind direction" (Felicísimo et al. 2008).
 #'
+#'
 #' @param x RasterStack object with layers obtained from wind2raster
 #' function ("rWind" package) with direction and speed flow values.
-#' @param type Could be either "passive" or "active".In "passive" mode,
-#' movement against flow direction is not allowed (deviations from the wind
-#' direction higher than 90). In "active" mode, the movement can go against flow
-#' direction, by increasing the cost.
+#' @param fun A function to compute the cost to move between cells. The default  
+#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.  
 #' @param output This argument allows to select diferent kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
+#' @param ... Further arguments passed to or from other methods.
+#' @param wind.direction A vector or skalar containing wind directions. 
+#' @param wind.speed A vector or skalar containing wind speeds. 
+#' @param target direction of the target cell
+#' @param type Could be either "passive" or "active".In "passive" mode,
+#' movement against flow direction is not allowed (deviations from the wind
+#' direction higher than 90). In "active" mode, the movement can go against flow
+#' direction, by increasing the cost.
 #' @return In "transitionLayer" output, the function returns conductance values
 #' (1/cost)to move betwen all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
@@ -875,7 +757,7 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #'
 #' wind <- wind2raster(wind.data)
 #'
-#' Conductance<-flow.dispersion(wind,"passive", "transitionLayer")
+#' Conductance<-flow.dispersion(wind, type="passive")
 #'
 #' transitionMatrix(Conductance)
 #' image(transitionMatrix(Conductance))
@@ -886,20 +768,11 @@ flow.dispersion_int <-function(stack, type="passive", output="raw"){
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @export flow.dispersion
-
-flow.dispersion <- function(x, type = "passive", output = "raw") {
+flow.dispersion <- function(x, fun = cost.FMGS, output = "transitionLayer", ...) {
     if(inherits(x, "RasterStack")){
-        return(flow.dispersion_int(x, type=type, output=output))
+        return(flow.dispersion_int(x, fun=fun, output=output, ...))
     }
-    lapply(x, flow.dispersion_int, type=type, output=output)
-}
-
-#' @export flow.dispersion2 
-flow.dispersion2 <- function(x, fun = cost.Felicisimo, output = "raw", ...) {
-    if(inherits(x, "RasterStack")){
-        return(flow.dispersion_int2(x, fun=fun, output=output, ...))
-    }
-    lapply(x, flow.dispersion_int2, fun=fun, output=output, ...)
+    lapply(x, flow.dispersion_int, fun=fun, output=output, ...)
 }
 
 
