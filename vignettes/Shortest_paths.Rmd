@@ -1,6 +1,6 @@
 ---
 title: "Anisotropic shortest paths across Strait of Gibraltar"
-author: "Javier Fernández López and Klaus Schliep"
+author: "Javier Fernández-López and Klaus Schliep"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 bibliography: rWind.bib
 output: rmarkdown::html_vignette

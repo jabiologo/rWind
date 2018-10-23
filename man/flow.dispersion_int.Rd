@@ -32,7 +32,7 @@ TransitionLayer object from "gdistance" package.
 In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 }
 \description{
-flow.dispersion_int computes movement conductance through a flow either, sea 
+flow.dispersion_int computes movement conductance through a flow either, sea
 or wind currents. It implements the formula described in Felícisimo et al.
 2008:
 }

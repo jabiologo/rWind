@@ -542,7 +542,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 
 #' Compute flow-based cost or conductance
 #'
-#' flow.dispersion_int computes movement conductance through a flow either, sea 
+#' flow.dispersion_int computes movement conductance through a flow either, sea
 #' or wind currents. It implements the formula described in Felícisimo et al.
 #' 2008:
 #'
@@ -553,8 +553,8 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #'
 #' @param stack RasterStack object with layers obtained from wind2raster
 #' function ("rWind" package) with direction and speed flow values.
-#' @param fun A function to compute the cost to move between cells. The default  
-#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.  
+#' @param fun A function to compute the cost to move between cells. The default
+#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
 #' @param output This argument allows to select diferent kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
@@ -602,90 +602,90 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #' @keywords internal
 flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
                                 ...){
-    
+
     output <- match.arg(output, c("raw", "transitionLayer"))
-    
+
     DL <- as.matrix(stack$wind.direction)
     SL <- as.matrix(stack$wind.speed)
     M <- matrix(as.integer(1:ncell(stack$wind.direction)),
                 nrow = nrow(stack$wind.direction), byrow=TRUE)
     nr <- nrow(M)
     nc <- ncol(M)
-    
+
     ###################################################################
-    
+
     directions <- c(315 ,0, 45, 270, 90, 225, 180,135 )
-    
+
     ###################################################################
-    
+
     # Go Nortwest
-    
+
     north.west.from <- as.vector(M[-1,-1])
     north.west.to <- as.vector(M[-nr,-nc])
-    north.west.cost <- fun(DL[-1,-1], SL[-1,-1], directions[1], ...) 
-    
+    north.west.cost <- fun(DL[-1,-1], SL[-1,-1], directions[1], ...)
+
     ###################################################################
-    
+
     # Go North
-    
+
     north.from <- as.vector(M[-1,])
     north.to <- as.vector(M[-nr,])
     north.cost <- as.vector( fun(DL[-1,], SL[-1,], directions[2], ...) )
-    
+
     ###################################################################
-    
+
     # Go Norteast
-    
+
     north.east.from <- as.vector(M[-1,-nc])
     north.east.to <- as.vector(M[-nr,-1])
     north.east.cost <- as.vector( fun(DL[-1,-nc], SL[-1,-nc], directions[3], ...) )
-    
+
     ###################################################################
-    
+
     # Go West
-    
+
     west.from <- as.vector(M[,-1])
     west.to <- as.vector(M[,-nc])
     west.cost <- as.vector( fun(DL[,-1], SL[,-1], directions[4], ...) )
-    
+
     ###################################################################
-    
+
     # Go East
-    
+
     east.from <- as.vector(M[,-nc])
     east.to <- as.vector(M[,-1])
     east.cost <- as.vector( fun(DL[,-nc], SL[,-nc], directions[5], ...) )
-    
+
     ###################################################################
-    
+
     # Go Southwest
-    
+
     south.west.from <- as.vector(M[-nr,-1])
     south.west.to <- as.vector(M[-1,-nc])
     south.west.cost <- as.vector( fun(DL[-nr,-1], SL[-nr,-1], directions[6], ...) )
-    
+
     ###################################################################
-    
+
     # Go South
-    
+
     south.from <- as.vector(M[-nr,])
     south.to <- as.vector(M[-1,])
     south.cost <- as.vector( fun(DL[-nr,], SL[-nr,], directions[7], ...) )
-    
+
     ###################################################################
-    
+
     # Go Southeast
-    
+
     south.east.from <- as.vector(M[-nr,-nc])
     south.east.to <- as.vector(M[-1,-1])
     south.east.cost <- as.vector( fun(DL[-nr,-nc], SL[-nr,-nc], directions[8], ...)  )
-    
+
     ###################################################################
-    
+
     ii <- c(north.west.from, north.from, north.east.from, west.from, east.from, south.west.from, south.from, south.east.from)
     jj <- c(north.west.to, north.to, north.east.to, west.to, east.to, south.west.to, south.to, south.east.to)
     xx <- c(north.west.cost, north.cost, north.east.cost, west.cost, east.cost, south.west.cost, south.cost, south.east.cost)
-    
+
     tl <- sparseMatrix(i=ii, j=jj, x=xx)
     if(output == "raw") return(tl)
     if(output == "transitionLayer") {
@@ -700,7 +700,7 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 
 #' Compute flow-based cost or conductance
 #'
-#' flow.dispersion_int computes movement conductance through a flow either, sea
+#' \code{flow.dispersion} computes movement conductance through a flow either, sea
 #' or wind currents. It implements the formula described in Felícisimo et al.
 #' 2008:
 #'
@@ -712,15 +712,15 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #'
 #' @param x RasterStack object with layers obtained from wind2raster
 #' function ("rWind" package) with direction and speed flow values.
-#' @param fun A function to compute the cost to move between cells. The default  
-#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.  
+#' @param fun A function to compute the cost to move between cells. The default
+#' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
 #' @param output This argument allows to select diferent kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
 #' @param ... Further arguments passed to or from other methods.
-#' @param wind.direction A vector or skalar containing wind directions. 
-#' @param wind.speed A vector or skalar containing wind speeds. 
+#' @param wind.direction A vector or skalar containing wind directions.
+#' @param wind.speed A vector or skalar containing wind speeds.
 #' @param target direction of the target cell
 #' @param type Could be either "passive" or "active".In "passive" mode,
 #' movement against flow direction is not allowed (deviations from the wind
