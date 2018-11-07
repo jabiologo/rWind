@@ -1,0 +1,21 @@
+note <- sprintf("(rWind %s).", meta$Version)
+
+
+citHeader("To cite rWind in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{rWind}: Download, edit and include wind data in ecological and  evolutionary analysis.",
+  author       = personList(as.person("Javier Fernández-López"),
+                   as.person("Klaus Schliep")),
+  journal      = "Ecography",
+  year         = "2018",
+  url = "https://doi.org/10.1111/ecog.03730",
+  textVersion  =
+  paste("Javier Fernández-López, Klaus Schliep (2018).",
+        "rWind: Download, edit and include wind data in ecological and  evolutionary analysis.",
+        "In press Ecography.")
+)
+
+
+citFooter("As rWind is evolving quickly, you may want to cite also its version number", note)
+
