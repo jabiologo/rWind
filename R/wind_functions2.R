@@ -257,7 +257,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
                                     stringsAsFactors=FALSE),
                            read.csv(url_east, header=FALSE, skip=2,
                                     stringsAsFactors=FALSE))
-
+                tmp <- wind.fit_int(tmp)
                 if (type == "csv"){
                     tmp <- wind.fit_int(tmp)
                     fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
@@ -274,7 +274,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
                 url_dir<- paste("http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
                 tmp <- read.csv(url_dir, header=FALSE, skip=2,
                                 colClasses = c("POSIXct", "double", "double", "double", "double"))
-
+                tmp <- wind.fit_int(tmp)
                 if (type == "csv"){
                     tmp <- wind.fit_int(tmp)
                     fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
