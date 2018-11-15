@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/jabiologo/rWind/branch/master/graph/badge.svg)](https://codecov.io/gh/jabiologo/rWind)
 
 
-<gif img="man/figures/hurricane.gif" align="right" />
+<img src="man/figures/hurricane.gif" align="right" />
 
 rWind
 -----
