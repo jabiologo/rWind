@@ -1,6 +1,5 @@
 # rWind
 
-<img src="man/figures/hurricane.gif" align="right" />
 
 [![Build Status](https://travis-ci.org/jabiologo/rWind.svg?branch=master)](https://travis-ci.org/jabiologo/rWind)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
