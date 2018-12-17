@@ -19,7 +19,7 @@ To install the latest released version of rWind on CRAN use `install.packages("r
 
 To install the latest development version `devtools::install_github("jabiologo/rWind")`
 
-For more information and examples, please check [my blog](http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html)
+For more information and examples, please check [my blog](http://allthiswasfield.blogspot.com/2018/11/plotting-wind-highways-using-rwind.html)
 
 License
 -------
