@@ -859,3 +859,121 @@ wind.mean <- function(x){
     return(res)
 }
 
+
+###############################################################################
+# Some new and experimental functions to download OSCAR Sea Surface Velocity data
+# https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.html
+# https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+# This is a beta version, please use it carefully
+
+oscar.fit_int <- function (tmpx) {
+  tmpx <- cbind(tmpx[,1],tmpx[,3:6])
+  ###### DIRECTION
+  direction <- atan2(tmpx[,4], tmpx[,5])
+  direction <- rad2deg(direction)
+  direction[direction < 0] <- 360 + direction[direction < 0]
+
+  ###### SPEED
+  speed <- sqrt( (tmpx[,4] * tmpx[,4]) + (tmpx[,5] * tmpx[,5]))
+
+  ######
+  names(tmpx)<- c("time", "lat","lon", "u", "v")
+  res <- cbind(tmpx, dir=direction, speed=speed)
+  res <- res[with(res, order(-lat)), ]
+  res[,1] <- ymd_hms(res[,1], truncated = 3)
+  return(res)
+}
+
+#' OSCAR Sea currents data download
+#'
+#' seaOscar.dl downloads wind data from the Ocean Surface Current Analyses Real-time (OSCAR)
+#' (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
+#' Geospatial resolution is 0.33 degrees and sea currents are calculated for
+#' 15 m depth.
+#'
+#' The output type is determined by type="csv" or type="read-data". If
+#' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
+#' that is downloaded at the work directory. If type="read-data" is selected,
+#' an R object (data.frame) is created.
+#'
+#' @param yyyy Selected year.
+#' @param mm Selected month.
+#' @param dd Selected day.
+#' @param lon1 Western longitude
+#' @param lon2 Eastern longitude
+#' @param lat1 Northern latitude
+#' @param lat2 Southern latitude
+#' @param type Output type. "read-data" is selected by default, creating an R
+#' object. If you choose "csv", seaOscar.dl create a a CSV file in your working
+#' directory named "sea_yyyy_mm_dd.csv".
+#' @param trace if trace = 1 (by default) track downloaded files
+#' @return "rWind" and "data.frame" class object or .csv file with U and V
+#' vector  components and sea current direction and speed for each coordenate
+#' in the study area defined by lon1/lon2 and lat1/lat2.
+#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
+#' @references
+#' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
+#'
+#' https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+#' @keywords ~currents ~sea
+#' @examples
+#'
+#' # Download sea currents for Galapagos Islands
+#' \dontrun{
+#'
+#' seaOscar.dl(2015,1,1,-90,-88,-3,2)
+#'
+#' }
+
+#' @importFrom utils write.table read.csv download.file
+#' @importFrom lubridate ymd year month day hour
+#' @rdname seaOscar.dl
+#' @export seaOscar.dl
+
+seaOscar.dl <- function(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data", trace = 1) {
+  type <- match.arg(type, c("read-data", "csv"))
+  mm <- sprintf("%02d", mm)
+  dd <- sprintf("%02d", dd)
+  dt <- ymd(paste(yyyy, mm, dd, sep = "-"))
+  yyyy_c <- year(dt)
+  mm_c <- sprintf("%02d", month(dt))
+  dd_c <- sprintf("%02d", day(dt))
+  #tt_c <- sprintf("%02d", hour(dt))
+  testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
+  print(testDate)
+  if (trace)
+    print(paste(ymd(paste(yyyy_c, mm_c, dd_c, sep = "-")),
+                "downloading...", sep = " "))
+  tryCatch({
+    as.Date(testDate)
+    url_dir <- paste("https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.csv?u[(",
+                     yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z):1:(",yyyy_c,"-",mm_c,"-",dd_c,
+                     "T00:00:00Z)][(15.0):1:(15.0)][(",lat1,"):1:(", lat2,
+                     ")][(",lon1,"):1:(",lon2, ")],v[(",yyyy_c,"-",mm_c,"-",dd_c,
+                     "T00:00:00Z):1:(",yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z)][(15.0):1:(15.0)][(",
+                     lat1,"):1:(",lat2,")][(", lon1, "):1:(", lon2, ")],um[(",
+                     yyyy_c,"-",mm_c,"-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c,
+                     "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(",
+                     lat2,")][(", lon1, "):1:(", lon2, ")],vm[(", yyyy_c, "-", mm_c,
+                     "-", dd_c,"T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
+                     "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
+                     ")][(" , lon1, "):1:(", lon2,")]", sep="")
+
+    tmp <- read.csv(url_dir, header = FALSE, skip = 2,
+                    stringsAsFactors = FALSE)
+    tmp <- oscar.fit_int(tmp)
+    if (type == "csv") {
+      fname <- paste("oscar_", yyyy_c, "_", mm_c, "_",
+                     dd_c, "_", ".csv", sep = "")
+      write.table(tmp, fname, sep = ",", row.names = FALSE,
+                  col.names = TRUE, quote = FALSE)
+    }
+  }, error = function(e) {
+    cat("ERROR: database not found. Please, check server\n                      connection, date or geographical ranges \n")
+  }, warning = function(w) {
+    cat("ERROR: database not found. Please, check server\n                        connection, date or geographical ranges  \n")
+  })
+  class(tmp) <- c("rWind", "data.frame")
+  return(tmp)
+}
