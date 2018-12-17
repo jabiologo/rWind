@@ -870,14 +870,13 @@ wind.mean <- function(x){
 oscar.fit_int <- function (tmpx) {
   tmpx <- cbind(tmpx[,1],tmpx[,3:6])
   ###### DIRECTION
-  browser()
   direction <- atan2(tmpx[,4], tmpx[,5])
   direction <- rad2deg(direction)
-  direction[direction < 0] <- 360 + direction[direction < 0]
-  browser()
+  dir_filter <- direction[!is.nan(direction)]
+  dir_filter[dir_filter < 0] <- 360 + dir_filter[dir_filter < 0]
+  direction[!is.nan(direction)] <- dir_filter
   ###### SPEED
   speed <- sqrt( (tmpx[,4] * tmpx[,4]) + (tmpx[,5] * tmpx[,5]))
-  browser()
   ######
   names(tmpx)<- c("time", "lat","lon", "u", "v")
   res <- cbind(tmpx, dir=direction, speed=speed)

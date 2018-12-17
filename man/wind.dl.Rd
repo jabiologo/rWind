@@ -60,7 +60,8 @@ an R object (data.frame) is created.
 }
 \note{
 Longitude coordenates are provided by GFS dataset in 0/360 notation
-and transformed internaly into -180/180.
+and transformed internaly into -180/180. Wind "dir" denotes where the
+wind is going (toward), not from where is coming.
 }
 \examples{
 

@@ -50,7 +50,7 @@ an R object (data.frame) is created.
 # Download sea currents for Galapagos Islands
 \dontrun{
 
-seaOscar.dl(2015,1,1,-90,-88,-3,2)
+seaOscar.dl(2015,1,1,-93,-88,2,-3)
 
 }
 }
