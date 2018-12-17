@@ -51,7 +51,8 @@ circ.mean <- function(deg){
 #' vector  components and wind direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @note Longitude coordenates are provided by GFS dataset in 0/360 notation
-#' and transformed internaly into -180/180.
+#' and transformed internaly into -180/180. Wind "dir" denotes where the
+#' wind is going (toward), not from where is coming.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
