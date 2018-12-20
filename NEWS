@@ -1,3 +1,11 @@
+rWind v1.1.1 (Release date: 2018-12-20)
+==============
+
+o added a new function seaScud.dl() to download sea current data from SCUD
+
+o added a new internal function to manage SCUD data scud.fit_int()
+
+
 rWind v1.1.0 (Release date: 2018-12-17)
 ==============
 
