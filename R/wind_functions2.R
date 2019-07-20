@@ -434,7 +434,7 @@ wind2raster_int<- function(x){
   ras[] <- x$dir
   ras2[] <- x$speed
   tmp <- stack (ras, ras2)
-  names(tmp)<- c("wind.direction", "wind.speed")
+  names(tmp)<- c("direction", "speed")
   return(tmp)
 }
 
@@ -606,10 +606,10 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 
     output <- match.arg(output, c("raw", "transitionLayer"))
 
-    DL <- as.matrix(stack$wind.direction)
-    SL <- as.matrix(stack$wind.speed)
-    M <- matrix(as.integer(1:ncell(stack$wind.direction)),
-                nrow = nrow(stack$wind.direction), byrow=TRUE)
+    DL <- as.matrix(stack$direction)
+    SL <- as.matrix(stack$speed)
+    M <- matrix(as.integer(1:ncell(stack$direction)),
+                nrow = nrow(stack$direction), byrow=TRUE)
     nr <- nrow(M)
     nc <- ncol(M)
 
@@ -690,7 +690,7 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
     tl <- sparseMatrix(i=ii, j=jj, x=xx)
     if(output == "raw") return(tl)
     if(output == "transitionLayer") {
-        tmp <- transition(stack$wind.direction, transitionFunction=function(x) 0, directions=8)
+        tmp <- transition(stack$direction, transitionFunction=function(x) 0, directions=8)
         transitionMatrix(tmp)<-sparseMatrix(i=ii, j=jj, x= 1 / xx)
         return(tmp)
     }
