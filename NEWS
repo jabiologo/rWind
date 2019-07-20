@@ -1,3 +1,10 @@
+rWind v1.1.2 (Release date: 2018-12-20)
+==============
+
+o fixed some documentary issues with the new functions
+
+o changed from "wind.direction" and "wind.speed" to "direction" and "speed"
+
 rWind v1.1.1 (Release date: 2018-12-20)
 ==============
 
