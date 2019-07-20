@@ -829,7 +829,7 @@ tidy.rWind_series <- function(x, ...){
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
 #' @seealso \code{\link{wind.dl}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
-#' @keywords ~kwd1 ~kwd2
+#' @keywords ~average ~mean
 #' @examples
 #' data(wind.series)
 #' wind_average<- wind.mean(wind.series)

@@ -40,5 +40,5 @@ https://en.wikipedia.org/wiki/Cross_product
 \author{
 Javier Fernández-López (jflopez@rjb.csic.es)
 }
-\keyword{~kwd1}
-\keyword{~kwd2}
+\keyword{~average}
+\keyword{~mean}
