@@ -890,7 +890,8 @@ oscar.fit_int <- function (tmpx) {
 #' seaOscar.dl downloads sea currents data from the Ocean Surface Current Analyses Real-time (OSCAR)
 #' (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
 #' Geospatial resolution is 0.33 degrees and sea currents are calculated for
-#' 15 m depth.
+#' 15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
+#' degrees. You can use SCUD databse instead \code{\link{seaScud.dl}}
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
@@ -912,7 +913,7 @@ oscar.fit_int <- function (tmpx) {
 #' vector  components and sea current direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
+#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}, \code{\link{seaScud.dl}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
