@@ -8,12 +8,15 @@ citEntry(entry = "Article",
   author       = personList(as.person("Javier Fernández-López"),
                    as.person("Klaus Schliep")),
   journal      = "Ecography",
-  year         = "2018",
+  volume       = "42",
+  number       = "4",
+  pages        = "804-810",
+  year         = "2019",
   url = "https://doi.org/10.1111/ecog.03730",
   textVersion  =
-  paste("Javier Fernández-López, Klaus Schliep (2018).",
+  paste("Javier Fernández-López, Klaus Schliep (2019).",
         "rWind: Download, edit and include wind data in ecological and  evolutionary analysis.",
-        "In press Ecography.")
+        "Ecography 42: 804–810")
 )
 
 
