@@ -37,4 +37,4 @@ http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
 }
 \keyword{datasets}
 \keyword{download}
-\keyword{wind}
+\concept{wind}
