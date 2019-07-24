@@ -48,7 +48,7 @@ NULL
 #' @source
 #'
 #' http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
-#' @keywords datasets, wind, download
+#' @keywords datasets
 #' @examples
 #'
 #' data(wind.data)
