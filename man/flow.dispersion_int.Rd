@@ -72,7 +72,7 @@ doi:10.18637/jss.v076.i13
 \code{\link{wind.dl}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López; Klaus Schliep
+Javier Fernández-López; Klaus Schliep; Yurena Arjona
 }
 \keyword{internal}
 \keyword{~anisotropy}

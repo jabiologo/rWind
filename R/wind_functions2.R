@@ -526,18 +526,22 @@ arrowDir <- function(W){
 #' @rdname flow.dispersion
 #' @export
 cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
-    dif <- (abs(wind.direction - target))
-    dif[dif > 180] <- 360 - dif[dif > 180]
-    if (type=="passive"){
-        dif[dif >= 90] <- Inf # check
-        dif[dif < 90] <- 2 * dif[dif < 90]
-        dif[dif==0] <- 0.1
-    }
-    else {
-        dif[dif < 90] <- 2 * dif[dif < 90]
-        dif[dif==0] <- 0.1
-    }
-    dif / wind.speed
+  dif <- (abs(wind.direction - target))
+  dif[dif>180 & !is.na(dif)]<- 360 - dif[dif>180 & !is.na(dif)] #Modified from the original function
+  if (type=="passive"){
+    dif[dif >= 90 & !is.na(dif)] <- Inf # check
+    dif[is.na(dif)] <- Inf #Modified from the original function
+    dif[dif < 90] <- 2 * dif[dif < 90]
+    dif[dif==0] <- 0.1
+  }
+  else {
+    dif[dif < 90] <- 2 * dif[dif < 90]  # Need to be modified
+    dif[dif==0] <- 0.1
+  }
+
+  wind.speed[is.na(wind.speed)] <- 0
+
+  dif / wind.speed
 }
 
 
@@ -572,7 +576,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #' @note Note that for large data sets, it could take a while. For large study
 #' areas is strongly adviced perform the analysis in a remote computer or a
 #' cluster.
-#' @author Javier Fernández-López; Klaus Schliep
+#' @author Javier Fernández-López; Klaus Schliep; Yurena Arjona
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @references
 #'
@@ -738,7 +742,7 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #' @note Note that for large data sets, it could take a while. For large study
 #' areas is strongly adviced perform the analysis in a remote computer or a
 #' cluster.
-#' @author Javier Fernández-López; Klaus Schliep
+#' @author Javier Fernández-López; Klaus Schliep; Yurena Arjona
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @references
 #'
