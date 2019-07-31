@@ -527,15 +527,23 @@ arrowDir <- function(W){
 #' @export
 cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
   dif <- (abs(wind.direction - target))
+  # If dif > 180 and is not NA
   dif[dif>180 & !is.na(dif)]<- 360 - dif[dif>180 & !is.na(dif)] #Modified from the original function
   if (type=="passive"){
+    # In "passive" type, if dif > 90, movement is not allowed
     dif[dif >= 90 & !is.na(dif)] <- Inf # check
+    # For sea currents, dif could be NA is there are lands around
     dif[is.na(dif)] <- Inf #Modified from the original function
+    # Here we apply the formula in Felicísimo et al. 2008
     dif[dif < 90] <- 2 * dif[dif < 90]
     dif[dif==0] <- 0.1
   }
   else {
-    dif[dif < 90] <- 2 * dif[dif < 90]  # Need to be modified
+    # For sea currents, dif could be NA is there are lands around
+    dif[is.na(dif)] <- Inf
+    # For "active" type movements against flow are allowed, so simply we
+    # multiply by 2 the dif, following Felicísimo et al., 2008
+    dif[!is.na(dif)] <- 2 * dif[!is.na(dif)]
     dif[dif==0] <- 0.1
   }
 
