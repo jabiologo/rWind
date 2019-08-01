@@ -8,11 +8,15 @@
 [![codecov](https://codecov.io/gh/jabiologo/rWind/branch/master/graph/badge.svg)](https://codecov.io/gh/jabiologo/rWind)
 
 ## Overview
-rWind contain tools for downloading, editing and transforming wind data from Global Forecast System (GFS). It also allows to use wind data to compute the minimum cost path taking into account wind speed and direction to perform connectivity analysis. For more information about data source, please check: 
+rWind contain tools for downloading, editing and transforming wind and sea current data from several sources. It also allows to use wind and sea currents data to compute the minimum cost path taking into account flow speed and direction to perform connectivity analysis. For more information about data source, please check: 
 
 * <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>
 
 * <http://www.weather.gov/>
+
+* <https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html>
+
+* <https://bluehub.jrc.ec.europa.eu/erddap/info/hawaii_0958_63c0_45d2/index.html>
 
 
 To install the latest released version of rWind on CRAN use `install.packages("rWind")`
