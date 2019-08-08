@@ -69,6 +69,7 @@ circ.mean <- function(deg){
 #'
 #' }
 #'
+#'
 #' @importFrom utils write.table read.csv download.file
 #' @importFrom lubridate ymd_h year month day hour
 #' @rdname wind.dl
