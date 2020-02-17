@@ -1,9 +1,9 @@
 
 
-#' Download, edit and include wind data in ecological and evolutionary analysis
+#' Download, edit and include wind and sea currents data in ecological and evolutionary analysis
 #'
-#' rWind contain tools for downloading, editing and transforming wind data from
-#' Global Forecast System (GFS). It also allows to use wind data to compute the
+#' rWind contain tools for downloading, editing and transforming wind and sea currents data from
+#' Global Forecast System (GFS) and Ocean Surface Current Analyses Real-time (OSCAR). It also allows to use wind and sea currents data to compute the
 #' minimum cost path from wind speed and direction to perform
 #' connectivity analysis.
 #'
