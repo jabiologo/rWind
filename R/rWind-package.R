@@ -18,6 +18,8 @@
 #'
 #' Klaus Schliep
 #'
+#' Yurena Arjona
+#'
 #' Maintainer: Javier Fernández-López <jflopez.bio@@gmail.com>
 #' @keywords package
 NULL
