@@ -25,7 +25,7 @@ circ.mean <- function(deg){
 #' Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
 #' information:
-#' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+#' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
@@ -58,7 +58,7 @@ circ.mean <- function(deg){
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
-#' http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
+#' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
 #' @keywords ~gfs ~wind
 #' @examples
 #'
