@@ -21,6 +21,8 @@ Javier Fernández-López
 
 Klaus Schliep
 
+Yurena Arjona
+
 Maintainer: Javier Fernández-López <jflopez.bio@gmail.com>
 }
 \keyword{package}
