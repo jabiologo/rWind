@@ -904,7 +904,7 @@ oscar.fit_int <- function (tmpx) {
 #' (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
 #' Geospatial resolution is 0.33 degrees and sea currents are calculated for
 #' 15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
-#' degrees. You can use SCUD databse instead \code{\link{seaScud.dl}}
+#' degrees. You can use SCUD databse instead (coming soon...)
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
@@ -926,7 +926,7 @@ oscar.fit_int <- function (tmpx) {
 #' vector  components and sea current direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}, \code{\link{seaScud.dl}}
+#' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
@@ -993,130 +993,4 @@ seaOscar.dl <- function(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data"
   return(tmp)
 }
 
-
-###############################################################################
-# Some new and experimental functions to download Surface CUrrents from a
-# Diagnostic model (SCUD): Pacific database.
-# https://bluehub.jrc.ec.europa.eu/erddap/info/hawaii_0958_63c0_45d2/index.html
-# https://bluehub.jrc.ec.europa.eu/erddap/griddap/hawaii_0958_63c0_45d2.graph
-# This is a beta version, please use it carefully
-
-scud.fit_int <- function (tmpx) {
-  tmpx[,3] <- tmpx[,3] %% 360
-  tmpx[tmpx[,3]>=180,3] <- tmpx[tmpx[,3]>=180,3] - 360
-
-  #tmpx <- cbind(tmpx[,1],tmpx[,3:6])
-  ###### DIRECTION
-  direction <- atan2(tmpx[,4], tmpx[,5])
-  direction <- rad2deg(direction)
-  dir_filter <- direction[!is.nan(direction)]
-  dir_filter[dir_filter < 0] <- 360 + dir_filter[dir_filter < 0] # COMPROBAR A MANOOOOO!!!!!!!!!!!
-  direction[!is.nan(direction)] <- dir_filter
-  ###### SPEED
-  speed <- sqrt( (tmpx[,4] * tmpx[,4]) + (tmpx[,5] * tmpx[,5]))
-  ######
-  names(tmpx)<- c("time", "lat","lon", "u", "v")
-  res <- cbind(tmpx, dir=direction, speed=speed)
-  res <- res[with(res, order(-lat)), ]
-  res[,1] <- ymd_hms(res[,1], truncated = 3)
-  return(res)
-}
-
-
-#' SCUD Sea currents data download
-#'
-#' seaScud.dl downloads sea current data from the Surface CUrrents from a
-#' Diagnostic model (SCUD): Pacific
-#' (https://bluehub.jrc.ec.europa.eu/erddap/info/hawaii_0958_63c0_45d2/index.html).
-#' Geospatial resolution is 0.25 degrees. Data availability from 2012-03-17 to
-#' current.
-#'
-#' The output type is determined by type="csv" or type="read-data". If
-#' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
-#' that is downloaded at the work directory. If type="read-data" is selected,
-#' an R object (data.frame) is created.
-#'
-#' @param yyyy Selected year.
-#' @param mm Selected month.
-#' @param dd Selected day.
-#' @param lon1 Western longitude
-#' @param lon2 Eastern longitude
-#' @param lat1 Southern latitude
-#' @param lat2 Northern latitude
-#' @param type Output type. "read-data" is selected by default, creating an R
-#' object. If you choose "csv", seaOscar.dl create a a CSV file in your working
-#' directory named "seaSCUD_yyyy_mm_dd.csv".
-#' @param trace if trace = 1 (by default) track downloaded files
-#' @return "rWind" and "data.frame" class object or .csv file with U and V
-#' vector  components and sea current direction and speed for each coordenate
-#' in the study area defined by lon1/lon2 and lat1/lat2.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
-#' @seealso \code{\link{seaOscar.dl}}, \code{\link{wind2raster}}
-#' @references
-#' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
-#'
-#' https://bluehub.jrc.ec.europa.eu/erddap/info/hawaii_0958_63c0_45d2/index.html
-#' @keywords ~currents ~sea
-#' @examples
-#'
-#' # Download sea currents for Galapagos Islands
-#' \dontrun{
-#'
-#' seaScud.dl(2016, 11, 1, -94, -88, -3, 2)
-#'
-#' }
-
-#' @importFrom utils write.table read.csv download.file
-#' @importFrom lubridate ymd year month day hour
-#' @rdname seaScud.dl
-#' @export seaScud.dl
-
-seaScud.dl <- function(yyyy, mm, dd, lon1, lon2, lat1, lat2, type="read-data", trace=1){
-
-  type <- match.arg(type, c("read-data", "csv"))
-
-  mm<-sprintf("%02d", mm)
-  dd<-sprintf("%02d", dd)
-
-  # Create a sequence with all dates available between selected dates
-  dt <- ymd(paste(yyyy,mm,dd, sep="-"))
-
-  yyyy_c <- year(dt)
-  mm_c <- sprintf("%02d",month(dt))
-  dd_c <- sprintf("%02d",day(dt))
-
-  testDate <- paste(yyyy_c,"-",mm_c,"-",dd_c, sep="")
-  print(testDate)
-  if(trace)print(paste( ymd(paste(yyyy_c,mm_c,dd_c, sep="-")),
-                        "downloading...", sep= " "))
-
-  tryCatch({
-    as.Date(testDate)
-    if (lon1 < 0){
-      lon1<-360-(abs(lon1))
-    }
-    if (lon2 < 0){
-      lon2<-360-(abs(lon2))
-    }
-    #browser()
-    url_dir<- paste("https://bluehub.jrc.ec.europa.eu/erddap/griddap/hawaii_0958_63c0_45d2.csv?u[(",yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],v[(",yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|u|v&.color=0x000000", sep="")
-    #browser()
-    tmp <- read.csv(url_dir, header=FALSE, skip=2, stringsAsFactors=FALSE)
-    #browser()
-    tmp <- scud.fit_int(tmp)
-    if (type == "csv"){
-      fname <- paste("seaSCUD_",yyyy_c,"_",mm_c,"_",dd_c,".csv", sep="")
-      write.table(tmp, fname, sep = ",", row.names = FALSE,
-                  col.names = TRUE, quote = FALSE)
-    }
-
-  },
-  error=function(e){cat("ERROR: database not found. Please, check server
-                      connection, date or geographical ranges \n")},
-  warning=function(w){cat("ERROR: database not found. Please, check server
-                        connection, date or geographical ranges  \n")}
-  )
-  class(tmp) <-  c("rWind", "data.frame")
-  return(tmp)
-}
 

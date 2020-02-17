@@ -16,7 +16,6 @@ rWind contain tools for downloading, editing and transforming wind and sea curre
 
 * <https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html>
 
-* <https://bluehub.jrc.ec.europa.eu/erddap/info/hawaii_0958_63c0_45d2/index.html>
 
 
 To install the latest released version of rWind on CRAN use `install.packages("rWind")`
