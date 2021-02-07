@@ -39,7 +39,7 @@ wind2raster(wind.data)
 \code{\link{wind.dl}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~gfs}
 \keyword{~wind}

@@ -5,8 +5,18 @@
 \alias{read.rWind}
 \title{Wind-data download}
 \usage{
-wind.dl(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2, type = "read-data",
-  trace = 1)
+wind.dl(
+  yyyy,
+  mm,
+  dd,
+  tt,
+  lon1,
+  lon2,
+  lat1,
+  lat2,
+  type = "read-data",
+  trace = 1
+)
 
 read.rWind(file)
 }
@@ -83,7 +93,7 @@ https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
 \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~gfs}
 \keyword{~wind}

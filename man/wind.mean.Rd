@@ -38,7 +38,7 @@ https://en.wikipedia.org/wiki/Cross_product
 \code{\link{wind.dl}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~average}
 \keyword{~mean}

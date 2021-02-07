@@ -4,7 +4,8 @@
 \name{wind.series}
 \alias{wind.series}
 \title{Wind series example}
-\format{The format is an rWind list of 8 data.frame. Each data.frame contain
+\format{
+The format is an rWind list of 8 data.frame. Each data.frame contain
 961 observations on the following 7 variables:
 
 \describe{ \item{list("time (UTC)")}{a factor with selected time of wind
@@ -13,7 +14,8 @@ data } \item{list("latitude (degrees_north)")}{a factor with latitude values
 \item{list("ugrd10m (m s-1)")}{a factor with U component of wind data }
 \item{list("vgrd10m (m s-1)")}{a factor with V component of wind data }
 \item{list("dir")}{a numeric with direction of wind data }
-\item{list("speed")}{a numeric with speed of wind data } }}
+\item{list("speed")}{a numeric with speed of wind data } }
+}
 \source{
 http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
 }

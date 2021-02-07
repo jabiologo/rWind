@@ -64,7 +64,8 @@ lapse to download wind series data.
 U and V vector components allow you to create wind averages or tendences
 for each coordenate at the study area. Longitude coordenates are
 provided by GFS dataset in 0/360 notation and transformed internaly into
--180/180.
+-180/180. "dir" denotes where the
+wind/sea current is going (toward), not from where is coming.
 }
 \examples{
 
@@ -92,7 +93,7 @@ http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~gfs}
 \keyword{~wind}

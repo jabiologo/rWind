@@ -53,7 +53,7 @@ circ.mean <- function(deg){
 #' @note Longitude coordenates are provided by GFS dataset in 0/360 notation
 #' and transformed internaly into -180/180. Wind "dir" denotes where the
 #' wind is going (toward), not from where is coming.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
@@ -192,8 +192,9 @@ read.rWind <- function(file){
 #' U and V vector components allow you to create wind averages or tendences
 #' for each coordenate at the study area. Longitude coordenates are
 #' provided by GFS dataset in 0/360 notation and transformed internaly into
-#' -180/180.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' -180/180. "dir" denotes where the
+#' wind/sea current is going (toward), not from where is coming.
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}},
 #' \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
 #' @references
@@ -329,7 +330,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @param X downloaded data by wind.dl function from "rWind" package.
 #' @return data.frame
 #' @note This function is used internaly by wind.dl
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind.mean}},
 #' \code{\link{wind2raster}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
@@ -363,8 +364,9 @@ wind.fit_int <- function (tmpx) {
 #' @param u U component.
 #' @param v U component.
 #' @return "uv2ds" returns a matrix with direction and speed values
-#' @note Multiple U and V values can be procesed.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @note Multiple U and V values can be procesed. "dir" denotes where the
+#' wind/sea current is going (toward), not from where is coming.
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}}
 #' @keywords ~wind
 #' @examples
@@ -422,7 +424,7 @@ ds2uv <- function(d,s){
 #' @param x an object of class \code{rWind}
 #' @return A raster file representing wind direction, wind speed or both of the
 #' study area.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @keywords ~gfs ~wind
 #' @importFrom raster rasterFromXYZ stack
@@ -454,7 +456,7 @@ wind2raster_int<- function(x){
 #' @param x an "rWind list" obtained by wind.fit
 #' @return A raster stack or a list of raster stacks representing wind direction
 #' and speed.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}
 #' @keywords ~gfs ~wind
 #' @examples
@@ -839,7 +841,7 @@ tidy.rWind_series <- function(x, ...){
 #' @param x An object of class \code{rWind_series}
 #' @return An object of class \code{rWind}, which is a \code{data.frame}
 #' @note For large time series, it could take a while.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}
 #' @references https://en.wikipedia.org/wiki/Cross_product
 #' @keywords ~average ~mean
@@ -925,7 +927,7 @@ oscar.fit_int <- function (tmpx) {
 #' @return "rWind" and "data.frame" class object or .csv file with U and V
 #' vector  components and sea current direction and speed for each coordenate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
-#' @author Javier Fernández-López (jflopez@@rjb.csic.es)
+#' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL

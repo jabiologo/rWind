@@ -4,8 +4,7 @@
 \alias{flow.dispersion_int}
 \title{Compute flow-based cost or conductance}
 \usage{
-flow.dispersion_int(stack, fun = cost.FMGS, output = "transitionLayer",
-  ...)
+flow.dispersion_int(stack, fun = cost.FMGS, output = "transitionLayer", ...)
 }
 \arguments{
 \item{stack}{RasterStack object with layers obtained from wind2raster

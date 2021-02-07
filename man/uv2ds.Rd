@@ -27,7 +27,8 @@ ds2uv(d, s)
 Transform U and V components in direction and speed and vice versa
 }
 \note{
-Multiple U and V values can be procesed.
+Multiple U and V values can be procesed. "dir" denotes where the
+wind/sea current is going (toward), not from where is coming.
 }
 \examples{
 
@@ -40,6 +41,6 @@ ds2uv(ds[,1], ds[,2])
 \code{\link{wind.mean}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~wind}

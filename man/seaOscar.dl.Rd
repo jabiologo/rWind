@@ -4,8 +4,17 @@
 \alias{seaOscar.dl}
 \title{OSCAR Sea currents data download}
 \usage{
-seaOscar.dl(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data",
-  trace = 1)
+seaOscar.dl(
+  yyyy,
+  mm,
+  dd,
+  lon1,
+  lon2,
+  lat1,
+  lat2,
+  type = "read-data",
+  trace = 1
+)
 }
 \arguments{
 \item{yyyy}{Selected year.}
@@ -64,7 +73,7 @@ https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
 \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{~currents}
 \keyword{~sea}

@@ -29,7 +29,7 @@ file.
 \code{\link{wind.dl}}, \code{\link{wind2raster}}
 }
 \author{
-Javier Fernández-López (jflopez@rjb.csic.es)
+Javier Fernández-López (jflopez.bio@gmail.com)
 }
 \keyword{internal}
 \keyword{~gfs}
