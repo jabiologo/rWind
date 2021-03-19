@@ -22,7 +22,7 @@ circ.mean <- function(deg){
 #' USA's National Weather Service (NWS)
 #' (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
-#' Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
+#' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
 #' information:
 #' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
@@ -48,10 +48,10 @@ circ.mean <- function(deg){
 #' @param trace if trace = 1 (by default) track downloaded files
 #' @param file file name of the saved ".csv" files.
 #' @return "rWind" and "data.frame" class object or .csv file with U and V
-#' vector  components and wind direction and speed for each coordenate
+#' vector  components and wind direction and speed for each coordinate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
-#' @note Longitude coordenates are provided by GFS dataset in 0/360 notation
-#' and transformed internaly into -180/180. Wind "dir" denotes where the
+#' @note Longitude coordinate are provided by GFS dataset in 0/360 notation
+#' and transformed internally into -180/180. Wind "dir" denotes where the
 #' wind is going (toward), not from where is coming.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
@@ -173,7 +173,7 @@ read.rWind <- function(file){
 #' an \code{rWind_series} object is created.
 #'
 #' @param time a scalar or vector of POSIXt or Date objects or an character
-#' which can transfored into those, see example below.
+#' which can transformed into those, see example below.
 #' There are currently these options at the GFS database for the hours:
 #' 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC) (TO).
 #' @param lon1 Western longitude
@@ -185,13 +185,13 @@ read.rWind <- function(file){
 #' directory named "wind_yyyy_mm_dd_tt.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
 #' @return an object of class \code{rWind_series} or .csv file/s with
-#' U and V vector components and wind direction and speed for each coordenate
+#' U and V vector components and wind direction and speed for each coordinate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @note wind.dl_2 requires two dates that represent the boundaries of the time
 #' lapse to download wind series data.
-#' U and V vector components allow you to create wind averages or tendences
-#' for each coordenate at the study area. Longitude coordenates are
-#' provided by GFS dataset in 0/360 notation and transformed internaly into
+#' U and V vector components allow you to create wind averages or tendencies
+#' for each coordinate at the study area. Longitude coordinates are
+#' provided by GFS dataset in 0/360 notation and transformed internally into
 #' -180/180. "dir" denotes where the
 #' wind/sea current is going (toward), not from where is coming.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
@@ -268,7 +268,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
                     write.table(tmp, fname, sep = ",", row.names = FALSE,
                                 col.names = TRUE, quote = FALSE)
                 }
-                else{
+                else{coorde
                     resultados[[id]] <- tmp[, 4:5]
                 }
             }
@@ -364,7 +364,7 @@ wind.fit_int <- function (tmpx) {
 #' @param u U component.
 #' @param v U component.
 #' @return "uv2ds" returns a matrix with direction and speed values
-#' @note Multiple U and V values can be procesed. "dir" denotes where the
+#' @note Multiple U and V values can be processed. "dir" denotes where the
 #' wind/sea current is going (toward), not from where is coming.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}}
@@ -571,13 +571,13 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #' function ("rWind" package) with direction and speed flow values.
 #' @param fun A function to compute the cost to move between cells. The default
 #' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
-#' @param output This argument allows to select diferent kinds of output. "raw"
+#' @param output This argument allows to select different kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
 #' @param ... Further arguments passed to or from other methods.
 #' @return In "transitionLayer" output, the function returns conductance values
-#' (1/cost)to move betwen all cells in a raster having into account flow speed
+#' (1/cost)to move between all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
 #' sea currents implies directionality, flow.dispersion produces an anisotropic
 #' conductance matrix (asimetric). Conductance values are used later to built a
@@ -585,7 +585,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #'
 #' In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 #' @note Note that for large data sets, it could take a while. For large study
-#' areas is strongly adviced perform the analysis in a remote computer or a
+#' areas is strongly advised perform the analysis in a remote computer or a
 #' cluster.
 #' @author Javier Fernández-López; Klaus Schliep; Yurena Arjona
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
@@ -730,20 +730,20 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #' function ("rWind" package) with direction and speed flow values.
 #' @param fun A function to compute the cost to move between cells. The default
 #' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
-#' @param output This argument allows to select diferent kinds of output. "raw"
+#' @param output This argument allows to select different kinds of output. "raw"
 #' mode creates a matrix (class "dgCMatrix") with transition costs between all
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
 #' @param ... Further arguments passed to or from other methods.
 #' @param wind.direction A vector or skalar containing wind directions.
-#' @param wind.speed A vector or skalar containing wind speeds.
+#' @param wind.speed A vector or scalar containing wind speeds.
 #' @param target direction of the target cell
 #' @param type Could be either "passive" or "active".In "passive" mode,
 #' movement against flow direction is not allowed (deviations from the wind
 #' direction higher than 90). In "active" mode, the movement can go against flow
 #' direction, by increasing the cost.
 #' @return In "transitionLayer" output, the function returns conductance values
-#' (1/cost)to move betwen all cells in a raster having into account flow speed
+#' (1/cost)to move between all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
 #' sea currents implies directionality, flow.dispersion produces an anisotropic
 #' conductance matrix (asimetric). Conductance values are used later to built a
@@ -836,7 +836,7 @@ tidy.rWind_series <- function(x, ...){
 #' arithmetic mean for the wind speed.
 #' The direction as the circular mean, see
 #' \url{https://en.wikipedia.org/wiki/Mean_of_circular_quantities}
-#' for more details. The U and V componenats are afterwards transformed from
+#' for more details. The U and V components are afterwards transformed from
 #' these values.
 #' @param x An object of class \code{rWind_series}
 #' @return An object of class \code{rWind}, which is a \code{data.frame}
@@ -906,7 +906,7 @@ oscar.fit_int <- function (tmpx) {
 #' (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
 #' Geospatial resolution is 0.33 degrees and sea currents are calculated for
 #' 15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
-#' degrees. You can use SCUD databse instead (coming soon...)
+#' degrees. You can use SCUD database instead (coming soon...)
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
@@ -925,7 +925,7 @@ oscar.fit_int <- function (tmpx) {
 #' directory named "oscar_yyyy_mm_dd.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
 #' @return "rWind" and "data.frame" class object or .csv file with U and V
-#' vector  components and sea current direction and speed for each coordenate
+#' vector  components and sea current direction and speed for each coordinate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
