@@ -1,7 +1,6 @@
 # rWind
 
 
-[![Build Status](https://travis-ci.org/jabiologo/rWind.svg?branch=master)](https://travis-ci.org/jabiologo/rWind)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/rWind)](https://cran.r-project.org/package=rWind)
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
@@ -12,7 +11,7 @@ rWind contain tools for downloading, editing and transforming wind and sea curre
 
 * <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs>
 
-* <http://www.weather.gov/>
+* <https://www.weather.gov/>
 
 * <https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html>
 
