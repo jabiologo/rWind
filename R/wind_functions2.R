@@ -160,7 +160,7 @@ read.rWind <- function(file){
 #' (GFS) of the USA's National Weather Service (NWS)
 #' (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
-#' Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
+#' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
 #' information:
 #' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
@@ -321,7 +321,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 
 #' wind.fit_int
 #'
-#' wind.fit_int is used internaly by wind.dl to transform downloaded data from
+#' wind.fit_int is used internally by wind.dl to transform downloaded data from
 #' GFS. wind.fit_int applies trigonometry tools to transform U and V vector wind
 #' components in wind direction and speed features. It also transforms 0-360
 #' longitude notation obtained from GFS data into -180/180 longitude notation.
@@ -329,7 +329,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #'
 #' @param X downloaded data by wind.dl function from "rWind" package.
 #' @return data.frame
-#' @note This function is used internaly by wind.dl
+#' @note This function is used internally by wind.dl
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind.mean}},
 #' \code{\link{wind2raster}}
@@ -412,7 +412,7 @@ ds2uv <- function(d,s){
 #' Wind-data to raster file
 #'
 #' wind2raster_int crates a raster file (gridded) from a data.frame created by
-#' wind.fit function from "rWind" package. Latitude and logitude values are used
+#' wind.fit function from "rWind" package. Latitude and longitude values are used
 #' to locate raster file and create raster resolution using rasterFromXYZ
 #' function from raster package. As raster files only can store one field of
 #' information, you should choose between direction (by default, type="dir")
@@ -445,7 +445,7 @@ wind2raster_int<- function(x){
 #'
 #' wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
 #' wind direction for an object of \code{rWind}.
-#' Latitude and logitude values are used to locate raster file and to create
+#' Latitude and longitude values are used to locate raster file and to create
 #' raster using rasterFromXYZ function from raster package. If the input file is
 #' a list of wind data created by wind.dl, a list of raster stacks will be
 #' returned
@@ -564,7 +564,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #'
 #' Cost=(1/Speed)*(HorizontalFactor)
 #'
-#' being HorizontalFactor a "function that incrementaly penalized angular
+#' being HorizontalFactor a "function that incrementally penalized angular
 #' deviations from the wind direction" (Felicísimo et al. 2008).
 #'
 #' @param stack RasterStack object with layers obtained from wind2raster
@@ -580,7 +580,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #' (1/cost)to move between all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
 #' sea currents implies directionality, flow.dispersion produces an anisotropic
-#' conductance matrix (asimetric). Conductance values are used later to built a
+#' conductance matrix (asymmetric). Conductance values are used later to built a
 #' TransitionLayer object from "gdistance" package.
 #'
 #' In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
@@ -722,7 +722,7 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #'
 #' Cost=(1/Speed)*(HorizontalFactor)
 #'
-#' being HorizontalFactor a "function that incrementaly penalized angular
+#' being HorizontalFactor a "function that incrementally penalized angular
 #' deviations from the wind direction" (Felicísimo et al. 2008).
 #'
 #'
@@ -735,7 +735,7 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #' cells in the raster. "transitionLayer" creates a TransitionLayer object with
 #' conductance values to be used with "gdistance" package.
 #' @param ... Further arguments passed to or from other methods.
-#' @param wind.direction A vector or skalar containing wind directions.
+#' @param wind.direction A vector or scalar containing wind directions.
 #' @param wind.speed A vector or scalar containing wind speeds.
 #' @param target direction of the target cell
 #' @param type Could be either "passive" or "active".In "passive" mode,
@@ -746,12 +746,12 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #' (1/cost)to move between all cells in a raster having into account flow speed
 #' and direction obtained from wind.fit function("rWind" package). As wind or
 #' sea currents implies directionality, flow.dispersion produces an anisotropic
-#' conductance matrix (asimetric). Conductance values are used later to built a
+#' conductance matrix (asymmetric). Conductance values are used later to built a
 #' TransitionLayer object from "gdistance" package.
 #'
 #' In "raw" output, flow.dispersion creates a sparse Matrix with cost values.
 #' @note Note that for large data sets, it could take a while. For large study
-#' areas is strongly adviced perform the analysis in a remote computer or a
+#' areas is strongly advised perform the analysis in a remote computer or a
 #' cluster.
 #' @author Javier Fernández-López; Klaus Schliep; Yurena Arjona
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}

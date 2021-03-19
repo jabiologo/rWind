@@ -39,7 +39,7 @@ directory named "oscar_yyyy_mm_dd.csv".}
 }
 \value{
 "rWind" and "data.frame" class object or .csv file with U and V
-vector  components and sea current direction and speed for each coordenate
+vector  components and sea current direction and speed for each coordinate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -47,7 +47,7 @@ seaOscar.dl downloads sea currents data from the Ocean Surface Current Analyses 
 (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
 Geospatial resolution is 0.33 degrees and sea currents are calculated for
 15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
-degrees. You can use SCUD databse instead (coming soon...)
+degrees. You can use SCUD database instead (coming soon...)
 }
 \details{
 The output type is determined by type="csv" or type="read-data". If

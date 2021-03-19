@@ -27,7 +27,7 @@ ds2uv(d, s)
 Transform U and V components in direction and speed and vice versa
 }
 \note{
-Multiple U and V values can be procesed. "dir" denotes where the
+Multiple U and V values can be processed. "dir" denotes where the
 wind/sea current is going (toward), not from where is coming.
 }
 \examples{
