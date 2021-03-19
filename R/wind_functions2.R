@@ -268,7 +268,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
                     write.table(tmp, fname, sep = ",", row.names = FALSE,
                                 col.names = TRUE, quote = FALSE)
                 }
-                else{coorde
+                else{
                     resultados[[id]] <- tmp[, 4:5]
                 }
             }
