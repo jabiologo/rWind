@@ -1,6 +1,6 @@
 # rWind
 
-
+[![R-CMD-check](https://github.com/KlausVigo/rWind/workflows/R-CMD-check/badge.svg)](https://github.com/KlausVigo/rWind/actions)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/rWind)](https://cran.r-project.org/package=rWind)
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
