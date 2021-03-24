@@ -40,11 +40,11 @@ test_that("reading files works as expected", {
 
 
 # may works in future testthat version from https://github.com/r-lib/testthat
-# test_that("downloading works", {
-#    skip_if_offline()
-#    skip_on_cran()
-#    dl1 <- wind.dl(2015,2,12,0,-10,5,35,45)
-#    dl2 <- wind.dl_2("2015/2/12 0:00:00",-10,5,35,45)
-#    expect_equal(dl1, dl2[[1]])
-# })
+test_that("downloading works", {
+    skip_if_offline()
+    skip_on_cran()
+    dl1 <- wind.dl(2015,2,12,0,-10,5,35,45)
+    dl2 <- wind.dl_2("2015/2/12 0:00:00",-10,5,35,45)
+    expect_equal(dl1, dl2[[1]])
+})
 

@@ -27,7 +27,7 @@ NULL
 #' Wind data example
 #'
 #' This is an example of wind data obtained with wind.dl function for the
-#' Iberian Peninsula coordenates on 12/February/2015 at 00:00 (UTC)
+#' Iberian Peninsula coordinates on 12/February/2015 at 00:00 (UTC)
 #'
 #'
 #' This data set is the result of:
