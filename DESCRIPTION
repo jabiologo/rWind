@@ -17,3 +17,4 @@ Suggests: testthat, rmarkdown, knitr
 VignetteBuilder: knitr
 Depends: R (>= 3.4)
 RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
