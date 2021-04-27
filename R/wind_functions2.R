@@ -1,18 +1,22 @@
 # some trigonemetric functions
-rad2deg <- function(rad) {(rad * 180) / (pi)}
-deg2rad <- function(deg) {(deg * pi) / (180)}
+rad2deg <- function(rad) {
+  (rad * 180) / (pi)
+}
+deg2rad <- function(deg) {
+  (deg * pi) / (180)
+}
 
 # circular mean
 # https://en.wikipedia.org/wiki/Mean_of_circular_quantities
-circ.mean <- function(deg){
-    rad.m <- (deg * pi) / (180)
-    mean.cos <- mean(cos(rad.m))
-    mean.sin <- mean(sin(rad.m))
+circ.mean <- function(deg) {
+  rad.m <- (deg * pi) / (180)
+  mean.cos <- mean(cos(rad.m))
+  mean.sin <- mean(sin(rad.m))
 
-    theta <- rad2deg(atan(mean.sin/mean.cos))
-    if(mean.cos < 0) theta <- theta + 180
-    if((mean.sin < 0) & (mean.cos > 0)) theta <- theta + 360
-    theta
+  theta <- rad2deg(atan(mean.sin / mean.cos))
+  if (mean.cos < 0) theta <- theta + 180
+  if ((mean.sin < 0) & (mean.cos > 0)) theta <- theta + 360
+  theta
 }
 
 
@@ -65,91 +69,109 @@ circ.mean <- function(deg){
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 #' \dontrun{
 #'
-#' wind.dl(2015,2,12,0,-10,5,35,45)
-#'
+#' wind.dl(2015, 2, 12, 0, -10, 5, 35, 45)
 #' }
-#'
 #'
 #' @importFrom utils write.table read.csv download.file
 #' @importFrom lubridate ymd_h year month day hour
 #' @rdname wind.dl
 #' @export wind.dl
-wind.dl <- function (yyyy,mm,dd,tt,lon1,lon2,lat1,lat2,
-                         type="read-data", trace=1){
+wind.dl <- function(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2,
+                    type = "read-data", trace = 1) {
+  type <- match.arg(type, c("read-data", "csv"))
 
-    type <- match.arg(type, c("read-data", "csv"))
+  mm <- sprintf("%02d", mm)
+  dd <- sprintf("%02d", dd)
+  tt <- sprintf("%02d", tt)
 
-    mm<-sprintf("%02d", mm)
-    dd<-sprintf("%02d", dd)
-    tt<-sprintf("%02d", tt)
+  # Create a sequence with all dates available between selected dates
+  dt <- ymd_h(paste(yyyy, mm, dd, tt, sep = "-"))
 
-    # Create a sequence with all dates available between selected dates
-    dt <- ymd_h(paste(yyyy,mm,dd,tt, sep="-"))
+  yyyy_c <- year(dt)
+  mm_c <- sprintf("%02d", month(dt))
+  dd_c <- sprintf("%02d", day(dt))
+  tt_c <- sprintf("%02d", hour(dt))
 
-    yyyy_c <- year(dt)
-    mm_c <- sprintf("%02d",month(dt))
-    dd_c <- sprintf("%02d",day(dt))
-    tt_c <- sprintf("%02d",hour(dt))
+  testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
+  print(testDate)
+  if (trace) {
+    print(paste(ymd_h(paste(yyyy_c, mm_c, dd_c, tt_c, sep = "-")),
+      "downloading...",
+      sep = " "
+    ))
+  }
 
-    testDate <- paste(yyyy_c,"-",mm_c,"-",dd_c, sep="")
-    print(testDate)
-    if(trace)print(paste( ymd_h(paste(yyyy_c,mm_c,dd_c,tt_c, sep="-")),
-                          "downloading...", sep= " "))
+  tryCatch(
+    {
+      as.Date(testDate)
+      if (lon1 < 0) {
+        lon1 <- 360 - (abs(lon1))
+      }
+      if (lon2 < 0) {
+        lon2 <- 360 - (abs(lon2))
+      }
 
-    tryCatch({
-        as.Date(testDate)
-        if (lon1 < 0){
-            lon1<-360-(abs(lon1))
+      if (lon1 > 180 && lon2 < 180) {
+        url_west <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+        url_east <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+        tmp <- rbind(
+          read.csv(url_west, header = FALSE, skip = 2, stringsAsFactors = FALSE),
+          read.csv(url_east, header = FALSE, skip = 2, stringsAsFactors = FALSE)
+        )
+        tmp <- wind.fit_int(tmp)
+
+        if (type == "csv") {
+          fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
+            "_", tt_c, ".csv",
+            sep = ""
+          )
+          write.table(tmp, fname,
+            sep = ",", row.names = FALSE,
+            col.names = TRUE, quote = FALSE
+          )
         }
-        if (lon2 < 0){
-            lon2<-360-(abs(lon2))
-        }
+      }
 
-        if (lon1 > 180 && lon2 <180){
-            url_west<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-            url_east<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-            tmp<-rbind(read.csv(url_west, header=FALSE, skip=2, stringsAsFactors=FALSE),
-                       read.csv(url_east, header=FALSE, skip=2, stringsAsFactors=FALSE))
-            tmp <- wind.fit_int(tmp)
-
-            if (type == "csv"){
-                fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                               "_",tt_c,".csv", sep="")
-                write.table(tmp, fname, sep = ",", row.names = FALSE,
-                            col.names = TRUE, quote = FALSE)
-            }
+      else {
+        url_dir <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+        tmp <- read.csv(url_dir, header = FALSE, skip = 2, stringsAsFactors = FALSE)
+        tmp <- wind.fit_int(tmp)
+        if (type == "csv") {
+          fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
+            "_", tt_c, ".csv",
+            sep = ""
+          )
+          write.table(tmp, fname,
+            sep = ",", row.names = FALSE,
+            col.names = TRUE, quote = FALSE
+          )
         }
-
-        else {
-            url_dir<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-            tmp <- read.csv(url_dir, header=FALSE, skip=2, stringsAsFactors=FALSE)
-            tmp <- wind.fit_int(tmp)
-            if (type == "csv"){
-                fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                               "_",tt_c,".csv", sep="")
-                write.table(tmp, fname, sep = ",", row.names = FALSE,
-                            col.names = TRUE, quote = FALSE)
-            }
-        }
+      }
     },
-    error=function(e){cat("ERROR: database not found. Please, check server
-                      connection, date or geographical ranges \n")},
-    warning=function(w){cat("ERROR: database not found. Please, check server
-                        connection, date or geographical ranges  \n")}
-    )
-    class(tmp) <-  c("rWind", "data.frame")
-    return(tmp)
+    error = function(e) {
+      cat("ERROR: database not found. Please, check server
+                      connection, date or geographical ranges \n")
+    },
+    warning = function(w) {
+      cat("ERROR: database not found. Please, check server
+                        connection, date or geographical ranges  \n")
+    }
+  )
+  class(tmp) <- c("rWind", "data.frame")
+  return(tmp)
 }
 
 
 #' @rdname wind.dl
 #' @export
-read.rWind <- function(file){
-    tmp <- read.csv(file, colClasses = c("POSIXct", "numeric", "numeric",
-                                 "numeric", "numeric", "numeric", "numeric"))
-    tmp[,1] <- ymd_hms(tmp[,1], truncated = 3)
-    class(tmp) <- c("rWind", "data.frame")
-    tmp
+read.rWind <- function(file) {
+  tmp <- read.csv(file, colClasses = c(
+    "POSIXct", "numeric", "numeric",
+    "numeric", "numeric", "numeric", "numeric"
+  ))
+  tmp[, 1] <- ymd_hms(tmp[, 1], truncated = 3)
+  class(tmp) <- c("rWind", "data.frame")
+  tmp
 }
 
 
@@ -207,14 +229,15 @@ read.rWind <- function(file){
 #' # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 #' \dontrun{
 #'
-#' wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
+#' wind.dl_2("2018/3/15 9:00:00", -10, 5, 35, 45)
 #'
 #' library(lubridate)
-#' dt <- seq(ymd_hms(paste(2018,1,1,00,00,00, sep="-")),
-#'           ymd_hms(paste(2018,1,2,21,00,00, sep="-")),by="3 hours")
-#' ww <- wind.dl_2(dt,-10,5,35,45)
-#' tidy (ww)
-#'
+#' dt <- seq(ymd_hms(paste(2018, 1, 1, 00, 00, 00, sep = "-")),
+#'   ymd_hms(paste(2018, 1, 2, 21, 00, 00, sep = "-")),
+#'   by = "3 hours"
+#' )
+#' ww <- wind.dl_2(dt, -10, 5, 35, 45)
+#' tidy(ww)
 #' }
 #'
 #' @importFrom utils write.table read.csv download.file
@@ -222,86 +245,110 @@ read.rWind <- function(file){
 #' @rdname wind.dl_2
 #' @export wind.dl_2
 #'
-wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
+wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1) {
+  type <- match.arg(type, c("read-data", "csv"))
 
-    type <- match.arg(type, c("read-data", "csv"))
+  dt <- as_datetime(time)
+  # We will store each date and time in a list
+  resultados <- vector("list", length(dt))
+  names(resultados) <- dt
 
-    dt <- as_datetime(time)
-    # We will store each date and time in a list
-    resultados <- vector("list", length(dt))
-    names(resultados) <- dt
+  for (id in seq_along(dt)) {
+    yyyy_c <- year(dt[id])
+    mm_c <- sprintf("%02d", month(dt[id]))
+    dd_c <- sprintf("%02d", day(dt[id]))
+    tt_c <- sprintf("%02d", hour(dt[id]))
 
-    for (id in seq_along(dt)) {
+    testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
 
-        yyyy_c <- year(dt[id])
-        mm_c <- sprintf("%02d",month(dt[id]))
-        dd_c <- sprintf("%02d",day(dt[id]))
-        tt_c <- sprintf("%02d",hour(dt[id]))
-
-        testDate <- paste(yyyy_c,"-",mm_c,"-",dd_c, sep="")
-
-        if(trace)print(paste( ymd_h(paste(yyyy_c,mm_c,dd_c,tt_c, sep="-")),
-                              "downloading...", sep= " "))
-
-        tryCatch({
-            as.Date(testDate)
-            if (lon1 < 0){
-                lon1<-360-(abs(lon1))
-            }
-            if (lon2 < 0){
-                lon2<-360-(abs(lon2))
-            }
-
-            if (lon1 > 180 && lon2 <180){
-                url_west<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-                url_east<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(0.0):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-
-                tmp<-rbind(read.csv(url_west, header=FALSE, skip=2,
-                                    stringsAsFactors=FALSE),
-                           read.csv(url_east, header=FALSE, skip=2,
-                                    stringsAsFactors=FALSE))
-                tmp <- wind.fit_int(tmp)
-                if (type == "csv"){
-                    tmp <- wind.fit_int(tmp)
-                    fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                                   "_",tt_c,".csv", sep="")
-                    write.table(tmp, fname, sep = ",", row.names = FALSE,
-                                col.names = TRUE, quote = FALSE)
-                }
-                else{
-                    resultados[[id]] <- tmp[, 4:5]
-                }
-            }
-
-            else {
-                url_dir<- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")],vgrd10m[(",yyyy_c,"-",mm_c,"-",dd_c,"T",tt_c,":00:00Z)][(",lat1,"):(",lat2,")][(",lon1,"):(",lon2,")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000",sep="")
-                tmp <- read.csv(url_dir, header=FALSE, skip=2,
-                                colClasses = c("POSIXct", "double", "double", "double", "double"))
-                tmp <- wind.fit_int(tmp)
-                if (type == "csv"){
-                    tmp <- wind.fit_int(tmp)
-                    fname <- paste("wind_",yyyy_c,"_",mm_c,"_",dd_c,
-                                   "_",tt_c,".csv", sep="")
-                    write.table(tmp, fname, sep = ",", row.names = FALSE,
-                                col.names = TRUE, quote = FALSE)
-                }
-                else{
-                    resultados[[id]] <- tmp[, 4:5]
-                }
-            }
-        },
-        error=function(e){cat("ERROR: database not found. Please, check server
-                          connection, date or geographical ranges \n")},
-        warning=function(w){cat("ERROR: database not found. Please, check server
-                            connection, date or geographical ranges  \n")}
-        )
-
+    if (trace) {
+      print(paste(ymd_h(paste(yyyy_c, mm_c, dd_c, tt_c, sep = "-")),
+        "downloading...",
+        sep = " "
+      ))
     }
 
-    if(type == "csv") return(NULL)
-    attr(resultados, "lat_lon") <- tmp[,2:3]
-    class(resultados) <-  c("rWind_series", "list")
-    return(resultados)
+    tryCatch(
+      {
+        as.Date(testDate)
+        if (lon1 < 0) {
+          lon1 <- 360 - (abs(lon1))
+        }
+        if (lon2 < 0) {
+          lon2 <- 360 - (abs(lon2))
+        }
+
+        if (lon1 > 180 && lon2 < 180) {
+          url_west <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+          url_east <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+
+          tmp <- rbind(
+            read.csv(url_west,
+              header = FALSE, skip = 2,
+              stringsAsFactors = FALSE
+            ),
+            read.csv(url_east,
+              header = FALSE, skip = 2,
+              stringsAsFactors = FALSE
+            )
+          )
+          tmp <- wind.fit_int(tmp)
+          if (type == "csv") {
+            tmp <- wind.fit_int(tmp)
+            fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
+              "_", tt_c, ".csv",
+              sep = ""
+            )
+            write.table(tmp, fname,
+              sep = ",", row.names = FALSE,
+              col.names = TRUE, quote = FALSE
+            )
+          }
+          else {
+            resultados[[id]] <- tmp[, 4:5]
+          }
+        }
+
+        else {
+          url_dir <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
+          tmp <- read.csv(url_dir,
+            header = FALSE, skip = 2,
+            colClasses = c("POSIXct", "double", "double", "double", "double")
+          )
+          tmp <- wind.fit_int(tmp)
+          if (type == "csv") {
+            tmp <- wind.fit_int(tmp)
+            fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
+              "_", tt_c, ".csv",
+              sep = ""
+            )
+            write.table(tmp, fname,
+              sep = ",", row.names = FALSE,
+              col.names = TRUE, quote = FALSE
+            )
+          }
+          else {
+            resultados[[id]] <- tmp[, 4:5]
+          }
+        }
+      },
+      error = function(e) {
+        cat("ERROR: database not found. Please, check server
+                          connection, date or geographical ranges \n")
+      },
+      warning = function(w) {
+        cat("ERROR: database not found. Please, check server
+                            connection, date or geographical ranges  \n")
+      }
+    )
+  }
+
+  if (type == "csv") {
+    return(NULL)
+  }
+  attr(resultados, "lat_lon") <- tmp[, 2:3]
+  class(resultados) <- c("rWind_series", "list")
+  return(resultados)
 }
 
 
@@ -310,12 +357,12 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @param i indices specifying elements to extract.
 #' @param exact Controls possible partial matching (not used yet).
 #' @export
-"[[.rWind_series" <- function(x, i, exact=TRUE){
-    tt <- as_datetime(names(x)[i])
-    tmp <- cbind(tt, attr(x, "lat_lon"), unclass(x)[[i]])
-    tmp <- wind.fit_int(tmp)
-    class(tmp) <-  c("rWind", "data.frame")
-    tmp
+"[[.rWind_series" <- function(x, i, exact = TRUE) {
+  tt <- as_datetime(names(x)[i])
+  tmp <- cbind(tt, attr(x, "lat_lon"), unclass(x)[[i]])
+  tmp <- wind.fit_int(tmp)
+  class(tmp) <- c("rWind", "data.frame")
+  tmp
 }
 
 
@@ -338,23 +385,23 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type="read-data", trace=1){
 #' @importFrom lubridate ymd_hms
 #' @rdname wind.fit_int
 #' @keywords internal
-wind.fit_int <- function (tmpx) {
-  tmpx[,3] <- tmpx[,3] %% 360
-  tmpx[tmpx[,3]>=180,3] <- tmpx[tmpx[,3]>=180,3] - 360
+wind.fit_int <- function(tmpx) {
+  tmpx[, 3] <- tmpx[, 3] %% 360
+  tmpx[tmpx[, 3] >= 180, 3] <- tmpx[tmpx[, 3] >= 180, 3] - 360
 
   ###### DIRECTION
-  direction <- atan2(tmpx[,4], tmpx[,5])
+  direction <- atan2(tmpx[, 4], tmpx[, 5])
   direction <- rad2deg(direction)
   direction[direction < 0] <- 360 + direction[direction < 0]
 
   ###### SPEED
-  speed <- sqrt( (tmpx[,4] * tmpx[,4]) + (tmpx[,5] * tmpx[,5]))
+  speed <- sqrt((tmpx[, 4] * tmpx[, 4]) + (tmpx[, 5] * tmpx[, 5]))
 
   ######
-  names(tmpx)<- c("time", "lat","lon", "ugrd10m", "vgrd10m")
-  res <- cbind(tmpx, dir=direction, speed=speed)
+  names(tmpx) <- c("time", "lat", "lon", "ugrd10m", "vgrd10m")
+  res <- cbind(tmpx, dir = direction, speed = speed)
   res <- res[with(res, order(-lat)), ]
-  res[,1] <- ymd_hms(res[,1], truncated = 3)
+  res[, 1] <- ymd_hms(res[, 1], truncated = 3)
   return(res)
 }
 
@@ -371,25 +418,23 @@ wind.fit_int <- function (tmpx) {
 #' @keywords ~wind
 #' @examples
 #'
-#' ( ds <- uv2ds(c(1,1,3,1), c(1,1.7,3,1)) )
-#' ds2uv(ds[,1], ds[,2])
-#'
-#'
+#' (ds <- uv2ds(c(1, 1, 3, 1), c(1, 1.7, 3, 1)))
+#' ds2uv(ds[, 1], ds[, 2])
 #' @rdname uv2ds
 #' @export uv2ds
 
-uv2ds <- function (u,v) {
-    ###### DIRECTION
-    direction <- atan2(u, v)
-    direction <- rad2deg(direction)
-    direction[direction < 0] <- 360 + direction[direction < 0]
+uv2ds <- function(u, v) {
+  ###### DIRECTION
+  direction <- atan2(u, v)
+  direction <- rad2deg(direction)
+  direction[direction < 0] <- 360 + direction[direction < 0]
 
-    ###### SPEED
-    speed <- sqrt( (u * u) + (v * v))
+  ###### SPEED
+  speed <- sqrt((u * u) + (v * v))
 
-    ######
-    res <- cbind(dir=direction, speed=speed)
-    return(res)
+  ######
+  res <- cbind(dir = direction, speed = speed)
+  return(res)
 }
 
 
@@ -399,12 +444,12 @@ uv2ds <- function (u,v) {
 #' @rdname uv2ds
 #' @export ds2uv
 
-ds2uv <- function(d,s){
-    d <- d %% 360
-    r <- deg2rad(d)
-    u <- sin(r) * s
-    v <- cos(r) * s
-    cbind(u=u, v=v)
+ds2uv <- function(d, s) {
+  d <- d %% 360
+  r <- deg2rad(d)
+  u <- sin(r) * s
+  v <- cos(r) * s
+  cbind(u = u, v = v)
 }
 
 
@@ -431,13 +476,13 @@ ds2uv <- function(d,s){
 #'
 #' @rdname wind2raster_int
 #' @keywords internal
-wind2raster_int<- function(x){
-  ras <- rasterFromXYZ(x[,c("lon","lat")], crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0" )
+wind2raster_int <- function(x) {
+  ras <- rasterFromXYZ(x[, c("lon", "lat")], crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
   ras2 <- ras
   ras[] <- x$dir
   ras2[] <- x$speed
-  tmp <- stack (ras, ras2)
-  names(tmp)<- c("direction", "speed")
+  tmp <- stack(ras, ras2)
+  names(tmp) <- c("direction", "speed")
   return(tmp)
 }
 
@@ -467,14 +512,16 @@ wind2raster_int<- function(x){
 #' # layers
 #'
 #' wind2raster(wind.data)
-#'
 #' @importFrom raster rasterFromXYZ stack
 #'
 #' @rdname wind2raster
 #' @export wind2raster
-wind2raster<- function(x){
-  if(inherits(x, "rWind_series"))X <- lapply(x , wind2raster_int)
-  else return (wind2raster_int(x))
+wind2raster <- function(x) {
+  if (inherits(x, "rWind_series")) {
+    X <- lapply(x, wind2raster_int)
+  } else {
+    return(wind2raster_int(x))
+  }
   X
 }
 
@@ -504,20 +551,21 @@ wind2raster<- function(x){
 #'
 #' # Create a vector with wind direction (angles) adapted
 #' alpha <- arrowDir(wind.data)
-#'
 #' \dontrun{
 #' # Now, you can plot wind direction with Arrowhead function from shapes package
 #' # Load "shape package
 #' require(shape)
-#' plot(wind.data$lon, wind.data$lat, type="n")
-#' Arrowhead(wind.data$lon, wind.data$lat, angle=alpha,
-#'           arr.length = 0.1, arr.type="curved")
+#' plot(wind.data$lon, wind.data$lat, type = "n")
+#' Arrowhead(wind.data$lon, wind.data$lat,
+#'   angle = alpha,
+#'   arr.length = 0.1, arr.type = "curved"
+#' )
 #' }
 #'
 #' @export arrowDir
-arrowDir <- function(W){
-  if(inherits(W, "rWind_series")){
-    if(length(W)>1) message("W contained a time series, just took first time point!")
+arrowDir <- function(W) {
+  if (inherits(W, "rWind_series")) {
+    if (length(W) > 1) message("W contained a time series, just took first time point!")
     W <- W[[1]]
   }
   aDir <- (360 - W$dir) + 90
@@ -528,18 +576,18 @@ arrowDir <- function(W){
 # Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
 #' @rdname flow.dispersion
 #' @export
-cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
+cost.FMGS <- function(wind.direction, wind.speed, target, type = "active") {
   dif <- (abs(wind.direction - target))
   # If dif > 180 and is not NA
-  dif[dif>180 & !is.na(dif)]<- 360 - dif[dif>180 & !is.na(dif)] #Modified from the original function
-  if (type=="passive"){
+  dif[dif > 180 & !is.na(dif)] <- 360 - dif[dif > 180 & !is.na(dif)] # Modified from the original function
+  if (type == "passive") {
     # In "passive" type, if dif > 90, movement is not allowed
     dif[dif >= 90 & !is.na(dif)] <- Inf # check
     # For sea currents, dif could be NA is there are lands around
-    dif[is.na(dif)] <- Inf #Modified from the original function
+    dif[is.na(dif)] <- Inf # Modified from the original function
     # Here we apply the formula in Felicísimo et al. 2008
     dif[dif < 90] <- 2 * dif[dif < 90]
-    dif[dif==0] <- 0.1
+    dif[dif == 0] <- 0.1
   }
   else {
     # For sea currents, dif could be NA is there are lands around
@@ -547,7 +595,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
     # For "active" type movements against flow are allowed, so simply we
     # multiply by 2 the dif, following Felicísimo et al., 2008
     dif[!is.na(dif)] <- 2 * dif[!is.na(dif)]
-    dif[dif==0] <- 0.1
+    dif[dif == 0] <- 0.1
   }
 
   wind.speed[is.na(wind.speed)] <- 0
@@ -603,8 +651,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #'
 #' data(wind.data)
 #' wind <- wind2raster(wind.data)
-#' Conductance <- flow.dispersion(wind, type="passive")
-#'
+#' Conductance <- flow.dispersion(wind, type = "passive")
 #' \dontrun{
 #' require(gdistance)
 #' transitionMatrix(Conductance)
@@ -616,100 +663,102 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type="active"){
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @keywords internal
-flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
-                                ...){
+flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLayer",
+                                ...) {
+  output <- match.arg(output, c("raw", "transitionLayer"))
 
-    output <- match.arg(output, c("raw", "transitionLayer"))
+  DL <- as.matrix(stack$direction)
+  SL <- as.matrix(stack$speed)
+  M <- matrix(as.integer(1:ncell(stack$direction)),
+    nrow = nrow(stack$direction), byrow = TRUE
+  )
+  nr <- nrow(M)
+  nc <- ncol(M)
 
-    DL <- as.matrix(stack$direction)
-    SL <- as.matrix(stack$speed)
-    M <- matrix(as.integer(1:ncell(stack$direction)),
-                nrow = nrow(stack$direction), byrow=TRUE)
-    nr <- nrow(M)
-    nc <- ncol(M)
+  ###################################################################
 
-    ###################################################################
+  directions <- c(315, 0, 45, 270, 90, 225, 180, 135)
 
-    directions <- c(315 ,0, 45, 270, 90, 225, 180,135 )
+  ###################################################################
 
-    ###################################################################
+  # Go Nortwest
 
-    # Go Nortwest
+  north.west.from <- as.vector(M[-1, -1])
+  north.west.to <- as.vector(M[-nr, -nc])
+  north.west.cost <- fun(DL[-1, -1], SL[-1, -1], directions[1], ...)
 
-    north.west.from <- as.vector(M[-1,-1])
-    north.west.to <- as.vector(M[-nr,-nc])
-    north.west.cost <- fun(DL[-1,-1], SL[-1,-1], directions[1], ...)
+  ###################################################################
 
-    ###################################################################
+  # Go North
 
-    # Go North
+  north.from <- as.vector(M[-1, ])
+  north.to <- as.vector(M[-nr, ])
+  north.cost <- as.vector(fun(DL[-1, ], SL[-1, ], directions[2], ...))
 
-    north.from <- as.vector(M[-1,])
-    north.to <- as.vector(M[-nr,])
-    north.cost <- as.vector( fun(DL[-1,], SL[-1,], directions[2], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go Norteast
 
-    # Go Norteast
+  north.east.from <- as.vector(M[-1, -nc])
+  north.east.to <- as.vector(M[-nr, -1])
+  north.east.cost <- as.vector(fun(DL[-1, -nc], SL[-1, -nc], directions[3], ...))
 
-    north.east.from <- as.vector(M[-1,-nc])
-    north.east.to <- as.vector(M[-nr,-1])
-    north.east.cost <- as.vector( fun(DL[-1,-nc], SL[-1,-nc], directions[3], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go West
 
-    # Go West
+  west.from <- as.vector(M[, -1])
+  west.to <- as.vector(M[, -nc])
+  west.cost <- as.vector(fun(DL[, -1], SL[, -1], directions[4], ...))
 
-    west.from <- as.vector(M[,-1])
-    west.to <- as.vector(M[,-nc])
-    west.cost <- as.vector( fun(DL[,-1], SL[,-1], directions[4], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go East
 
-    # Go East
+  east.from <- as.vector(M[, -nc])
+  east.to <- as.vector(M[, -1])
+  east.cost <- as.vector(fun(DL[, -nc], SL[, -nc], directions[5], ...))
 
-    east.from <- as.vector(M[,-nc])
-    east.to <- as.vector(M[,-1])
-    east.cost <- as.vector( fun(DL[,-nc], SL[,-nc], directions[5], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go Southwest
 
-    # Go Southwest
+  south.west.from <- as.vector(M[-nr, -1])
+  south.west.to <- as.vector(M[-1, -nc])
+  south.west.cost <- as.vector(fun(DL[-nr, -1], SL[-nr, -1], directions[6], ...))
 
-    south.west.from <- as.vector(M[-nr,-1])
-    south.west.to <- as.vector(M[-1,-nc])
-    south.west.cost <- as.vector( fun(DL[-nr,-1], SL[-nr,-1], directions[6], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go South
 
-    # Go South
+  south.from <- as.vector(M[-nr, ])
+  south.to <- as.vector(M[-1, ])
+  south.cost <- as.vector(fun(DL[-nr, ], SL[-nr, ], directions[7], ...))
 
-    south.from <- as.vector(M[-nr,])
-    south.to <- as.vector(M[-1,])
-    south.cost <- as.vector( fun(DL[-nr,], SL[-nr,], directions[7], ...) )
+  ###################################################################
 
-    ###################################################################
+  # Go Southeast
 
-    # Go Southeast
+  south.east.from <- as.vector(M[-nr, -nc])
+  south.east.to <- as.vector(M[-1, -1])
+  south.east.cost <- as.vector(fun(DL[-nr, -nc], SL[-nr, -nc], directions[8], ...))
 
-    south.east.from <- as.vector(M[-nr,-nc])
-    south.east.to <- as.vector(M[-1,-1])
-    south.east.cost <- as.vector( fun(DL[-nr,-nc], SL[-nr,-nc], directions[8], ...)  )
+  ###################################################################
 
-    ###################################################################
+  ii <- c(north.west.from, north.from, north.east.from, west.from, east.from, south.west.from, south.from, south.east.from)
+  jj <- c(north.west.to, north.to, north.east.to, west.to, east.to, south.west.to, south.to, south.east.to)
+  xx <- c(north.west.cost, north.cost, north.east.cost, west.cost, east.cost, south.west.cost, south.cost, south.east.cost)
 
-    ii <- c(north.west.from, north.from, north.east.from, west.from, east.from, south.west.from, south.from, south.east.from)
-    jj <- c(north.west.to, north.to, north.east.to, west.to, east.to, south.west.to, south.to, south.east.to)
-    xx <- c(north.west.cost, north.cost, north.east.cost, west.cost, east.cost, south.west.cost, south.cost, south.east.cost)
-
-    tl <- sparseMatrix(i=ii, j=jj, x=xx)
-    if(output == "raw") return(tl)
-    if(output == "transitionLayer") {
-        tmp <- transition(stack$direction, transitionFunction=function(x) 0, directions=8)
-        transitionMatrix(tmp)<-sparseMatrix(i=ii, j=jj, x= 1 / xx)
-        return(tmp)
-    }
-    return(NULL)
+  tl <- sparseMatrix(i = ii, j = jj, x = xx)
+  if (output == "raw") {
+    return(tl)
+  }
+  if (output == "transitionLayer") {
+    tmp <- transition(stack$direction, transitionFunction = function(x) 0, directions = 8)
+    transitionMatrix(tmp) <- sparseMatrix(i = ii, j = jj, x = 1 / xx)
+    return(tmp)
+  }
+  return(NULL)
 }
 
 
@@ -773,11 +822,10 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #'
 #' wind <- wind2raster(wind.data)
 #'
-#' Conductance<-flow.dispersion(wind, type="passive")
+#' Conductance <- flow.dispersion(wind, type = "passive")
 #'
 #' transitionMatrix(Conductance)
 #' image(transitionMatrix(Conductance))
-#'
 #' @importClassesFrom raster RasterLayer
 #' @importFrom raster ncell
 #' @importMethodsFrom raster as.matrix
@@ -785,10 +833,10 @@ flow.dispersion_int <- function(stack, fun=cost.FMGS, output="transitionLayer",
 #' @importFrom gdistance transition transitionMatrix<-
 #' @export flow.dispersion
 flow.dispersion <- function(x, fun = cost.FMGS, output = "transitionLayer", ...) {
-    if(inherits(x, "RasterStack")){
-        return(flow.dispersion_int(x, fun=fun, output=output, ...))
-    }
-    lapply(x, flow.dispersion_int, fun=fun, output=output, ...)
+  if (inherits(x, "RasterStack")) {
+    return(flow.dispersion_int(x, fun = fun, output = output, ...))
+  }
+  lapply(x, flow.dispersion_int, fun = fun, output = output, ...)
 }
 
 
@@ -806,22 +854,23 @@ flow.dispersion <- function(x, fun = cost.FMGS, output = "transitionLayer", ...)
 #' \dontrun{
 #' # use the tidyverse
 #' library(dplyr)
-#' mean_speed <- tidy(wind.series) %>% group_by(lat, lon) %>%
-#'     summarise(speed=mean(speed))
+#' mean_speed <- tidy(wind.series) %>%
+#'   group_by(lat, lon) %>%
+#'   summarise(speed = mean(speed))
 #' wind_average2 <- wind.mean(wind.series)
 #' all.equal(wind_average2$speed, mean_speed$speed)
 #' }
 #' @rdname tidy.rWind_series
 #' @export tidy
-tidy <- function (x, ...) UseMethod("tidy")
+tidy <- function(x, ...) UseMethod("tidy")
 
 #' @rdname tidy.rWind_series
 #' @export
-tidy.rWind_series <- function(x, ...){
-    l <- length(x)
-    res <- x[[1]]
-    if(l>1)for(i in 2:l)res <- rbind(res, x[[i]])
-    res
+tidy.rWind_series <- function(x, ...) {
+  l <- length(x)
+  res <- x[[1]]
+  if (l > 1) for (i in 2:l) res <- rbind(res, x[[i]])
+  res
 }
 
 
@@ -847,32 +896,32 @@ tidy.rWind_series <- function(x, ...){
 #' @keywords ~average ~mean
 #' @examples
 #' data(wind.series)
-#' wind_average<- wind.mean(wind.series)
-#'
-#'
+#' wind_average <- wind.mean(wind.series)
 #' @export wind.mean
-wind.mean <- function(x){
-    if(!inherits(x, "rWind_series")) stop("x needs to be of class rWind_series")
+wind.mean <- function(x) {
+  if (!inherits(x, "rWind_series")) stop("x needs to be of class rWind_series")
 
-    tt <- as_datetime(names(x)[1])
-    res <- cbind(tt, attr(x, "lat_lon"))
+  tt <- as_datetime(names(x)[1])
+  res <- cbind(tt, attr(x, "lat_lon"))
 
-    x <- unclass(x)
-    l <- length(x)
-    tmpD <- tmpS <- matrix(0, nrow(x[[1]]), l)
-    for(i in seq_len(l)){
-        tmp <- uv2ds(x[[i]][,1], x[[i]][,2])
-        tmpD[,i] <- tmp[,1]
-        tmpS[,i] <- tmp[,2]
-    }
-    smean <- apply(tmpS, 1, mean)
-    dmean <- apply(tmpD, 1, circ.mean)
-    res <- cbind(res, ds2uv(dmean, smean), dmean, smean)
+  x <- unclass(x)
+  l <- length(x)
+  tmpD <- tmpS <- matrix(0, nrow(x[[1]]), l)
+  for (i in seq_len(l)) {
+    tmp <- uv2ds(x[[i]][, 1], x[[i]][, 2])
+    tmpD[, i] <- tmp[, 1]
+    tmpS[, i] <- tmp[, 2]
+  }
+  smean <- apply(tmpS, 1, mean)
+  dmean <- apply(tmpD, 1, circ.mean)
+  res <- cbind(res, ds2uv(dmean, smean), dmean, smean)
 
-    colnames(res) <- c("time", "lat", "lon", "ugrd10m", "vgrd10m", "dir",
-                       "speed")
-    class(res) <-  c("rWind", "data.frame")
-    return(res)
+  colnames(res) <- c(
+    "time", "lat", "lon", "ugrd10m", "vgrd10m", "dir",
+    "speed"
+  )
+  class(res) <- c("rWind", "data.frame")
+  return(res)
 }
 
 
@@ -882,21 +931,21 @@ wind.mean <- function(x){
 # https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
 # This is a beta version, please use it carefully
 
-oscar.fit_int <- function (tmpx) {
-  tmpx <- cbind(tmpx[,1],tmpx[,3:6])
+oscar.fit_int <- function(tmpx) {
+  tmpx <- cbind(tmpx[, 1], tmpx[, 3:6])
   ###### DIRECTION
-  direction <- atan2(tmpx[,4], tmpx[,5])
+  direction <- atan2(tmpx[, 4], tmpx[, 5])
   direction <- rad2deg(direction)
   dir_filter <- direction[!is.nan(direction)]
   dir_filter[dir_filter < 0] <- 360 + dir_filter[dir_filter < 0]
   direction[!is.nan(direction)] <- dir_filter
   ###### SPEED
-  speed <- sqrt( (tmpx[,4] * tmpx[,4]) + (tmpx[,5] * tmpx[,5]))
+  speed <- sqrt((tmpx[, 4] * tmpx[, 4]) + (tmpx[, 5] * tmpx[, 5]))
   ######
-  names(tmpx)<- c("time", "lat","lon", "u", "v")
-  res <- cbind(tmpx, dir=direction, speed=speed)
+  names(tmpx) <- c("time", "lat", "lon", "u", "v")
+  res <- cbind(tmpx, dir = direction, speed = speed)
   res <- res[with(res, order(-lat)), ]
-  res[,1] <- ymd_hms(res[,1], truncated = 3)
+  res[, 1] <- ymd_hms(res[, 1], truncated = 3)
   return(res)
 }
 
@@ -939,10 +988,9 @@ oscar.fit_int <- function (tmpx) {
 #' # Download sea currents for Galapagos Islands
 #' \dontrun{
 #'
-#' seaOscar.dl(2015,1,1,-93,-88,2,-3)
-#'
+#' seaOscar.dl(2015, 1, 1, -93, -88, 2, -3)
 #' }
-
+#'
 #' @importFrom utils write.table read.csv download.file
 #' @importFrom lubridate ymd year month day hour
 #' @rdname seaOscar.dl
@@ -956,43 +1004,56 @@ seaOscar.dl <- function(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data"
   yyyy_c <- year(dt)
   mm_c <- sprintf("%02d", month(dt))
   dd_c <- sprintf("%02d", day(dt))
-  #tt_c <- sprintf("%02d", hour(dt))
+  # tt_c <- sprintf("%02d", hour(dt))
   testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
   print(testDate)
-  if (trace)
+  if (trace) {
     print(paste(ymd(paste(yyyy_c, mm_c, dd_c, sep = "-")),
-                "downloading...", sep = " "))
-  tryCatch({
-    as.Date(testDate)
-    url_dir <- paste("https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.csv?u[(",
-                     yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z):1:(",yyyy_c,"-",mm_c,"-",dd_c,
-                     "T00:00:00Z)][(15.0):1:(15.0)][(",lat1,"):1:(", lat2,
-                     ")][(",lon1,"):1:(",lon2, ")],v[(",yyyy_c,"-",mm_c,"-",dd_c,
-                     "T00:00:00Z):1:(",yyyy_c,"-",mm_c,"-",dd_c,"T00:00:00Z)][(15.0):1:(15.0)][(",
-                     lat1,"):1:(",lat2,")][(", lon1, "):1:(", lon2, ")],um[(",
-                     yyyy_c,"-",mm_c,"-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c,
-                     "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(",
-                     lat2,")][(", lon1, "):1:(", lon2, ")],vm[(", yyyy_c, "-", mm_c,
-                     "-", dd_c,"T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
-                     "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
-                     ")][(" , lon1, "):1:(", lon2,")]", sep="")
+      "downloading...",
+      sep = " "
+    ))
+  }
+  tryCatch(
+    {
+      as.Date(testDate)
+      url_dir <- paste("https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.csv?u[(",
+        yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
+        "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
+        ")][(", lon1, "):1:(", lon2, ")],v[(", yyyy_c, "-", mm_c, "-", dd_c,
+        "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(",
+        lat1, "):1:(", lat2, ")][(", lon1, "):1:(", lon2, ")],um[(",
+        yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c,
+        "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(",
+        lat2, ")][(", lon1, "):1:(", lon2, ")],vm[(", yyyy_c, "-", mm_c,
+        "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
+        "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
+        ")][(", lon1, "):1:(", lon2, ")]",
+        sep = ""
+      )
 
-    tmp <- read.csv(url_dir, header = FALSE, skip = 2,
-                    stringsAsFactors = FALSE)
-    tmp <- oscar.fit_int(tmp)
-    if (type == "csv") {
-      fname <- paste("oscar_", yyyy_c, "_", mm_c, "_",
-                     dd_c, "_", ".csv", sep = "")
-      write.table(tmp, fname, sep = ",", row.names = FALSE,
-                  col.names = TRUE, quote = FALSE)
+      tmp <- read.csv(url_dir,
+        header = FALSE, skip = 2,
+        stringsAsFactors = FALSE
+      )
+      tmp <- oscar.fit_int(tmp)
+      if (type == "csv") {
+        fname <- paste("oscar_", yyyy_c, "_", mm_c, "_",
+          dd_c, "_", ".csv",
+          sep = ""
+        )
+        write.table(tmp, fname,
+          sep = ",", row.names = FALSE,
+          col.names = TRUE, quote = FALSE
+        )
+      }
+    },
+    error = function(e) {
+      cat("ERROR: database not found. Please, check server\n                      connection, date or geographical ranges \n")
+    },
+    warning = function(w) {
+      cat("ERROR: database not found. Please, check server\n                        connection, date or geographical ranges  \n")
     }
-  }, error = function(e) {
-    cat("ERROR: database not found. Please, check server\n                      connection, date or geographical ranges \n")
-  }, warning = function(w) {
-    cat("ERROR: database not found. Please, check server\n                        connection, date or geographical ranges  \n")
-  })
+  )
   class(tmp) <- c("rWind", "data.frame")
   return(tmp)
 }
-
-

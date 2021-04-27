@@ -56,7 +56,6 @@ NULL
 #' data(wind.data)
 #' str(wind.data)
 #' head(wind.data[[1]])
-#'
 NULL
 
 
@@ -95,9 +94,4 @@ NULL
 #'
 #' data(wind.series)
 #' str(tidy(wind.series))
-#'
-#'
 NULL
-
-
-
