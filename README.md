@@ -1,7 +1,6 @@
 # rWind
 
-
-[![Build Status](https://travis-ci.org/jabiologo/rWind.svg?branch=master)](https://travis-ci.org/jabiologo/rWind)
+[![R-CMD-check](https://github.com/KlausVigo/rWind/workflows/R-CMD-check/badge.svg)](https://github.com/KlausVigo/rWind/actions)
 [![CRAN Status Badge](http://www.r-pkg.org/badges/version/rWind)](https://cran.r-project.org/package=rWind)
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/rWind)](https://cran.r-project.org/package=rWind)
 [![Research software impact](http://depsy.org/api/package/cran/rWind/badge.svg)](http://depsy.org/package/r/rWind)
@@ -12,9 +11,7 @@
  rWind is a library in the R language for statistical computing and graphics (R Development Core Team), designed specifically to download and process wind and sea currents data from the Global Forecasting System. From these data, users can obtain wind/sea currents speed and direction layers in order to compute connectivity values between locations. There are other great R libraries that covers data download and data managing that could overlap with rWind, such us [rnoaa](https://cran.r-project.org/web/packages/rnoaa/index.html), [RNCEP](https://cran.r-project.org/web/packages/RNCEP/index.html) or [weathercran](https://cran.r-project.org/web/packages/weathercan/index.html). However, rWind is specially focused to offer to the users a straightforward workflow from data download to cost analysis between locations. rWind fills the gap between wind/sea currents data accessibility and their inclusion in a general framework to be applied broadly in ecological or evolutionary studies.
  
  It has been peer-reviewed published in: Fernández‐López, J. and Schliep, K. (2019), rWind: download, edit and include wind data in ecological and evolutionary analysis. Ecography, 42: 804-810. https://doi.org/10.1111/ecog.03730  
-https://onlinelibrary.wiley.com/doi/full/10.1111/ecog.03730
-
- 
+https://onlinelibrary.wiley.com/doi/full/10.1111/ecog.03730  
 
  For more information about data source, please check: 
 

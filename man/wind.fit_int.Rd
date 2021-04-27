@@ -13,14 +13,14 @@ wind.fit_int(tmpx)
 data.frame
 }
 \description{
-wind.fit_int is used internaly by wind.dl to transform downloaded data from
+wind.fit_int is used internally by wind.dl to transform downloaded data from
 GFS. wind.fit_int applies trigonometry tools to transform U and V vector wind
 components in wind direction and speed features. It also transforms 0-360
 longitude notation obtained from GFS data into -180/180 longitude notation.
 Moreover, it cleans dates names and sorts the data by latitude.
 }
 \note{
-This function is used internaly by wind.dl
+This function is used internally by wind.dl
 }
 \references{
 https://en.wikipedia.org/wiki/Cross_product

@@ -11,7 +11,7 @@ wind.dl_2(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1)
 }
 \arguments{
 \item{time}{a scalar or vector of POSIXt or Date objects or an character
-which can transfored into those, see example below.
+which can transformed into those, see example below.
 There are currently these options at the GFS database for the hours:
 00:00 - 03:00 - 06:00 - 09:00 - 12:00 - 15:00 - 18:00 - 21:00 (UTC) (TO).}
 
@@ -37,7 +37,7 @@ directory named "wind_yyyy_mm_dd_tt.csv".}
 }
 \value{
 an object of class \code{rWind_series} or .csv file/s with
-U and V vector components and wind direction and speed for each coordenate
+U and V vector components and wind direction and speed for each coordinate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -45,7 +45,7 @@ wind.dl_2 downloads time-series wind data from the Global Forecast System
 (GFS) of the USA's National Weather Service (NWS)
 (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
 Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
-Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
+Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 and wind is calculated for Earth surface, at 10 m. More metadata
 information:
 http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
@@ -61,9 +61,9 @@ an \code{rWind_series} object is created.
 \note{
 wind.dl_2 requires two dates that represent the boundaries of the time
 lapse to download wind series data.
-U and V vector components allow you to create wind averages or tendences
-for each coordenate at the study area. Longitude coordenates are
-provided by GFS dataset in 0/360 notation and transformed internaly into
+U and V vector components allow you to create wind averages or tendencies
+for each coordinate at the study area. Longitude coordinates are
+provided by GFS dataset in 0/360 notation and transformed internally into
 -180/180. "dir" denotes where the
 wind/sea current is going (toward), not from where is coming.
 }

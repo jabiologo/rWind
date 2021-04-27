@@ -19,7 +19,7 @@ Summaries of time series are not trivial to compute. We compute the
 arithmetic mean for the wind speed.
 The direction as the circular mean, see
 \url{https://en.wikipedia.org/wiki/Mean_of_circular_quantities}
-for more details. The U and V componenats are afterwards transformed from
+for more details. The U and V components are afterwards transformed from
 these values.
 }
 \note{

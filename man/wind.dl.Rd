@@ -49,7 +49,7 @@ directory named "wind_yyyy_mm_dd_tt.csv".}
 }
 \value{
 "rWind" and "data.frame" class object or .csv file with U and V
-vector  components and wind direction and speed for each coordenate
+vector  components and wind direction and speed for each coordinate
 in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
@@ -57,7 +57,7 @@ wind.dl downloads wind data from the Global Forecast System (GFS) of the
 USA's National Weather Service (NWS)
 (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
 Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
-Model colection. Geospatial resolution is 0.5 degrees (approximately 50 km),
+Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 and wind is calculated for Earth surface, at 10 m. More metadata
 information:
 https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
@@ -69,8 +69,8 @@ that is downloaded at the work directory. If type="read-data" is selected,
 an R object (data.frame) is created.
 }
 \note{
-Longitude coordenates are provided by GFS dataset in 0/360 notation
-and transformed internaly into -180/180. Wind "dir" denotes where the
+Longitude coordinate are provided by GFS dataset in 0/360 notation
+and transformed internally into -180/180. Wind "dir" denotes where the
 wind is going (toward), not from where is coming.
 }
 \examples{

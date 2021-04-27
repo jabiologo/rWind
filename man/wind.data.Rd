@@ -20,7 +20,7 @@ http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
 }
 \description{
 This is an example of wind data obtained with wind.dl function for the
-Iberian Peninsula coordenates on 12/February/2015 at 00:00 (UTC)
+Iberian Peninsula coordinates on 12/February/2015 at 00:00 (UTC)
 }
 \details{
 This data set is the result of:
