@@ -50,8 +50,7 @@ cluster.
 
 data(wind.data)
 wind <- wind2raster(wind.data)
-Conductance <- flow.dispersion(wind, type="passive")
-
+Conductance <- flow.dispersion(wind, type = "passive")
 \dontrun{
 require(gdistance)
 transitionMatrix(Conductance)

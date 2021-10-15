@@ -32,7 +32,6 @@ This data set is the result of:
 data(wind.data)
 str(wind.data)
 head(wind.data[[1]])
-
 }
 \references{
 http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html

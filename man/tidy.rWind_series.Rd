@@ -25,8 +25,9 @@ head(df)
 \dontrun{
 # use the tidyverse
 library(dplyr)
-mean_speed <- tidy(wind.series) \%>\% group_by(lat, lon) \%>\%
-    summarise(speed=mean(speed))
+mean_speed <- tidy(wind.series) \%>\%
+  group_by(lat, lon) \%>\%
+  summarise(speed = mean(speed))
 wind_average2 <- wind.mean(wind.series)
 all.equal(wind_average2$speed, mean_speed$speed)
 }

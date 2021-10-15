@@ -60,9 +60,9 @@ an R object (data.frame) is created.
 # Download sea currents for Galapagos Islands
 \dontrun{
 
-seaOscar.dl(2015,1,1,-93,-88,2,-3)
-
+seaOscar.dl(2015, 1, 1, -93, -88, 2, -3)
 }
+
 }
 \references{
 http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL

@@ -68,11 +68,10 @@ data(wind.data)
 
 wind <- wind2raster(wind.data)
 
-Conductance<-flow.dispersion(wind, type="passive")
+Conductance <- flow.dispersion(wind, type = "passive")
 
 transitionMatrix(Conductance)
 image(transitionMatrix(Conductance))
-
 }
 \references{
 Felicísimo, Á. M., Muñoz, J., & González-Solis, J. (2008). Ocean surface

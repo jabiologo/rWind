@@ -33,7 +33,6 @@ data(wind.data)
 # layers
 
 wind2raster(wind.data)
-
 }
 \seealso{
 \code{\link{wind.dl}}

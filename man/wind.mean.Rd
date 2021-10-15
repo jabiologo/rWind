@@ -27,9 +27,7 @@ For large time series, it could take a while.
 }
 \examples{
 data(wind.series)
-wind_average<- wind.mean(wind.series)
-
-
+wind_average <- wind.mean(wind.series)
 }
 \references{
 https://en.wikipedia.org/wiki/Cross_product

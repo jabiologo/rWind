@@ -36,8 +36,6 @@ This data set is the result of:
 
 data(wind.series)
 str(tidy(wind.series))
-
-
 }
 \references{
 http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html

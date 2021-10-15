@@ -23,6 +23,6 @@ Klaus Schliep
 
 Yurena Arjona
 
-Maintainer: Javier Fernández-López <jflopez.bio@gmail.com>
+Maintainer: Javier Fernández-López \href{mailto:jflopez.bio@gmail.com}{jflopez.bio@gmail.com}
 }
 \keyword{package}

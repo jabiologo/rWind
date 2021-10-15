@@ -72,14 +72,15 @@ wind/sea current is going (toward), not from where is coming.
 # Download wind for Iberian Peninsula region at 2015, February 12, 00:00
 \dontrun{
 
-wind.dl_2("2018/3/15 9:00:00",-10,5,35,45)
+wind.dl_2("2018/3/15 9:00:00", -10, 5, 35, 45)
 
 library(lubridate)
-dt <- seq(ymd_hms(paste(2018,1,1,00,00,00, sep="-")),
-          ymd_hms(paste(2018,1,2,21,00,00, sep="-")),by="3 hours")
-ww <- wind.dl_2(dt,-10,5,35,45)
-tidy (ww)
-
+dt <- seq(ymd_hms(paste(2018, 1, 1, 00, 00, 00, sep = "-")),
+  ymd_hms(paste(2018, 1, 2, 21, 00, 00, sep = "-")),
+  by = "3 hours"
+)
+ww <- wind.dl_2(dt, -10, 5, 35, 45)
+tidy(ww)
 }
 
 }

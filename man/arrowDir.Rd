@@ -19,7 +19,7 @@ arrowDir adapts wind direction value to be used by Arrowhead function from
 }
 \details{
 Angle argument of Arrowhead function from "shape" package needs to be fed
-in an anti-clockwise way, relative to x-axis, in degrees [0,360]. arrowDir
+in an anti-clockwise way, relative to x-axis, in degrees \link{0,360}. arrowDir
 function adapts wind direction provided by wind.fit (clockwise, relative to
 y-axis ) to requirements of Arrowhead.
 }
@@ -32,14 +32,15 @@ data(wind.data)
 
 # Create a vector with wind direction (angles) adapted
 alpha <- arrowDir(wind.data)
-
 \dontrun{
 # Now, you can plot wind direction with Arrowhead function from shapes package
 # Load "shape package
 require(shape)
-plot(wind.data$lon, wind.data$lat, type="n")
-Arrowhead(wind.data$lon, wind.data$lat, angle=alpha,
-          arr.length = 0.1, arr.type="curved")
+plot(wind.data$lon, wind.data$lat, type = "n")
+Arrowhead(wind.data$lon, wind.data$lat,
+  angle = alpha,
+  arr.length = 0.1, arr.type = "curved"
+)
 }
 
 }
