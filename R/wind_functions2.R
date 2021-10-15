@@ -24,7 +24,7 @@ circ.mean <- function(deg) {
 #'
 #' wind.dl downloads wind data from the Global Forecast System (GFS) of the
 #' USA's National Weather Service (NWS)
-#' (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
+#' (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 #' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
@@ -180,7 +180,7 @@ read.rWind <- function(file) {
 #'
 #' wind.dl_2 downloads time-series wind data from the Global Forecast System
 #' (GFS) of the USA's National Weather Service (NWS)
-#' (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs).
+#' (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 #' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
