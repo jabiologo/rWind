@@ -8,7 +8,7 @@ Authors@R: c(person("Javier", "Fernández-López", email="jflopez.bio@gmail.com"
     person("Klaus", "Schliep", email="klaus.schliep@gmail.com", role = c("aut")),
     person("Yurena", "Arjona", email="yurenaaf@gmail.com", role = c("aut")))
 Maintainer: Javier Fernández-López <jflopez.bio@gmail.com>
-Description: Tools for download and manage surface wind and sea currents data from the Global Forecasting System <https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs> and to compute connectivity between locations.
+Description: Tools for download and manage surface wind and sea currents data from the Global Forecasting System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast> and to compute connectivity between locations.
 URL: http://allthiswasfield.blogspot.com.es/
 License: GPL (>=3)
 LazyData: true
