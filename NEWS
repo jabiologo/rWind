@@ -3,6 +3,7 @@ rWind v1.1.7 (Release date: 2021-10-15)
 
 o move from travisCI to github actions
 
+o some fix in arrowDir documentation
 
 rWind v1.1.6 (Release date: 2021-02-07)
 ==============

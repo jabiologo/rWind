@@ -531,7 +531,7 @@ wind2raster <- function(x) {
 #' "shape" package to plot wind direction for each coordinate.
 #'
 #' Angle argument of Arrowhead function from "shape" package needs to be fed
-#' in an anti-clockwise way, relative to x-axis, in degrees [0,360]. arrowDir
+#' in an anti-clockwise way, relative to x-axis, in degrees 0,360. arrowDir
 #' function adapts wind direction provided by wind.fit (clockwise, relative to
 #' y-axis ) to requirements of Arrowhead.
 #'
