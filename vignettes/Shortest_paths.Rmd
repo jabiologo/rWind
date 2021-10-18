@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%B %d, %Y')`"
 bibliography: rWind.bib
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Shortest_paths}
+  %\VignetteIndexEntry{Anisotropic shortest paths across Strait of Gibralta}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
