@@ -884,7 +884,7 @@ tidy.rWind_series <- function(x, ...) {
 #' Summaries of time series are not trivial to compute. We compute the
 #' arithmetic mean for the wind speed.
 #' The direction as the circular mean, see
-#' \url{https://en.wikipedia.org/wiki/Mean_of_circular_quantities}
+#' \url{https://en.wikipedia.org/wiki/Circular_mean}
 #' for more details. The U and V components are afterwards transformed from
 #' these values.
 #' @param x An object of class \code{rWind_series}
