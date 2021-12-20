@@ -86,7 +86,7 @@ library(fields)
 library(shape)
 library(rworldmap)
 
-image.plot(wind_layer$wind.speed, main="least cost paths by wind direction and speed", 
+image.plot(wind_layer[["speed"]], main="least cost paths by wind direction and speed", 
      col=terrain.colors(10), xlab="Longitude", ylab="Lattitude", zlim=c(0,7))
 
 lines(getMap(resolution = "low"), lwd=4)
