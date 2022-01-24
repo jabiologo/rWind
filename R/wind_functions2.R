@@ -576,7 +576,7 @@ arrowDir <- function(W) {
 # Cost computation following Muñoz et al., 2004; Felicísimo et al., 2008
 #' @rdname flow.dispersion
 #' @export
-cost.FMGS <- function(wind.direction, wind.speed, target, type = "active") {
+cost.FMGS <- function(wind.direction, wind.speed, target, type = "passive") {
   dif <- (abs(wind.direction - target))
   # If dif > 180 and is not NA
   dif[dif > 180 & !is.na(dif)] <- 360 - dif[dif > 180 & !is.na(dif)] # Modified from the original function
@@ -590,12 +590,13 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type = "active") {
     dif[dif == 0] <- 0.1
   }
   else {
+      print("Only passive movements are currently allowed")
     # For sea currents, dif could be NA is there are lands around
-    dif[is.na(dif)] <- Inf
+    #dif[is.na(dif)] <- Inf
     # For "active" type movements against flow are allowed, so simply we
     # multiply by 2 the dif, following Felicísimo et al., 2008
-    dif[!is.na(dif)] <- 2 * dif[!is.na(dif)]
-    dif[dif == 0] <- 0.1
+    #dif[!is.na(dif)] <- 2 * dif[!is.na(dif)]
+    #dif[dif == 0] <- 0.1
   }
 
   wind.speed[is.na(wind.speed)] <- 0
@@ -613,7 +614,8 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type = "active") {
 #' Cost=(1/Speed)*(HorizontalFactor)
 #'
 #' being HorizontalFactor a "function that incrementally penalized angular
-#' deviations from the wind direction" (Felicísimo et al. 2008).
+#' deviations from the wind direction" (Felicísimo et al. 2008). Only _passive_
+#' movements are currently allowed.
 #'
 #' @param stack RasterStack object with layers obtained from wind2raster
 #' function ("rWind" package) with direction and speed flow values.
@@ -772,7 +774,8 @@ flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLaye
 #' Cost=(1/Speed)*(HorizontalFactor)
 #'
 #' being HorizontalFactor a "function that incrementally penalized angular
-#' deviations from the wind direction" (Felicísimo et al. 2008).
+#' deviations from the wind direction" (Felicísimo et al. 2008). Only _passive_
+#' movements are currently allowed.
 #'
 #'
 #' @param x RasterStack object with layers obtained from wind2raster

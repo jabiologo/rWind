@@ -39,7 +39,8 @@ or wind currents. It implements the formula described in Felícisimo et al.
 Cost=(1/Speed)*(HorizontalFactor)
 
 being HorizontalFactor a "function that incrementally penalized angular
-deviations from the wind direction" (Felicísimo et al. 2008).
+deviations from the wind direction" (Felicísimo et al. 2008). Only \emph{passive}
+movements are currently allowed.
 }
 \note{
 Note that for large data sets, it could take a while. For large study
