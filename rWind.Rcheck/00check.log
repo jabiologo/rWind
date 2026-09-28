@@ -1,0 +1,173 @@
+* using log directory ‘/home/javifl/ChatGPT/rWind 2.0/source/rWind.Rcheck’
+* using R version 4.5.0 (2025-04-11)
+* using platform: x86_64-pc-linux-gnu
+* R was compiled by
+    gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+    GNU Fortran (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+* running under: Ubuntu 22.04.5 LTS
+* using session charset: UTF-8
+* using options ‘--no-manual --as-cran’
+* checking for file ‘rWind/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘rWind’ version ‘1.2.0’
+* package encoding: UTF-8
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Javier Fernández-López <jflopez.bio@gmail.com>’
+
+Package CITATION file contains call(s) to old-style personList() or
+as.personList().  Please use c() on person objects instead.
+Package CITATION file contains call(s) to old-style citEntry().  Please
+use bibentry() instead.
+
+Found the following (possibly) invalid URLs:
+  URL: http://allthiswasfield.blogspot.com.es/
+    From: DESCRIPTION
+          man/rWind-package.Rd
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: allthiswasfield.blogspot.com.es
+  URL: http://allthiswasfield.blogspot.com/2018/11/plotting-wind-highways-using-rwind.html
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: allthiswasfield.blogspot.com
+  URL: http://depsy.org/package/r/rWind
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: depsy.org
+  URL: https://app.codecov.io/gh/jabiologo/rWind
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: app.codecov.io
+  URL: https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: coastwatch.pfeg.noaa.gov
+  URL: https://cran.r-project.org/package=RNCEP
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: cran.r-project.org
+  URL: https://cran.r-project.org/package=rnoaa
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: cran.r-project.org
+  URL: https://CRAN.R-project.org/package=weatherr
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: CRAN.R-project.org
+  URL: https://doi.org/10.1111/ecog.03730
+    From: inst/CITATION
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: doi.org
+  URL: https://doi.org/10.1371/journal.pone.0002928
+    From: inst/doc/Shortest_paths.html
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: doi.org
+  URL: https://doi.org/10.18637/jss.v076.i13
+    From: inst/doc/Shortest_paths.html
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: doi.org
+  URL: https://doi.org/10.32614/CRAN.package.terra
+    From: inst/doc/Shortest_paths.html
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: doi.org
+  URL: https://en.wikipedia.org/wiki/Circular_mean
+    From: man/wind.mean.Rd
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: en.wikipedia.org
+  URL: https://github.com/jabiologo/rWind/issues
+    From: DESCRIPTION
+          man/rWind-package.Rd
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: github.com
+  URL: https://github.com/KlausVigo/rWind/actions
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: github.com
+  URL: https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: pae-paha.pacioos.hawaii.edu
+  URL: https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00634
+    From: README.md
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: www.ncei.noaa.gov
+  URL: https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast
+    From: DESCRIPTION
+    Status: Error
+    Message: libcurl error code 6:
+      	Could not resolve host: www.ncei.noaa.gov
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘rWind’ can be installed ... [42s/39s] OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking for future file timestamps ... NOTE
+unable to verify current time
+* checking ‘build’ directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking code files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... [12s/12s] OK
+* checking whether the package can be loaded with stated dependencies ... [12s/12s] OK
+* checking whether the package can be unloaded cleanly ... [12s/12s] OK
+* checking whether the namespace can be loaded with stated dependencies ... [13s/12s] OK
+* checking whether the namespace can be unloaded cleanly ... [12s/12s] OK
+* checking loading without being on the library search path ... [12s/12s] OK
+* checking use of S3 registration ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... [60s/53s] OK
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking contents of ‘data’ directory ... OK
+* checking data for non-ASCII characters ... OK
+* checking LazyData ... OK
+* checking data for ASCII and uncompressed saves ... OK
+* checking installed files from ‘inst/doc’ ... OK
+* checking files in ‘vignettes’ ... OK
+* checking examples ... [24s/23s] OK
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ... [16s/15s] OK
+  Running ‘testthat.R’ [15s/15s]
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes ... OK
+* checking re-building of vignette outputs ... [12s/11s] OK
+* checking for non-standard things in the check directory ... OK
+* checking for detritus in the temp directory ... OK
+* DONE
+Status: 2 NOTEs

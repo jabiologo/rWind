@@ -1,0 +1,31 @@
+
+R version 4.5.0 (2025-04-11) -- "How About a Twenty-Six"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> suppressPackageStartupMessages(library(rWind))
+> 
+> test_check("rWind")
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 39 ]
+
+══ Skipped tests (1) ═══════════════════════════════════════════════════════════
+• On CRAN (1): 'test_rWind.R:173:3'
+
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 39 ]
+> 
+> proc.time()
+   user  system elapsed 
+ 14.150   0.890  14.492 

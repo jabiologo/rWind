@@ -1,0 +1,18 @@
+arrowDir                Arrow direction fitting for Arrowhead function
+                        from "shape" package
+cost.active             Relative cost of active movement through a flow
+cost.FMGS               Compute flow-based cost or conductance
+rWind-package           Download, edit and include wind and sea
+                        currents data in ecological and evolutionary
+                        analysis
+seaOscar.dl             OSCAR Sea currents data download
+tidy                    Transforming a rWind_series object into a
+                        data.frame
+uv2ds                   Transform U and V components in direction and
+                        speed and vice versa
+wind.data               Wind data example
+wind.dl                 Wind-data download
+wind.dl_2               Wind-data download
+wind.mean               Wind-data mean
+wind.series             Wind series example
+wind2raster             Wind data to terra rasters

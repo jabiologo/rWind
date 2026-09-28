@@ -1,7 +1,8 @@
 Package: rWind
 Encoding: UTF-8
 Type: Package
-Title: Download, Edit and Include Wind and Sea Currents Data in Ecological and Evolutionary Analysis
+Title: Download, Edit and Include Wind and Sea Currents Data in
+        Ecological and Evolutionary Analysis
 Version: 1.2.0
 BugReports: https://github.com/jabiologo/rWind/issues
 Authors@R: c(person("Javier", "Fernández-López", email="jflopez.bio@gmail.com", role = c("aut", "cre")), 
@@ -18,3 +19,8 @@ VignetteBuilder: knitr
 Depends: R (>= 3.5)
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
+NeedsCompilation: no
+Packaged: 2026-09-28 11:15:07 UTC; javifl
+Author: Javier Fernández-López [aut, cre],
+  Klaus Schliep [aut],
+  Yurena Arjona [aut]
