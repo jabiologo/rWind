@@ -14,6 +14,11 @@ o restored active movement with a general signed flow-support index. Stronger
 o transition costs now average the local costs at the origin and destination
   cells, and diagonal transitions are multiplied by sqrt(2).
 
+o updated the OSCAR sea-current downloader to the current NOAA ERDDAP dataset
+  identifier and its 20--420 degree longitude convention.
+
+o modernized the package CITATION file for current R and CRAN checks.
+
 rWind v1.1.8
 ==============
 

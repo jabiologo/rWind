@@ -44,10 +44,10 @@ in the study area defined by lon1/lon2 and lat1/lat2.
 }
 \description{
 seaOscar.dl downloads sea currents data from the Ocean Surface Current Analyses Real-time (OSCAR)
-(https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
+(PO.DAAC, \doi{10.5067/OSCAR-03D01}).
 Geospatial resolution is 0.33 degrees and sea currents are calculated for
-15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
-degrees. You can use SCUD database instead (coming soon...)
+15 m depth. Longitudes in the usual -180 to 180 notation are translated to
+the 20 to 420 degree axis used by the service.
 }
 \details{
 The output type is determined by type="csv" or type="read-data". If
@@ -65,9 +65,7 @@ seaOscar.dl(2015, 1, 1, -93, -88, 2, -3)
 
 }
 \references{
-http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
-
-https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+\doi{10.5067/OSCAR-03D01}
 }
 \seealso{
 \code{\link{wind.dl_2}}, \code{\link{wind2raster}}

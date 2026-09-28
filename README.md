@@ -16,11 +16,11 @@ https://onlinelibrary.wiley.com/doi/full/10.1111/ecog.03730
  For more information about data source, please check: 
 
 NOAA/NCEP Global Forecast System (GFS) Atmospheric Model colection (wind data)  
-* <https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html>
+* <https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.html>
 * Historical GFS 0.5 degree data: <https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00634>
 
 Ocean Surface Current Analyses Real-time (OSCAR) (sea currents data)  
-* <https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html><br />
+* <https://doi.org/10.5067/OSCAR-03D01><br />
 
 To install the latest released version of rWind on CRAN use `install.packages("rWind")`  
 To install the latest development version `devtools::install_github("jabiologo/rWind")`  

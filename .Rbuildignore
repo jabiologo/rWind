@@ -1,3 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.Rhistory$
+^cran-comments\.md$
+^rWind\.Rcheck$
+^rWind_.*\.tar\.gz$

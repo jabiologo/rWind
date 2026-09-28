@@ -2,18 +2,15 @@
 
 #' Download, edit and include wind and sea currents data in ecological and evolutionary analysis
 #'
-#' rWind contain tools for downloading, editing and transforming wind and sea currents data from
-#' Global Forecast System (GFS) and Ocean Surface Current Analyses Real-time (OSCAR). It also allows to use wind and sea currents data to compute the
-#' minimum cost path from wind speed and direction to perform
+#' rWind contains tools for downloading, editing and transforming wind and sea currents data from
+#' the Global Forecast System (GFS) and Ocean Surface Current Analyses Real-time (OSCAR). It also allows wind and sea currents data to be used to compute
+#' minimum-cost paths from flow speed and direction and to perform
 #' connectivity analysis.
 #'
 #' The complete list of functions can be displayed with \code{library(help =
 #' rWind)}. For more information, please check:
-#' http://allthiswasfield.blogspot.com.es/
+#' <https://allthiswasfield.blogspot.com/>.
 #'
-#' @name rWind-package
-#' @aliases rWind-package rWind
-#' @docType package
 #' @author Javier Fernández-López
 #'
 #' Klaus Schliep
@@ -22,7 +19,7 @@
 #'
 #' Maintainer: Javier Fernández-López <jflopez.bio@@gmail.com>
 #' @keywords package
-NULL
+"_PACKAGE"
 
 #' Wind data example
 #'
@@ -46,10 +43,10 @@ NULL
 #' \item{list("dir")}{a numeric with direction of wind data }
 #' \item{list("speed")}{a numeric with speed of wind data } }
 #' @references
-#' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+#' <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>
 #' @source
 #'
-#' http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
+#' <https://allthiswasfield.blogspot.com/2016/12/rwind-r-package-released.html>
 #' @keywords datasets
 #' @examples
 #'
@@ -86,9 +83,9 @@ NULL
 #' \item{list("speed")}{a numeric with speed of wind data } }
 #'
 #' @references
-#' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+#' <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>
 #' @source
-#' http://allthiswasfield.blogspot.com.es/2016/12/rwind-r-package-released.html
+#' <https://allthiswasfield.blogspot.com/2016/12/rwind-r-package-released.html>
 #' @keywords datasets
 #' @examples
 #'
