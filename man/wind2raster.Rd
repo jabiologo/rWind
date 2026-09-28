@@ -2,35 +2,28 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind2raster}
 \alias{wind2raster}
-\title{Wind-data to raster file}
+\title{Wind data to terra rasters}
 \usage{
 wind2raster(x)
 }
 \arguments{
-\item{x}{an "rWind list" obtained by wind.fit}
+\item{x}{An object of class \code{rWind} or \code{rWind_series}.}
 }
 \value{
-A raster stack or a list of raster stacks representing wind direction
-and speed.
+A \link[terra:SpatRaster-class]{terra::SpatRaster}, or a list of them, with layers \code{direction}
+and \code{speed}.
 }
 \description{
-wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
-wind direction for an object of \code{rWind}.
-Latitude and longitude values are used to locate raster file and to create
-raster using rasterFromXYZ function from raster package. If the input file is
-a list of wind data created by wind.dl, a list of raster stacks will be
-returned
-}
-\details{
-WGS84 datum (non-projected) CRS is selected by default to build the raster
-file.
+\code{wind2raster()} converts an \code{rWind} object to a two-layer
+\link[terra:SpatRaster-class]{terra::SpatRaster} containing wind direction and speed. An
+\code{rWind_series} is converted to a list of \code{SpatRaster} objects, one per time
+step. All outputs use WGS 84 (EPSG:4326).
 }
 \examples{
 
 data(wind.data)
 
-# Create raster stack from the downloaded data with wind directon and speed
-# layers
+# Create a SpatRaster with wind direction and speed layers
 
 wind2raster(wind.data)
 }

@@ -21,8 +21,8 @@ movement against flow direction is not allowed (deviations from the wind
 direction higher than 90). In "active" mode, the movement can go against flow
 direction, by increasing the cost.}
 
-\item{x}{RasterStack object with layers obtained from wind2raster
-function ("rWind" package) with direction and speed flow values.}
+\item{x}{A \code{SpatRaster} returned by \code{wind2raster()} with direction and speed
+layers, a legacy \code{RasterStack}, or a list of either type.}
 
 \item{fun}{A function to compute the cost to move between cells. The default
 is \code{cost.FMGS} from Felicísimo et al. (2008), see details.}

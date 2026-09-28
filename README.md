@@ -29,15 +29,14 @@ To install the latest development version `devtools::install_github("jabiologo/r
   
 ### Quick example: Computing anisotropic shortest paths across Strait of Gibraltar
 
-First, we load the main packages we will use in this example. This vignette 
-was written under the rWind version `r foo$Version`
+First, load the packages used in this example.
 
 ```{R}
 # use install.packages() if some is not installed
 # you can install the latest development version using the command 
 # devtools::install_github("jabiologo/rWind")
 library(rWind)
-library(raster)
+library(terra)
 library(gdistance)
 ```
 
@@ -52,8 +51,8 @@ First, we download wind data of a selected date (e.g. 2015 February 12th).
 ```{R}
 w <- wind.dl(2015, 2, 12, 12, -7, -4, 34.5, 37.5)
 ```
-Next we transform this `data.frame` into two raster layers, with values of wind
-direction and wind speed.
+Next we transform this `data.frame` into a two-layer `SpatRaster`, with wind
+direction and speed.
 ```{R}
 wind_layer <- wind2raster(w)
 ```
@@ -78,38 +77,32 @@ BtoA<- shortestPath(Conductance,
 Finally, we plot the map and we will add the shortest paths as lines and some
 other features.
 
-We need some additionally packages to be installed. This can be done using the 
-command `install.packages(c("fields", "shape", "rworldmap"))`. 
-
-
 ```{R}
-library(fields)
-library(shape)
-library(rworldmap)
-
-image.plot(wind_layer[["speed"]], main="least cost paths by wind direction and speed", 
-     col=terrain.colors(10), xlab="Longitude", ylab="Lattitude", zlim=c(0,7))
-
-lines(getMap(resolution = "low"), lwd=4)
+plot(wind_layer[["speed"]],
+  col = hcl.colors(20, "YlOrRd", rev = TRUE),
+  main = "Wind-assisted paths across the Strait of Gibraltar",
+  xlab = "Longitude", ylab = "Latitude"
+)
 
 points(-5.5, 37, pch=19, cex=3.4, col="red")
 points(-5.5, 35, pch=19, cex=3.4, col="blue")
 
-lines(AtoB, col="red", lwd=4, lty=2)
-lines(BtoA, col="blue", lwd=4, lty=2)
+lines(vect(AtoB), col="red", lwd=4, lty=2)
+lines(vect(BtoA), col="blue", lwd=4, lty=2)
 
-alpha <- arrowDir(w)
-Arrowhead(w$lon, w$lat, angle=alpha, arr.length = 0.4, arr.type="curved")
+arrow_scale <- 0.12 / max(w$speed, na.rm = TRUE)
+arrows(w$lon, w$lat,
+  w$lon + w$ugrd10m * arrow_scale,
+  w$lat + w$vgrd10m * arrow_scale,
+  length = 0.035
+)
 
 text(-5.75, 37.25,labels="Spain", cex= 2.5, col="red", font=2)
 text(-5.25, 34.75,labels="Morocco", cex= 2.5, col="blue", font=2)
-legend("toprigh", legend = c("From Spain to Morocco", "From Morocco to Spain"),
-    lwd=4 ,lty = 1, col=c("red","blue"), cex=0.9, bg="white")
+legend("topleft", legend = c("From Spain to Morocco", "From Morocco to Spain"),
+    lwd=4, lty=1, col=c("red","blue"), cex=0.8, bg="white")
 ```
-![](vignettes/path_Spain_Morocco.png)
 
   
   
 For more information and examples, you can check [my blog](http://allthiswasfield.blogspot.com/2018/11/plotting-wind-highways-using-rwind.html)
-
-

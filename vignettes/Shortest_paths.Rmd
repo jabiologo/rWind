@@ -1,114 +1,149 @@
 ---
-title: "Anisotropic shortest paths across Strait of Gibraltar"
+title: "Anisotropic shortest paths across the Strait of Gibraltar"
 author: "Javier Fernández-López and Klaus Schliep"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
 bibliography: rWind.bib
+nocite: |
+  @terra
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Anisotropic shortest paths across Strait of Gibraltar}
+  %\VignetteIndexEntry{Anisotropic shortest paths across the Strait of Gibraltar}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
----
-nocite: | 
-  @raster @rworldmap @fields @shape 
-...
-
-
-```{R , echo=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 6
+)
 suppressPackageStartupMessages(library(rWind))
-suppressPackageStartupMessages(library(raster))
+suppressPackageStartupMessages(library(terra))
 suppressPackageStartupMessages(library(gdistance))
-suppressPackageStartupMessages(library(lubridate))
-foo <- packageDescription("rWind")
 ```
 
+## Overview
 
-First, we load the main packages we will use in this vignette. This vignette 
-was written under the rWind version `r foo$Version`
+This vignette shows the core rWind workflow: obtain wind data, represent them
+as modern spatial rasters, translate wind speed and direction into anisotropic
+movement conductance, and calculate directional least-cost paths.
 
-```{R , eval=FALSE}
-# use install.packages() if some is not installed
-# and you can install the latest development version using the command 
-# devtools::install_github("jabiologo/rWind")
-library(rWind)
-library(raster)
-library(gdistance)
+The example crosses the Strait of Gibraltar. Because wind-assisted movement is
+direction dependent, the least-cost path from Spain to Morocco does not
+necessarily match the path in the opposite direction.
+
+## Obtain wind data
+
+`wind.dl()` automatically selects the appropriate data source. Current dates
+are requested from PacIOOS, whereas older dates are retrieved from the
+NOAA/NCEI GFS archive. GFS data are available at three-hour UTC intervals.
+
+The download call used for this example is:
+
+```{r download, eval=FALSE}
+w <- wind.dl(
+  2015, 2, 12, 12,
+  lon1 = -7, lon2 = -4,
+  lat1 = 34.5, lat2 = 37.5
+)
 ```
 
+To make the vignette reproducible without a network connection, it uses the
+result saved with the package.
 
-In this simple example, we introduce the most basic functionality of rWind, 
-to get the shortest paths between two points across Strait of Gibraltar. Notice
-that, as wind connectivity is anisotropic (direction dependent), shortest path
-from A to B usually does not match with shortest path from B to A.
-
-First, we download wind data of a selected date (e.g. 2015 February 12th). 
-```{R, echo=FALSE}
+```{r cached-data}
 w <- readRDS("w.rds")
+head(w)
 ```
-```{R, eval=FALSE}
-w <- wind.dl(2015, 2, 12, 12, -7, -4, 34.5, 37.5)
-```
-Next we transform this `data.frame` into two raster layers, with values of wind
-direction and wind speed.
-```{R}
+
+## Create a `SpatRaster`
+
+`wind2raster()` converts the tabular result into a two-layer
+`terra::SpatRaster` [@terra]. The layers are named `direction` and `speed`, and
+the coordinate reference system is WGS 84 (EPSG:4326).
+
+```{r create-raster}
 wind_layer <- wind2raster(w)
+wind_layer
 ```
 
-Then, we will use `flow.dispersion` function to obtain a `transitionLayer` 
-object with conductance values, which will be used later to obtain the shortest
-paths.
-```{R}
-Conductance<-flow.dispersion(wind_layer)
+Individual layers use standard `terra` syntax:
+
+```{r inspect-speed}
+wind_layer[["speed"]]
 ```
 
-Now, we will use `shortestPath` function from `gdistance` package [@gdistance] 
-to compute shortest path from our `Conductance` object between the two selected
-points.
-```{R}
-AtoB<- shortestPath(Conductance, 
-                    c(-5.5, 37), c(-5.5, 35), output="SpatialLines")
-BtoA<- shortestPath(Conductance, 
-                    c(-5.5, 35), c(-5.5, 37), output="SpatialLines")
+## Build directional conductance
+
+`flow.dispersion()` applies the formulation of Felicísimo et al.
+[-@felicisimo2008] to
+the raster. The resulting `TransitionLayer` stores directional conductance and
+can be used by `gdistance` [@gdistance]. Internally, rWind converts only the
+direction layer to the legacy raster representation required by `gdistance`;
+the public spatial representation remains a `SpatRaster`.
+
+```{r conductance}
+conductance <- flow.dispersion(wind_layer)
+conductance
 ```
 
-Finally, we plot the map and we will add the shortest paths as lines and some
-other features.
+## Calculate paths in both directions
 
-We need some additionally packages to be installed. This can be done using the 
-command `install.packages(c("fields", "shape", "rworldmap"))`. 
+```{r paths}
+spain <- c(-5.5, 37)
+morocco <- c(-5.5, 35)
 
-
-```{R, fig.width = 7, fig.height = 6.5, eval=FALSE}
-library(fields)
-library(shape)
-library(rworldmap)
-
-image.plot(wind_layer$wind.speed, main="least cost paths by wind direction and speed", 
-     col=terrain.colors(10), xlab="Longitude", ylab="Lattitude", zlim=c(0,7))
-
-lines(getMap(resolution = "low"), lwd=4)
-
-points(-5.5, 37, pch=19, cex=3.4, col="red")
-points(-5.5, 35, pch=19, cex=3.4, col="blue")
-
-lines(AtoB, col="red", lwd=4, lty=2)
-lines(BtoA, col="blue", lwd=4, lty=2)
-
-alpha <- arrowDir(w)
-Arrowhead(w$lon, w$lat, angle=alpha, arr.length = 0.4, arr.type="curved")
-
-text(-5.75, 37.25,labels="Spain", cex= 2.5, col="red", font=2)
-text(-5.25, 34.75,labels="Morocco", cex= 2.5, col="blue", font=2)
-legend("toprigh", legend = c("From Spain to Morocco", "From Morocco to Spain"),
-    lwd=4 ,lty = 1, col=c("red","blue"), cex=0.9, bg="white")
+spain_to_morocco <- shortestPath(
+  conductance, spain, morocco,
+  output = "SpatialLines"
+)
+morocco_to_spain <- shortestPath(
+  conductance, morocco, spain,
+  output = "SpatialLines"
+)
 ```
-![](path_Spain_Morocco.png)
+
+The following map uses `terra` for the raster and path representation. Wind
+arrows are drawn from the downloaded U and V components; their lengths are
+scaled for display.
+
+```{r map}
+plot(
+  wind_layer[["speed"]],
+  col = hcl.colors(20, "YlOrRd", rev = TRUE),
+  main = "Wind-assisted paths across the Strait of Gibraltar",
+  xlab = "Longitude", ylab = "Latitude"
+)
+
+lines(vect(spain_to_morocco), col = "#C62828", lwd = 3, lty = 2)
+lines(vect(morocco_to_spain), col = "#1565C0", lwd = 3, lty = 2)
+points(spain[1], spain[2], pch = 19, cex = 1.3, col = "#C62828")
+points(morocco[1], morocco[2], pch = 19, cex = 1.3, col = "#1565C0")
+
+arrow_scale <- 0.12 / max(w$speed, na.rm = TRUE)
+arrows(
+  w$lon, w$lat,
+  w$lon + w$ugrd10m * arrow_scale,
+  w$lat + w$vgrd10m * arrow_scale,
+  length = 0.035, col = "grey20"
+)
+
+text(spain[1], spain[2] + 0.18, "Spain", col = "#C62828", font = 2)
+text(morocco[1], morocco[2] - 0.18, "Morocco", col = "#1565C0", font = 2)
+legend(
+  "topleft",
+  legend = c("Spain to Morocco", "Morocco to Spain"),
+  col = c("#C62828", "#1565C0"),
+  lwd = 3, lty = 2, cex = 0.8, bg = "white"
+)
+```
+
+The two paths differ because the conductance matrix is asymmetric: travelling
+with the wind has a different cost from travelling against it. For larger
+areas or long time series, both raster size and the number of possible cell
+transitions increase rapidly, so start with the smallest spatial extent and
+resolution needed for the biological question.
 
 ## References
-
-
-
-
-

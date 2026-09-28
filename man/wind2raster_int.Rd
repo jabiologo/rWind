@@ -2,7 +2,7 @@
 % Please edit documentation in R/wind_functions2.R
 \name{wind2raster_int}
 \alias{wind2raster_int}
-\title{Wind-data to raster file}
+\title{Wind data to a terra raster}
 \usage{
 wind2raster_int(x)
 }
@@ -10,20 +10,13 @@ wind2raster_int(x)
 \item{x}{an object of class \code{rWind}}
 }
 \value{
-A raster file representing wind direction, wind speed or both of the
-study area.
+A two-layer \link[terra:SpatRaster-class]{terra::SpatRaster} named \code{direction} and \code{speed}.
 }
 \description{
-wind2raster_int crates a raster file (gridded) from a data.frame created by
-wind.fit function from "rWind" package. Latitude and longitude values are used
-to locate raster file and create raster resolution using rasterFromXYZ
-function from raster package. As raster files only can store one field of
-information, you should choose between direction (by default, type="dir")
-and speed (type="speed") to be represented by the new raster file.
-}
-\details{
-WGS84 datum (non-projected) CRS is selected by default to build the raster
-file.
+\code{wind2raster_int()} converts one gridded \code{rWind} data frame to a two-layer
+\link[terra:SpatRaster-class]{terra::SpatRaster}. Longitude and latitude define the grid and the output
+layers contain wind direction and speed. The coordinate reference system is
+WGS 84 (EPSG:4326).
 }
 \seealso{
 \code{\link{wind.dl}}, \code{\link{wind2raster}}

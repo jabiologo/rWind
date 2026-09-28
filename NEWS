@@ -11,6 +11,13 @@ o invalid GFS hours are rejected before contacting a server, and unavailable
 
 o fixed duplicate direction and speed columns in wind.dl_2(type = "csv").
 
+o wind2raster now returns modern terra SpatRaster objects. flow.dispersion
+  accepts SpatRaster inputs while retaining compatibility with legacy
+  RasterStack objects required by older workflows.
+
+o rewrote the shortest-path vignette around terra and the automatic historical
+  data-source selection.
+
 rWind v1.1.7 (Release date: 2021-10-18)
 ==============
 

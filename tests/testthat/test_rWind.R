@@ -26,9 +26,25 @@ test_that("rWind works as expected", {
   expect_is(wind.series[[1]], "rWind")
   expect_is(tidy(wind.series), "rWind")
   expect_is(wind.mean(wind.series), "rWind")
-  expect_is(wind, "RasterStack")
+  expect_s4_class(wind, "SpatRaster")
+  expect_named(wind, c("direction", "speed"))
+  expect_equal(terra::crs(wind, proj = TRUE), "+proj=longlat +datum=WGS84 +no_defs")
+  expect_true(all(vapply(wind_s, inherits, logical(1), "SpatRaster")))
   expect_is(fl1, "dgCMatrix")
   expect_is(fl3, "TransitionLayer")
+})
+
+
+test_that("flow.dispersion remains compatible with legacy RasterStack input", {
+  legacy <- raster::stack(
+    raster::raster(wind[["direction"]]),
+    raster::raster(wind[["speed"]])
+  )
+  names(legacy) <- c("direction", "speed")
+  expect_equal(
+    flow.dispersion(legacy, output = "raw"),
+    flow.dispersion(wind, output = "raw")
+  )
 })
 
 

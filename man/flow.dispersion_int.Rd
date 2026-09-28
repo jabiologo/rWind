@@ -7,8 +7,8 @@
 flow.dispersion_int(stack, fun = cost.FMGS, output = "transitionLayer", ...)
 }
 \arguments{
-\item{stack}{RasterStack object with layers obtained from wind2raster
-function ("rWind" package) with direction and speed flow values.}
+\item{stack}{A \code{SpatRaster} returned by \code{wind2raster()} with direction and
+speed layers. Legacy \code{RasterStack} objects are also accepted.}
 
 \item{fun}{A function to compute the cost to move between cells. The default
 is \code{cost.FMGS} from Felicísimo et al. (2008), see details.}

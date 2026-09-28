@@ -558,53 +558,49 @@ ds2uv <- function(d, s) {
 
 
 
-#' Wind-data to raster file
+#' Wind data to a terra raster
 #'
-#' wind2raster_int crates a raster file (gridded) from a data.frame created by
-#' wind.fit function from "rWind" package. Latitude and longitude values are used
-#' to locate raster file and create raster resolution using rasterFromXYZ
-#' function from raster package. As raster files only can store one field of
-#' information, you should choose between direction (by default, type="dir")
-#' and speed (type="speed") to be represented by the new raster file.
-#'
-#' WGS84 datum (non-projected) CRS is selected by default to build the raster
-#' file.
+#' `wind2raster_int()` converts one gridded `rWind` data frame to a two-layer
+#' [terra::SpatRaster]. Longitude and latitude define the grid and the output
+#' layers contain wind direction and speed. The coordinate reference system is
+#' WGS 84 (EPSG:4326).
 #'
 #' @param x an object of class \code{rWind}
-#' @return A raster file representing wind direction, wind speed or both of the
-#' study area.
+#' @return A two-layer [terra::SpatRaster] named `direction` and `speed`.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}, \code{\link{wind2raster}}
 #' @keywords ~gfs ~wind
-#' @importFrom raster rasterFromXYZ stack
+#' @importFrom terra rast
 #'
 #' @rdname wind2raster_int
 #' @keywords internal
 wind2raster_int <- function(x) {
-  ras <- rasterFromXYZ(x[, c("lon", "lat")], crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-  ras2 <- ras
-  ras[] <- x$dir
-  ras2[] <- x$speed
-  tmp <- stack(ras, ras2)
-  names(tmp) <- c("direction", "speed")
-  return(tmp)
+  required <- c("lon", "lat", "dir", "speed")
+  if (!all(required %in% names(x))) {
+    stop(
+      "'x' must contain lon, lat, dir, and speed columns",
+      call. = FALSE
+    )
+  }
+  xyz <- data.frame(
+    lon = x$lon,
+    lat = x$lat,
+    direction = x$dir,
+    speed = x$speed
+  )
+  terra::rast(xyz, type = "xyz", crs = "EPSG:4326")
 }
 
-#' Wind-data to raster file
+#' Wind data to terra rasters
 #'
-#' wind2raster crates a raster stack (gridded) with 2 layers: wind speed and
-#' wind direction for an object of \code{rWind}.
-#' Latitude and longitude values are used to locate raster file and to create
-#' raster using rasterFromXYZ function from raster package. If the input file is
-#' a list of wind data created by wind.dl, a list of raster stacks will be
-#' returned
+#' `wind2raster()` converts an `rWind` object to a two-layer
+#' [terra::SpatRaster] containing wind direction and speed. An
+#' `rWind_series` is converted to a list of `SpatRaster` objects, one per time
+#' step. All outputs use WGS 84 (EPSG:4326).
 #'
-#' WGS84 datum (non-projected) CRS is selected by default to build the raster
-#' file.
-#'
-#' @param x an "rWind list" obtained by wind.fit
-#' @return A raster stack or a list of raster stacks representing wind direction
-#' and speed.
+#' @param x An object of class `rWind` or `rWind_series`.
+#' @return A [terra::SpatRaster], or a list of them, with layers `direction`
+#' and `speed`.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl}}
 #' @keywords ~gfs ~wind
@@ -612,11 +608,10 @@ wind2raster_int <- function(x) {
 #'
 #' data(wind.data)
 #'
-#' # Create raster stack from the downloaded data with wind directon and speed
-#' # layers
+#' # Create a SpatRaster with wind direction and speed layers
 #'
 #' wind2raster(wind.data)
-#' @importFrom raster rasterFromXYZ stack
+#' @importFrom terra rast
 #'
 #' @rdname wind2raster
 #' @export wind2raster
@@ -721,8 +716,8 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type = "passive") {
 #' deviations from the wind direction" (Felicísimo et al. 2008). Only _passive_
 #' movements are currently allowed.
 #'
-#' @param stack RasterStack object with layers obtained from wind2raster
-#' function ("rWind" package) with direction and speed flow values.
+#' @param stack A `SpatRaster` returned by `wind2raster()` with direction and
+#' speed layers. Legacy `RasterStack` objects are also accepted.
 #' @param fun A function to compute the cost to move between cells. The default
 #' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
 #' @param output This argument allows to select different kinds of output. "raw"
@@ -763,8 +758,7 @@ cost.FMGS <- function(wind.direction, wind.speed, target, type = "passive") {
 #' transitionMatrix(Conductance)
 #' image(transitionMatrix(Conductance))
 #' }
-#' @importClassesFrom raster RasterLayer
-#' @importFrom raster ncell
+#' @importFrom raster raster
 #' @importMethodsFrom raster as.matrix
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
@@ -773,10 +767,24 @@ flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLaye
                                 ...) {
   output <- match.arg(output, c("raw", "transitionLayer"))
 
-  DL <- as.matrix(stack$direction)
-  SL <- as.matrix(stack$speed)
-  M <- matrix(as.integer(1:ncell(stack$direction)),
-    nrow = nrow(stack$direction), byrow = TRUE
+  if (inherits(stack, "SpatRaster")) {
+    DL <- terra::as.matrix(stack[["direction"]], wide = TRUE)
+    SL <- terra::as.matrix(stack[["speed"]], wide = TRUE)
+    direction_layer <- stack[["direction"]]
+    ncells <- terra::ncell(stack[["direction"]])
+    raster_nrow <- terra::nrow(stack[["direction"]])
+  } else if (inherits(stack, "Raster")) {
+    DL <- as.matrix(stack[["direction"]])
+    SL <- as.matrix(stack[["speed"]])
+    direction_layer <- stack[["direction"]]
+    ncells <- raster::ncell(direction_layer)
+    raster_nrow <- nrow(direction_layer)
+  } else {
+    stop("'stack' must be a SpatRaster or Raster* object", call. = FALSE)
+  }
+
+  M <- matrix(seq_len(ncells),
+    nrow = raster_nrow, byrow = TRUE
   )
   nr <- nrow(M)
   nc <- ncol(M)
@@ -860,7 +868,13 @@ flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLaye
     return(tl)
   }
   if (output == "transitionLayer") {
-    tmp <- transition(stack$direction, transitionFunction = function(x) 0, directions = 8)
+    if (inherits(direction_layer, "SpatRaster")) {
+      direction_layer <- raster::raster(direction_layer)
+    }
+    tmp <- transition(direction_layer,
+      transitionFunction = function(x) 0,
+      directions = 8
+    )
     transitionMatrix(tmp) <- sparseMatrix(i = ii, j = jj, x = 1 / xx)
     return(tmp)
   }
@@ -882,8 +896,8 @@ flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLaye
 #' movements are currently allowed.
 #'
 #'
-#' @param x RasterStack object with layers obtained from wind2raster
-#' function ("rWind" package) with direction and speed flow values.
+#' @param x A `SpatRaster` returned by `wind2raster()` with direction and speed
+#' layers, a legacy `RasterStack`, or a list of either type.
 #' @param fun A function to compute the cost to move between cells. The default
 #' is \code{cost.FMGS} from Felicísimo et al. (2008), see details.
 #' @param output This argument allows to select different kinds of output. "raw"
@@ -933,15 +947,16 @@ flow.dispersion_int <- function(stack, fun = cost.FMGS, output = "transitionLaye
 #'
 #' transitionMatrix(Conductance)
 #' image(transitionMatrix(Conductance))
-#' @importClassesFrom raster RasterLayer
-#' @importFrom raster ncell
-#' @importMethodsFrom raster as.matrix
+#' @importFrom raster raster
 #' @importFrom Matrix sparseMatrix
 #' @importFrom gdistance transition transitionMatrix<-
 #' @export flow.dispersion
 flow.dispersion <- function(x, fun = cost.FMGS, output = "transitionLayer", ...) {
-  if (inherits(x, "RasterStack")) {
+  if (inherits(x, "SpatRaster") || inherits(x, "Raster")) {
     return(flow.dispersion_int(x, fun = fun, output = output, ...))
+  }
+  if (!is.list(x)) {
+    stop("'x' must be a spatial raster or a list of spatial rasters", call. = FALSE)
   }
   lapply(x, flow.dispersion_int, fun = fun, output = output, ...)
 }
