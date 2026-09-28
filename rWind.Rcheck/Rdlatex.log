@@ -1,0 +1,455 @@
+Hmm ... looks like a package
+Converting parsed Rd's to LaTeX .
+Creating pdf output from LaTeX ...
+Aviso en texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  :
+  texi2dvi script/program not available, using emulation
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty))))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+No file Rd2.aux.
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd) [1{/var/lib/texmf/f
+onts/map/pdftex/updmap/pdftex.map}]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [2] [3] [4]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 270--276
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[5] [6]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 387--393
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[7] [8]
+Overfull \hbox (8.3873pt too wide) in paragraph at lines 496--500
+\T1/ptm/m/n/10 func-tion cre-ates a "sea_yyyy_mm_dd.csv" file that is down-load
+ed at the work di-rec-tory. If type="read-
+[9] (/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [10]
+[11] [12]
+Overfull \hbox (2.07675pt too wide) in paragraph at lines 679--690
+[]\T1/ptm/m/n/10 wind.dl down-loads wind data from the Global Fore-cast Sys-tem
+ (GFS) of the USA's Na-tional Weather
+
+Overfull \hbox (7.21582pt too wide) in paragraph at lines 679--690
+\T1/ptm/m/n/10 Ser-vice (NWS) (https://www.ncei.noaa.gov/products/weather-clima
+te-models/global-forecast). Wind
+[13] [14]
+Overfull \hbox (16.32568pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 Na-tional Weather Ser-vice (NWS) (https://www.ncei.noaa.gov/prod
+ucts/weather-climate-models/global-
+
+Overfull \hbox (186.02478pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 lated for Earth sur-face, at 10 m. More meta-data in-for-ma-tion
+ for cur-rent data: https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_glo
+bal.html
+
+Overfull \hbox (80.81728pt too wide) in paragraph at lines 843--846
+\T1/ptm/m/n/10 choose "csv", wind.dl cre-ate a a CSV file in your work di-rec-t
+ory named "wind_yyyy_mm_dd_tt.csv". 
+[15] [16] [17] [18]
+Overfull \hbox (36.68091pt too wide) in paragraph at lines 1050--1054
+[]\T1/zi4/m/n/10 library(lubridate) dt <- seq(ymd_h(paste(2015,1,3,00, sep="-")
+), ymd_h(paste(2015,1,3,21,
+[19] [20]
+No file Rd2.ind.
+[21] (./Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.terra::SpatRaster} has been referenced but does not exist, replaced by a f
+ixed one
+
+pdfTeX warning (dest): name{Rfn.as.POSIXct} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Rfn.as.Rul.datetime} has been referenced but does n
+ot exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/t
+imes/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (21 pages, 123713 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2022/dev] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (74 entries accepted, 0 rejected).
+Sorting entries....done (515 comparisons).
+Generating output file Rd2.ind....done (109 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty))))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+(./Rd2.aux) (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(./Rd2.out) (./Rd2.out)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd) (./Rd2.toc [1{/var/
+lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [2] [3] [4] [5]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 270--276
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[6] [7]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 387--393
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[8] [9]
+Overfull \hbox (8.3873pt too wide) in paragraph at lines 496--500
+\T1/ptm/m/n/10 func-tion cre-ates a "sea_yyyy_mm_dd.csv" file that is down-load
+ed at the work di-rec-tory. If type="read-
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [10] [11]
+[12]
+Overfull \hbox (2.07675pt too wide) in paragraph at lines 679--690
+[]\T1/ptm/m/n/10 wind.dl down-loads wind data from the Global Fore-cast Sys-tem
+ (GFS) of the USA's Na-tional Weather
+
+Overfull \hbox (7.21582pt too wide) in paragraph at lines 679--690
+\T1/ptm/m/n/10 Ser-vice (NWS) (https://www.ncei.noaa.gov/products/weather-clima
+te-models/global-forecast). Wind
+[13] [14]
+Overfull \hbox (16.32568pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 Na-tional Weather Ser-vice (NWS) (https://www.ncei.noaa.gov/prod
+ucts/weather-climate-models/global-
+
+Overfull \hbox (186.02478pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 lated for Earth sur-face, at 10 m. More meta-data in-for-ma-tion
+ for cur-rent data: https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_glo
+bal.html
+[15]
+Overfull \hbox (80.81728pt too wide) in paragraph at lines 843--846
+\T1/ptm/m/n/10 choose "csv", wind.dl cre-ate a a CSV file in your work di-rec-t
+ory named "wind_yyyy_mm_dd_tt.csv". 
+[16] [17] [18]
+Overfull \hbox (36.68091pt too wide) in paragraph at lines 1050--1054
+[]\T1/zi4/m/n/10 library(lubridate) dt <- seq(ymd_h(paste(2015,1,3,00, sep="-")
+), ymd_h(paste(2015,1,3,21,
+[19] [20] (./Rd2.ind [21]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 40.
+
+[22]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.terra::SpatRaster} has been referenced but does not exist, replaced by a f
+ixed one
+
+pdfTeX warning (dest): name{Rfn.as.POSIXct} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Rfn.as.Rul.datetime} has been referenced but does n
+ot exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (22 pages, 141186 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2022/dev] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (74 entries accepted, 0 rejected).
+Sorting entries....done (519 comparisons).
+Generating output file Rd2.ind....done (109 lines written, 2 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./Rd2.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21>
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe)
+(/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+(/usr/share/texlive/texmf-dist/tex/generic/xkeyval/keyval.tex)))))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty))))
+(/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+(./Rd2.aux) (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty))
+(./Rd2.out) (./Rd2.out)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd) (./Rd2.toc [1{/var/
+lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [2] [3] [4] [5]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 270--276
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[6] [7]
+Overfull \hbox (2.7973pt too wide) in paragraph at lines 387--393
+\T1/ptm/m/n/10 cells in a raster hav-ing into ac-count flow speed and di-rec-ti
+on ob-tained from wind.fit func-tion("rWind"
+[8] [9]
+Overfull \hbox (8.3873pt too wide) in paragraph at lines 496--500
+\T1/ptm/m/n/10 func-tion cre-ates a "sea_yyyy_mm_dd.csv" file that is down-load
+ed at the work di-rec-tory. If type="read-
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [10] [11]
+[12]
+Overfull \hbox (2.07675pt too wide) in paragraph at lines 679--690
+[]\T1/ptm/m/n/10 wind.dl down-loads wind data from the Global Fore-cast Sys-tem
+ (GFS) of the USA's Na-tional Weather
+
+Overfull \hbox (7.21582pt too wide) in paragraph at lines 679--690
+\T1/ptm/m/n/10 Ser-vice (NWS) (https://www.ncei.noaa.gov/products/weather-clima
+te-models/global-forecast). Wind
+[13] [14]
+Overfull \hbox (16.32568pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 Na-tional Weather Ser-vice (NWS) (https://www.ncei.noaa.gov/prod
+ucts/weather-climate-models/global-
+
+Overfull \hbox (186.02478pt too wide) in paragraph at lines 798--808
+\T1/ptm/m/n/10 lated for Earth sur-face, at 10 m. More meta-data in-for-ma-tion
+ for cur-rent data: https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_glo
+bal.html
+[15]
+Overfull \hbox (80.81728pt too wide) in paragraph at lines 843--846
+\T1/ptm/m/n/10 choose "csv", wind.dl cre-ate a a CSV file in your work di-rec-t
+ory named "wind_yyyy_mm_dd_tt.csv". 
+[16] [17] [18]
+Overfull \hbox (36.68091pt too wide) in paragraph at lines 1050--1054
+[]\T1/zi4/m/n/10 library(lubridate) dt <- seq(ymd_h(paste(2015,1,3,00, sep="-")
+), ymd_h(paste(2015,1,3,21,
+[19] [20] (./Rd2.ind [21]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 40.
+
+[22]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.terra::SpatRaster} has been referenced but does not exist, replaced by a f
+ixed one
+
+pdfTeX warning (dest): name{Rfn.as.POSIXct} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Rfn.as.Rul.datetime} has been referenced but does n
+ot exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (22 pages, 141156 bytes).
+Transcript written on Rd2.log.
+Saving output to ‘rWind-manual.pdf’ ...
+Done
+You may want to clean up by 'rm -Rf /tmp/RtmpvdJFQS/Rd2pdf15366310a8c7d'

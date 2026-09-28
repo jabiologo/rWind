@@ -337,7 +337,7 @@ read.rWind <- function(file) {
 #' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
 #' information for current data:
-#' https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html
+#' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.html
 #' Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
 #' archive.
 #'
@@ -382,7 +382,7 @@ read.rWind <- function(file) {
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
-#' http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
+#' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
 #' @keywords ~gfs ~wind
 #' @examples
 #'
@@ -1156,8 +1156,8 @@ wind.mean <- function(x) {
 
 ###############################################################################
 # Some new and experimental functions to download OSCAR Sea Surface Velocity data
-# https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.html
-# https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+# https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar.html
+# https://doi.org/10.5067/OSCAR-03D01
 # This is a beta version, please use it carefully
 
 oscar.fit_int <- function(tmpx) {
@@ -1172,19 +1172,61 @@ oscar.fit_int <- function(tmpx) {
   speed <- sqrt((tmpx[, 4] * tmpx[, 4]) + (tmpx[, 5] * tmpx[, 5]))
   ######
   names(tmpx) <- c("time", "lat", "lon", "u", "v")
+  tmpx$lon <- tmpx$lon %% 360
+  tmpx$lon[tmpx$lon >= 180] <- tmpx$lon[tmpx$lon >= 180] - 360
   res <- cbind(tmpx, dir = direction, speed = speed)
   res <- res[with(res, order(-lat)), ]
   res[, 1] <- ymd_hms(res[, 1], truncated = 3)
   return(res)
 }
 
+.oscar_url <- function(date, lon1, lon2, lat1, lat2) {
+  limits <- c(lon1, lon2, lat1, lat2)
+  if (length(limits) != 4L || any(!is.finite(limits))) {
+    stop("Longitude and latitude limits must be four finite scalars", call. = FALSE)
+  }
+  if (any(c(lon1, lon2) < -180 | c(lon1, lon2) > 360)) {
+    stop("Longitudes must be between -180 and 360 degrees", call. = FALSE)
+  }
+  if (lat1 > 80 || lat2 < -80 || lat1 < lat2) {
+    stop("OSCAR latitude limits must satisfy 80 >= lat1 >= lat2 >= -80",
+      call. = FALSE
+    )
+  }
+
+  # jplOscar stores a continuous 20--420 degree longitude axis. Moving values
+  # below 20 degrees into its repeated section avoids splitting most extents.
+  oscar_lon <- function(x) {
+    x <- x %% 360
+    ifelse(x < 20, x + 360, x)
+  }
+  west <- oscar_lon(lon1)
+  east <- oscar_lon(lon2)
+  if (east <= west) east <- east + 360
+  if (east > 420) {
+    stop("The requested longitude interval cannot be represented by OSCAR",
+      call. = FALSE
+    )
+  }
+
+  stamp <- format(date, "%Y-%m-%dT00:00:00Z", tz = "UTC")
+  subset <- paste0(
+    "[(", stamp, ")][(15.0)][(", lat1, "):1:(", lat2,
+    ")][(", west, "):1:(", east, ")]"
+  )
+  paste0(
+    "https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar.csv?",
+    "u", subset, ",v", subset
+  )
+}
+
 #' OSCAR Sea currents data download
 #'
 #' seaOscar.dl downloads sea currents data from the Ocean Surface Current Analyses Real-time (OSCAR)
-#' (https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html).
+#' (PO.DAAC, \doi{10.5067/OSCAR-03D01}).
 #' Geospatial resolution is 0.33 degrees and sea currents are calculated for
-#' 15 m depth. CAUTION: OSCAR database has no data between 0 and 20 longitude
-#' degrees. You can use SCUD database instead (coming soon...)
+#' 15 m depth. Longitudes in the usual -180 to 180 notation are translated to
+#' the 20 to 420 degree axis used by the service.
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "sea_yyyy_mm_dd.csv" file
@@ -1208,9 +1250,7 @@ oscar.fit_int <- function(tmpx) {
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
-#' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
-#'
-#' https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html
+#' \doi{10.5067/OSCAR-03D01}
 #' @keywords ~currents ~sea
 #' @examples
 #'
@@ -1227,62 +1267,31 @@ oscar.fit_int <- function(tmpx) {
 
 seaOscar.dl <- function(yyyy, mm, dd, lon1, lon2, lat1, lat2, type = "read-data", trace = 1) {
   type <- match.arg(type, c("read-data", "csv"))
-  mm <- sprintf("%02d", mm)
-  dd <- sprintf("%02d", dd)
-  dt <- ymd(paste(yyyy, mm, dd, sep = "-"))
+  dt <- suppressWarnings(ymd(paste(yyyy, mm, dd, sep = "-")))
+  if (length(dt) != 1L || is.na(dt)) {
+    stop("'yyyy', 'mm', and 'dd' must define one valid date", call. = FALSE)
+  }
   yyyy_c <- year(dt)
   mm_c <- sprintf("%02d", month(dt))
   dd_c <- sprintf("%02d", day(dt))
-  # tt_c <- sprintf("%02d", hour(dt))
-  testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
-  print(testDate)
   if (trace) {
-    print(paste(ymd(paste(yyyy_c, mm_c, dd_c, sep = "-")),
-      "downloading...",
-      sep = " "
-    ))
+    message(format(dt), " downloading...")
   }
-  tryCatch(
-    {
-      as.Date(testDate)
-      url_dir <- paste("https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplOscar_LonPM180.csv?u[(",
-        yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
-        "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
-        ")][(", lon1, "):1:(", lon2, ")],v[(", yyyy_c, "-", mm_c, "-", dd_c,
-        "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(",
-        lat1, "):1:(", lat2, ")][(", lon1, "):1:(", lon2, ")],um[(",
-        yyyy_c, "-", mm_c, "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c,
-        "-", dd_c, "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(",
-        lat2, ")][(", lon1, "):1:(", lon2, ")],vm[(", yyyy_c, "-", mm_c,
-        "-", dd_c, "T00:00:00Z):1:(", yyyy_c, "-", mm_c, "-", dd_c,
-        "T00:00:00Z)][(15.0):1:(15.0)][(", lat1, "):1:(", lat2,
-        ")][(", lon1, "):1:(", lon2, ")]",
-        sep = ""
-      )
-
-      tmp <- read.csv(url_dir,
-        header = FALSE, skip = 2,
-        stringsAsFactors = FALSE
-      )
-      tmp <- oscar.fit_int(tmp)
-      if (type == "csv") {
-        fname <- paste("oscar_", yyyy_c, "_", mm_c, "_",
-          dd_c, "_", ".csv",
-          sep = ""
-        )
-        write.table(tmp, fname,
-          sep = ",", row.names = FALSE,
-          col.names = TRUE, quote = FALSE
-        )
-      }
-    },
+  url_dir <- .oscar_url(dt, lon1, lon2, lat1, lat2)
+  tmp <- tryCatch(
+    read.csv(url_dir, header = FALSE, skip = 2, stringsAsFactors = FALSE),
     error = function(e) {
-      cat("ERROR: database not found. Please, check server\n                      connection, date or geographical ranges \n")
-    },
-    warning = function(w) {
-      cat("ERROR: database not found. Please, check server\n                        connection, date or geographical ranges  \n")
+      stop("OSCAR data are unavailable: ", conditionMessage(e), call. = FALSE)
     }
   )
+  tmp <- oscar.fit_int(tmp)
+  if (type == "csv") {
+    fname <- paste0("oscar_", yyyy_c, "_", mm_c, "_", dd_c, ".csv")
+    write.table(tmp, fname,
+      sep = ",", row.names = FALSE,
+      col.names = TRUE, quote = FALSE
+    )
+  }
   class(tmp) <- c("rWind", "data.frame")
-  return(tmp)
+  tmp
 }

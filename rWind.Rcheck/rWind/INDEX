@@ -1,7 +1,7 @@
 arrowDir                Arrow direction fitting for Arrowhead function
                         from "shape" package
-cost.active             Relative cost of active movement through a flow
 cost.FMGS               Compute flow-based cost or conductance
+cost.active             Relative cost of active movement through a flow
 rWind-package           Download, edit and include wind and sea
                         currents data in ecological and evolutionary
                         analysis

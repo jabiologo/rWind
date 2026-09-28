@@ -61,7 +61,7 @@ Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 and wind is calculated for Earth surface, at 10 m. More metadata
 information for current data:
-https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html
+https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.html
 Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
 archive.
 }
@@ -104,7 +104,7 @@ tidy(ww)
 \references{
 http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 
-http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
+https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
 }
 \seealso{
 \code{\link{wind.mean}}, \code{\link{wind2raster}},

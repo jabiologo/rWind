@@ -2,24 +2,25 @@
 % Please edit documentation in R/rWind-package.R
 \docType{package}
 \name{rWind-package}
-\alias{rWind-package}
 \alias{rWind}
+\alias{rWind-package}
 \title{Download, edit and include wind and sea currents data in ecological and evolutionary analysis}
 \description{
-rWind contain tools for downloading, editing and transforming wind and sea currents data from
-Global Forecast System (GFS) and Ocean Surface Current Analyses Real-time (OSCAR). It also allows to use wind and sea currents data to compute the
-minimum cost path from wind speed and direction to perform
+rWind contains tools for downloading, editing and transforming wind and sea currents data from
+the Global Forecast System (GFS) and Ocean Surface Current Analyses Real-time (OSCAR). It also allows wind and sea currents data to be used to compute
+minimum-cost paths from flow speed and direction and to perform
 connectivity analysis.
 }
 \details{
 The complete list of functions can be displayed with \code{library(help =
 rWind)}. For more information, please check:
-http://allthiswasfield.blogspot.com.es/
+\url{https://allthiswasfield.blogspot.com/}.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://allthiswasfield.blogspot.com.es/}
+  \item \url{https://github.com/jabiologo/rWind}
+  \item \url{https://allthiswasfield.blogspot.com/}
   \item Report bugs at \url{https://github.com/jabiologo/rWind/issues}
 }
 

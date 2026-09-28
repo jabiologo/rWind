@@ -9,8 +9,12 @@ Authors@R: c(person("Javier", "Fernández-López", email="jflopez.bio@gmail.com"
     person("Klaus", "Schliep", email="klaus.schliep@gmail.com", role = c("aut")),
     person("Yurena", "Arjona", email="yurenaaf@gmail.com", role = c("aut")))
 Maintainer: Javier Fernández-López <jflopez.bio@gmail.com>
-Description: Tools for download and manage surface wind and sea currents data from the Global Forecasting System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast> and to compute connectivity between locations.
-URL: http://allthiswasfield.blogspot.com.es/
+Description: Tools to download and manage surface wind and sea-current data
+    from the Global Forecast System
+    <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>
+    and to compute flow-sensitive connectivity between locations.
+URL: https://github.com/jabiologo/rWind,
+        https://allthiswasfield.blogspot.com/
 License: GPL (>=3)
 LazyData: true
 Imports: raster (>= 2.5-8), terra, gdistance, Matrix, lubridate
@@ -20,7 +24,7 @@ Depends: R (>= 3.5)
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 NeedsCompilation: no
-Packaged: 2026-09-28 11:15:07 UTC; javifl
+Packaged: 2026-09-28 12:53:02 UTC; javifl
 Author: Javier Fernández-López [aut, cre],
   Klaus Schliep [aut],
   Yurena Arjona [aut]

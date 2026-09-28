@@ -6,6 +6,12 @@ knitr::opts_chunk$set(
   fig.height = 6
 )
 suppressPackageStartupMessages(library(rWind))
+if (utils::packageVersion("rWind") < "1.2.0") {
+  stop(
+    "This vignette requires rWind >= 1.2.0. Install the current package ",
+    "source before knitting it."
+  )
+}
 suppressPackageStartupMessages(library(terra))
 suppressPackageStartupMessages(library(gdistance))
 

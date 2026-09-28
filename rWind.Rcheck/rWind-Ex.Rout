@@ -4355,7 +4355,7 @@ max values  : 359.446435, 9.887087
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  22.294 0.521 22.945 0 0 
+Time elapsed:  13.188 0.277 13.467 0 0 
 > grDevices::dev.off()
 null device 
           1 

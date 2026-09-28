@@ -19,13 +19,13 @@ Type 'q()' to quit R.
 > suppressPackageStartupMessages(library(rWind))
 > 
 > test_check("rWind")
-[ FAIL 0 | WARN 0 | SKIP 1 | PASS 39 ]
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 47 ]
 
 ══ Skipped tests (1) ═══════════════════════════════════════════════════════════
-• On CRAN (1): 'test_rWind.R:173:3'
+• On CRAN (1): 'test_rWind.R:201:3'
 
-[ FAIL 0 | WARN 0 | SKIP 1 | PASS 39 ]
+[ FAIL 0 | WARN 0 | SKIP 1 | PASS 47 ]
 > 
 > proc.time()
    user  system elapsed 
- 14.150   0.890  14.492 
+ 10.973   0.870  11.098 

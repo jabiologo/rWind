@@ -168,6 +168,34 @@ test_that("invalid GFS times and extents fail before a network request", {
 })
 
 
+test_that("OSCAR requests use the current ERDDAP dataset", {
+  url <- rWind:::.oscar_url(
+    as.Date("2014-01-01"), -93, -88, 2, -3
+  )
+  expect_match(url, "griddap/jplOscar[.]csv", fixed = FALSE)
+  expect_match(url, "[(]267[)]:1:[(]272[)]")
+  expect_false(grepl("LonPM180", url, fixed = TRUE))
+
+  expect_error(
+    rWind:::.oscar_url(as.Date("2014-01-01"), -93, -88, -3, 2),
+    "latitude limits"
+  )
+  expect_error(
+    rWind:::.oscar_url(as.Date("2014-01-01"), -200, -88, 2, -3),
+    "Longitudes"
+  )
+
+  response <- data.frame(
+    time = "2014-01-01T00:00:00Z", depth = 15, latitude = 0,
+    longitude = 267, u = 1, v = 0
+  )
+  fitted <- rWind:::oscar.fit_int(response)
+  expect_equal(fitted$lon, -93)
+  expect_equal(fitted$dir, 90)
+  expect_equal(fitted$speed, 1)
+})
+
+
 # may works in future testthat version from https://github.com/r-lib/testthat
 test_that("historical downloading works through NOAA/NCEI", {
   skip_if_offline()
