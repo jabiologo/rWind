@@ -7,7 +7,7 @@
 wind.fit_int(tmpx)
 }
 \arguments{
-\item{X}{downloaded data by wind.dl function from "rWind" package.}
+\item{tmpx}{downloaded data produced by \code{wind.dl}.}
 }
 \value{
 data.frame

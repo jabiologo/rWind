@@ -16,6 +16,14 @@ The complete list of functions can be displayed with \code{library(help =
 rWind)}. For more information, please check:
 http://allthiswasfield.blogspot.com.es/
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://allthiswasfield.blogspot.com.es/}
+  \item Report bugs at \url{https://github.com/jabiologo/rWind/issues}
+}
+
+}
 \author{
 Javier Fernández-López
 

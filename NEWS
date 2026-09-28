@@ -1,3 +1,16 @@
+rWind v1.1.8
+==============
+
+o wind.dl and wind.dl_2 now select the data provider according to the
+  requested date. PacIOOS is used for its current coverage and the official
+  NOAA/NCEI GFS 0.5 degree archive is used for older dates.
+
+o invalid GFS hours are rejected before contacting a server, and unavailable
+  data now produce an informative error instead of a secondary "tmp not
+  found" error.
+
+o fixed duplicate direction and speed columns in wind.dl_2(type = "csv").
+
 rWind v1.1.7 (Release date: 2021-10-18)
 ==============
 

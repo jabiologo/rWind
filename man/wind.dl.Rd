@@ -15,7 +15,8 @@ wind.dl(
   lat1,
   lat2,
   type = "read-data",
-  trace = 1
+  trace = 1,
+  source = c("auto", "pacioos", "ncei")
 )
 
 read.rWind(file)
@@ -45,6 +46,10 @@ directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
 
+\item{source}{Data provider. \code{"auto"} selects PacIOOS for dates in its
+current coverage and NOAA/NCEI for older dates. Use \code{"pacioos"} or
+\code{"ncei"} to force one provider.}
+
 \item{file}{file name of the saved ".csv" files.}
 }
 \value{
@@ -59,8 +64,11 @@ USA's National Weather Service (NWS)
 Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 and wind is calculated for Earth surface, at 10 m. More metadata
-information:
+information for the current PacIOOS data:
 https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
+Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
+archive:
+https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00634
 }
 \details{
 The output type is determined by type="csv" or type="read-data". If
@@ -71,7 +79,8 @@ an R object (data.frame) is created.
 \note{
 Longitude coordinate are provided by GFS dataset in 0/360 notation
 and transformed internally into -180/180. Wind "dir" denotes where the
-wind is going (toward), not from where is coming.
+wind is going (toward), not from where is coming. With \code{source = "auto"},
+dates before the current PacIOOS coverage are requested from NOAA/NCEI.
 }
 \examples{
 

@@ -5,7 +5,16 @@
 \alias{[[.rWind_series}
 \title{Wind-data download}
 \usage{
-wind.dl_2(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1)
+wind.dl_2(
+  time,
+  lon1,
+  lon2,
+  lat1,
+  lat2,
+  type = "read-data",
+  trace = 1,
+  source = c("auto", "pacioos", "ncei")
+)
 
 \method{[[}{rWind_series}(x, i, exact = TRUE)
 }
@@ -29,6 +38,10 @@ directory named "wind_yyyy_mm_dd_tt.csv".}
 
 \item{trace}{if trace = 1 (by default) track downloaded files}
 
+\item{source}{Data provider. \code{"auto"} selects PacIOOS for dates in its
+current coverage and NOAA/NCEI for older dates. Use \code{"pacioos"} or
+\code{"ncei"} to force one provider.}
+
 \item{x}{object from which to extract element(s).}
 
 \item{i}{indices specifying elements to extract.}
@@ -47,8 +60,10 @@ wind.dl_2 downloads time-series wind data from the Global Forecast System
 Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 and wind is calculated for Earth surface, at 10 m. More metadata
-information:
-http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+information for current data:
+https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html
+Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
+archive.
 }
 \details{
 To get the same format as wind.dl, you should run \code{tidy} function from
@@ -65,7 +80,9 @@ U and V vector components allow you to create wind averages or tendencies
 for each coordinate at the study area. Longitude coordinates are
 provided by GFS dataset in 0/360 notation and transformed internally into
 -180/180. "dir" denotes where the
-wind/sea current is going (toward), not from where is coming.
+wind/sea current is going (toward), not from where is coming. With
+\code{source = "auto"}, dates before the current PacIOOS coverage are requested
+from NOAA/NCEI.
 }
 \examples{
 
@@ -91,7 +108,8 @@ http://oos.soest.hawaii.edu/erddap/griddap/NCEP_Global_Best.graph
 }
 \seealso{
 \code{\link{wind.mean}}, \code{\link{wind2raster}},
-\code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
+\code{\link{wind.dl}}, \code{\link[lubridate]{as_datetime}},
+\code{\link{as.POSIXct}}
 }
 \author{
 Javier Fernández-López (jflopez.bio@gmail.com)

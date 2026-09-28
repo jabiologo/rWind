@@ -17,6 +17,7 @@ https://onlinelibrary.wiley.com/doi/full/10.1111/ecog.03730
 
 NOAA/NCEP Global Forecast System (GFS) Atmospheric Model colection (wind data)  
 * <https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html>
+* Historical GFS 0.5 degree data: <https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00634>
 
 Ocean Surface Current Analyses Real-time (OSCAR) (sea currents data)  
 * <https://coastwatch.pfeg.noaa.gov/erddap/info/jplOscar_LonPM180/index.html><br />
@@ -110,6 +111,5 @@ legend("toprigh", legend = c("From Spain to Morocco", "From Morocco to Spain"),
   
   
 For more information and examples, you can check [my blog](http://allthiswasfield.blogspot.com/2018/11/plotting-wind-highways-using-rwind.html)
-
 
 

@@ -20,6 +20,210 @@ circ.mean <- function(deg) {
 }
 
 
+# Wind data providers ------------------------------------------------------
+
+.wind_pacioos_start <- as.POSIXct("2022-12-01 12:00:00", tz = "UTC")
+
+.wind_validate_time <- function(time) {
+  dt <- as_datetime(time, tz = "UTC")
+  if (!length(dt) || anyNA(dt)) {
+    stop("'time' must contain valid dates or date-times", call. = FALSE)
+  }
+
+  hh <- as.integer(format(dt, "%H", tz = "UTC"))
+  mm <- as.integer(format(dt, "%M", tz = "UTC"))
+  ss <- as.numeric(format(dt, "%OS", tz = "UTC"))
+  if (any(hh %% 3 != 0 | mm != 0 | ss != 0)) {
+    stop(
+      "GFS wind data are available at 3-hour intervals (00, 03, ..., 21 UTC)",
+      call. = FALSE
+    )
+  }
+  dt
+}
+
+.wind_validate_extent <- function(lon1, lon2, lat1, lat2) {
+  extent <- c(lon1, lon2, lat1, lat2)
+  if (length(extent) != 4L || any(!is.finite(extent))) {
+    stop("Longitude and latitude limits must be four finite scalars", call. = FALSE)
+  }
+  if (any(c(lon1, lon2) < -180 | c(lon1, lon2) > 360)) {
+    stop("Longitudes must be between -180 and 360 degrees", call. = FALSE)
+  }
+  if (lat1 < -90 || lat2 > 90 || lat1 > lat2) {
+    stop("Latitude limits must satisfy -90 <= lat1 <= lat2 <= 90", call. = FALSE)
+  }
+  invisible(TRUE)
+}
+
+.wind_longitude_parts <- function(lon1, lon2) {
+  west <- lon1 %% 360
+  east <- lon2 %% 360
+  if (west > 180 && east < 180) {
+    return(list(c(west, 359.5), c(0, east)))
+  }
+  list(c(west, east))
+}
+
+.wind_pacioos_urls <- function(time, lon1, lon2, lat1, lat2) {
+  stamp <- format(time, "%Y-%m-%dT%H:00:00Z", tz = "UTC")
+  parts <- .wind_longitude_parts(lon1, lon2)
+  vapply(parts, function(part) {
+    paste0(
+      "https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?",
+      "ugrd10m[(", stamp, ")][(", lat1, "):(", lat2, ")][(",
+      part[1], "):(", part[2], ")],",
+      "vgrd10m[(", stamp, ")][(", lat1, "):(", lat2, ")][(",
+      part[1], "):(", part[2], ")]"
+    )
+  }, character(1))
+}
+
+.wind_download_pacioos <- function(time, lon1, lon2, lat1, lat2) {
+  urls <- .wind_pacioos_urls(time, lon1, lon2, lat1, lat2)
+  pieces <- lapply(urls, function(url) {
+    read.csv(url, header = FALSE, skip = 2, stringsAsFactors = FALSE)
+  })
+  wind.fit_int(do.call(rbind, pieces))
+}
+
+.wind_ncei_files <- function(time) {
+  day <- format(time, "%Y%m%d", tz = "UTC")
+  month <- format(time, "%Y%m", tz = "UTC")
+  requested_hour <- as.integer(format(time, "%H", tz = "UTC"))
+  cycle_hour <- 6L * (requested_hour %/% 6L)
+  forecast_hour <- requested_hour - cycle_hour
+  cycle <- sprintf("%02d00", cycle_hour)
+  forecast <- sprintf("%03d", forecast_hour)
+
+  old <- paste0(
+    "model-gfs-g4-anl-files-old/", month, "/", day,
+    "/gfsanl_4_", day, "_", cycle, "_", forecast, ".grb2"
+  )
+  current <- paste0(
+    "model-gfs-g4-anl-files/", month, "/", day,
+    "/gfs_4_", day, "_", cycle, "_", forecast, ".grb2"
+  )
+
+  # The NCEI migration took place during May 2020 and the catalogues overlap
+  # for part of that month. Prefer the likely catalogue, but try both.
+  if (time < as.POSIXct("2020-05-15", tz = "UTC")) {
+    c(old, current)
+  } else {
+    c(current, old)
+  }
+}
+
+.wind_ncei_url <- function(file, time, lon, lat1, lat2) {
+  query <- c(
+    "var=u-component_of_wind_height_above_ground",
+    "var=v-component_of_wind_height_above_ground",
+    paste0("north=", lat2),
+    paste0("south=", lat1),
+    paste0("west=", lon[1]),
+    paste0("east=", lon[2]),
+    "horizStride=1",
+    paste0("time=", format(time, "%Y-%m-%dT%H:00:00Z", tz = "UTC")),
+    "vertCoord=10",
+    "accept=netcdf3"
+  )
+  paste0(
+    "https://www.ncei.noaa.gov/thredds/ncss/grid/", file, "?",
+    paste(query, collapse = "&")
+  )
+}
+
+.wind_read_ncei <- function(file, time) {
+  x <- suppressWarnings(terra::rast(file))
+  values <- as.data.frame(x, xy = TRUE, na.rm = FALSE)
+  u <- grep("^u-component", names(values))
+  v <- grep("^v-component", names(values))
+  if (length(u) != 1L || length(v) != 1L) {
+    stop("The NOAA/NCEI response did not contain 10 m U and V wind data")
+  }
+  data.frame(
+    time = rep(time, nrow(values)),
+    lat = values$y,
+    lon = values$x,
+    ugrd10m = values[[u]],
+    vgrd10m = values[[v]]
+  )
+}
+
+.wind_download_ncei <- function(time, lon1, lon2, lat1, lat2) {
+  files <- .wind_ncei_files(time)
+  parts <- .wind_longitude_parts(lon1, lon2)
+
+  for (file in files) {
+    pieces <- vector("list", length(parts))
+    complete <- TRUE
+    for (i in seq_along(parts)) {
+      destination <- tempfile(fileext = ".nc")
+      url <- .wind_ncei_url(file, time, parts[[i]], lat1, lat2)
+      status <- tryCatch(
+        suppressWarnings(download.file(url, destination, quiet = TRUE, mode = "wb")),
+        error = function(e) 1L
+      )
+      if (!identical(status, 0L) || !file.exists(destination) ||
+          file.info(destination)$size == 0) {
+        unlink(destination)
+        complete <- FALSE
+        break
+      }
+      pieces[[i]] <- tryCatch(
+        .wind_read_ncei(destination, time),
+        error = function(e) NULL
+      )
+      unlink(destination)
+      if (is.null(pieces[[i]])) {
+        complete <- FALSE
+        break
+      }
+    }
+    if (complete) {
+      return(wind.fit_int(do.call(rbind, pieces)))
+    }
+  }
+  stop("NOAA/NCEI has no matching archived GFS data", call. = FALSE)
+}
+
+.wind_fetch <- function(time, lon1, lon2, lat1, lat2,
+                        source = c("auto", "pacioos", "ncei")) {
+  source <- match.arg(source)
+  providers <- switch(source,
+    pacioos = "pacioos",
+    ncei = "ncei",
+    auto = if (time >= .wind_pacioos_start) c("pacioos", "ncei") else "ncei"
+  )
+  errors <- character()
+
+  for (provider in providers) {
+    result <- tryCatch(
+      if (provider == "pacioos") {
+        .wind_download_pacioos(time, lon1, lon2, lat1, lat2)
+      } else {
+        .wind_download_ncei(time, lon1, lon2, lat1, lat2)
+      },
+      error = function(e) e
+    )
+    if (!inherits(result, "error")) {
+      class(result) <- c("rWind", "data.frame")
+      return(list(data = result, source = provider))
+    }
+    errors <- c(errors, paste0(provider, ": ", conditionMessage(result)))
+  }
+
+  stop(
+    paste0(
+      "Wind data are unavailable for ",
+      format(time, "%Y-%m-%d %H:%M UTC", tz = "UTC"), ". ",
+      paste(errors, collapse = "; ")
+    ),
+    call. = FALSE
+  )
+}
+
+
 #' Wind-data download
 #'
 #' wind.dl downloads wind data from the Global Forecast System (GFS) of the
@@ -28,8 +232,11 @@ circ.mean <- function(deg) {
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 #' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
-#' information:
+#' information for the current PacIOOS data:
 #' https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.graph
+#' Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
+#' archive:
+#' https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00634
 #'
 #' The output type is determined by type="csv" or type="read-data". If
 #' type="csv" is selected, the function creates a "wind_yyyy_mm_dd_tt.csv" file
@@ -50,13 +257,17 @@ circ.mean <- function(deg) {
 #' object. If you choose "csv", wind.dl create a a CSV file in your working
 #' directory named "wind_yyyy_mm_dd_tt.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
+#' @param source Data provider. `"auto"` selects PacIOOS for dates in its
+#' current coverage and NOAA/NCEI for older dates. Use `"pacioos"` or
+#' `"ncei"` to force one provider.
 #' @param file file name of the saved ".csv" files.
 #' @return "rWind" and "data.frame" class object or .csv file with U and V
 #' vector  components and wind direction and speed for each coordinate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
 #' @note Longitude coordinate are provided by GFS dataset in 0/360 notation
 #' and transformed internally into -180/180. Wind "dir" denotes where the
-#' wind is going (toward), not from where is coming.
+#' wind is going (toward), not from where is coming. With `source = "auto"`,
+#' dates before the current PacIOOS coverage are requested from NOAA/NCEI.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.dl_2}}, \code{\link{wind2raster}}
 #' @references
@@ -74,90 +285,31 @@ circ.mean <- function(deg) {
 #'
 #' @importFrom utils write.table read.csv download.file
 #' @importFrom lubridate ymd_h year month day hour
+#' @importFrom terra rast
 #' @rdname wind.dl
 #' @export wind.dl
 wind.dl <- function(yyyy, mm, dd, tt, lon1, lon2, lat1, lat2,
-                    type = "read-data", trace = 1) {
+                    type = "read-data", trace = 1,
+                    source = c("auto", "pacioos", "ncei")) {
   type <- match.arg(type, c("read-data", "csv"))
-
-  mm <- sprintf("%02d", mm)
-  dd <- sprintf("%02d", dd)
-  tt <- sprintf("%02d", tt)
-
-  # Create a sequence with all dates available between selected dates
-  dt <- ymd_h(paste(yyyy, mm, dd, tt, sep = "-"))
-
-  yyyy_c <- year(dt)
-  mm_c <- sprintf("%02d", month(dt))
-  dd_c <- sprintf("%02d", day(dt))
-  tt_c <- sprintf("%02d", hour(dt))
-
-  testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
-  print(testDate)
+  source <- match.arg(source)
+  .wind_validate_extent(lon1, lon2, lat1, lat2)
+  dt <- .wind_validate_time(ymd_h(paste(yyyy, mm, dd, tt, sep = "-")))
+  fetched <- .wind_fetch(dt, lon1, lon2, lat1, lat2, source = source)
+  tmp <- fetched$data
   if (trace) {
-    print(paste(ymd_h(paste(yyyy_c, mm_c, dd_c, tt_c, sep = "-")),
-      "downloading...",
-      sep = " "
-    ))
+    message(
+      format(dt, "%Y-%m-%d %H:%M UTC", tz = "UTC"),
+      " downloaded from ", fetched$source
+    )
   }
-
-  tryCatch(
-    {
-      as.Date(testDate)
-      if (lon1 < 0) {
-        lon1 <- 360 - (abs(lon1))
-      }
-      if (lon2 < 0) {
-        lon2 <- 360 - (abs(lon2))
-      }
-
-      if (lon1 > 180 && lon2 < 180) {
-        url_west <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-        url_east <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-        tmp <- rbind(
-          read.csv(url_west, header = FALSE, skip = 2, stringsAsFactors = FALSE),
-          read.csv(url_east, header = FALSE, skip = 2, stringsAsFactors = FALSE)
-        )
-        tmp <- wind.fit_int(tmp)
-
-        if (type == "csv") {
-          fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
-            "_", tt_c, ".csv",
-            sep = ""
-          )
-          write.table(tmp, fname,
-            sep = ",", row.names = FALSE,
-            col.names = TRUE, quote = FALSE
-          )
-        }
-      }
-
-      else {
-        url_dir <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-        tmp <- read.csv(url_dir, header = FALSE, skip = 2, stringsAsFactors = FALSE)
-        tmp <- wind.fit_int(tmp)
-        if (type == "csv") {
-          fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
-            "_", tt_c, ".csv",
-            sep = ""
-          )
-          write.table(tmp, fname,
-            sep = ",", row.names = FALSE,
-            col.names = TRUE, quote = FALSE
-          )
-        }
-      }
-    },
-    error = function(e) {
-      cat("ERROR: database not found. Please, check server
-                      connection, date or geographical ranges \n")
-    },
-    warning = function(w) {
-      cat("ERROR: database not found. Please, check server
-                        connection, date or geographical ranges  \n")
-    }
-  )
-  class(tmp) <- c("rWind", "data.frame")
+  if (type == "csv") {
+    fname <- paste0("wind_", format(dt, "%Y_%m_%d_%H", tz = "UTC"), ".csv")
+    write.table(tmp, fname,
+      sep = ",", row.names = FALSE,
+      col.names = TRUE, quote = FALSE
+    )
+  }
   return(tmp)
 }
 
@@ -184,8 +336,10 @@ read.rWind <- function(file) {
 #' Wind data are taken from NOAA/NCEP Global Forecast System (GFS) Atmospheric
 #' Model collection. Geospatial resolution is 0.5 degrees (approximately 50 km),
 #' and wind is calculated for Earth surface, at 10 m. More metadata
-#' information:
-#' http://oos.soest.hawaii.edu/erddap/info/NCEP_Global_Best/index.html
+#' information for current data:
+#' https://pae-paha.pacioos.hawaii.edu/erddap/info/ncep_global/index.html
+#' Historical data are obtained from the official NOAA/NCEI GFS 0.5 degree
+#' archive.
 #'
 #' To get the same format as wind.dl, you should run \code{tidy} function from
 #' wind.dl_2 output.
@@ -206,6 +360,9 @@ read.rWind <- function(file) {
 #' object. If you choose "csv", wind.dl create a a CSV file in your work
 #' directory named "wind_yyyy_mm_dd_tt.csv".
 #' @param trace if trace = 1 (by default) track downloaded files
+#' @param source Data provider. `"auto"` selects PacIOOS for dates in its
+#' current coverage and NOAA/NCEI for older dates. Use `"pacioos"` or
+#' `"ncei"` to force one provider.
 #' @return an object of class \code{rWind_series} or .csv file/s with
 #' U and V vector components and wind direction and speed for each coordinate
 #' in the study area defined by lon1/lon2 and lat1/lat2.
@@ -215,10 +372,13 @@ read.rWind <- function(file) {
 #' for each coordinate at the study area. Longitude coordinates are
 #' provided by GFS dataset in 0/360 notation and transformed internally into
 #' -180/180. "dir" denotes where the
-#' wind/sea current is going (toward), not from where is coming.
+#' wind/sea current is going (toward), not from where is coming. With
+#' `source = "auto"`, dates before the current PacIOOS coverage are requested
+#' from NOAA/NCEI.
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
 #' @seealso \code{\link{wind.mean}}, \code{\link{wind2raster}},
-#' \code{\link{wind.dl}}, \code{\link{as_datetime}}, \code{\link{as.POSIXct}}
+#' \code{\link{wind.dl}}, \code{\link[lubridate]{as_datetime}},
+#' \code{\link{as.POSIXct}}
 #' @references
 #' http://www.digital-geography.com/cloud-gis-getting-weather-data/#.WDOWmbV1DCL
 #'
@@ -245,108 +405,52 @@ read.rWind <- function(file) {
 #' @rdname wind.dl_2
 #' @export wind.dl_2
 #'
-wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1) {
+wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 1,
+                      source = c("auto", "pacioos", "ncei")) {
   type <- match.arg(type, c("read-data", "csv"))
-
-  dt <- as_datetime(time)
+  source <- match.arg(source)
+  .wind_validate_extent(lon1, lon2, lat1, lat2)
+  dt <- .wind_validate_time(time)
   # We will store each date and time in a list
   resultados <- vector("list", length(dt))
-  names(resultados) <- dt
+  names(resultados) <- format(dt, "%Y-%m-%d %H:%M:%S", tz = "UTC")
+  coordinates <- NULL
 
   for (id in seq_along(dt)) {
-    yyyy_c <- year(dt[id])
-    mm_c <- sprintf("%02d", month(dt[id]))
-    dd_c <- sprintf("%02d", day(dt[id]))
-    tt_c <- sprintf("%02d", hour(dt[id]))
-
-    testDate <- paste(yyyy_c, "-", mm_c, "-", dd_c, sep = "")
-
+    fetched <- .wind_fetch(dt[id], lon1, lon2, lat1, lat2, source = source)
+    tmp <- fetched$data
     if (trace) {
-      print(paste(ymd_h(paste(yyyy_c, mm_c, dd_c, tt_c, sep = "-")),
-        "downloading...",
-        sep = " "
-      ))
+      message(
+        format(dt[id], "%Y-%m-%d %H:%M UTC", tz = "UTC"),
+        " downloaded from ", fetched$source
+      )
     }
-
-    tryCatch(
-      {
-        as.Date(testDate)
-        if (lon1 < 0) {
-          lon1 <- 360 - (abs(lon1))
-        }
-        if (lon2 < 0) {
-          lon2 <- 360 - (abs(lon2))
-        }
-
-        if (lon1 > 180 && lon2 < 180) {
-          url_west <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(359.5)]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-          url_east <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(0.0):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-
-          tmp <- rbind(
-            read.csv(url_west,
-              header = FALSE, skip = 2,
-              stringsAsFactors = FALSE
-            ),
-            read.csv(url_east,
-              header = FALSE, skip = 2,
-              stringsAsFactors = FALSE
-            )
-          )
-          tmp <- wind.fit_int(tmp)
-          if (type == "csv") {
-            tmp <- wind.fit_int(tmp)
-            fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
-              "_", tt_c, ".csv",
-              sep = ""
-            )
-            write.table(tmp, fname,
-              sep = ",", row.names = FALSE,
-              col.names = TRUE, quote = FALSE
-            )
-          }
-          else {
-            resultados[[id]] <- tmp[, 4:5]
-          }
-        }
-
-        else {
-          url_dir <- paste("https://pae-paha.pacioos.hawaii.edu/erddap/griddap/ncep_global.csv?ugrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")],vgrd10m[(", yyyy_c, "-", mm_c, "-", dd_c, "T", tt_c, ":00:00Z)][(", lat1, "):(", lat2, ")][(", lon1, "):(", lon2, ")]&.draw=vectors&.vars=longitude|latitude|ugrd10m|vgrd10m&.color=0x000000", sep = "")
-          tmp <- read.csv(url_dir,
-            header = FALSE, skip = 2,
-            colClasses = c("POSIXct", "double", "double", "double", "double")
-          )
-          tmp <- wind.fit_int(tmp)
-          if (type == "csv") {
-            tmp <- wind.fit_int(tmp)
-            fname <- paste("wind_", yyyy_c, "_", mm_c, "_", dd_c,
-              "_", tt_c, ".csv",
-              sep = ""
-            )
-            write.table(tmp, fname,
-              sep = ",", row.names = FALSE,
-              col.names = TRUE, quote = FALSE
-            )
-          }
-          else {
-            resultados[[id]] <- tmp[, 4:5]
-          }
-        }
-      },
-      error = function(e) {
-        cat("ERROR: database not found. Please, check server
-                          connection, date or geographical ranges \n")
-      },
-      warning = function(w) {
-        cat("ERROR: database not found. Please, check server
-                            connection, date or geographical ranges  \n")
+    if (type == "csv") {
+      fname <- paste0(
+        "wind_", format(dt[id], "%Y_%m_%d_%H", tz = "UTC"), ".csv"
+      )
+      write.table(tmp, fname,
+        sep = ",", row.names = FALSE,
+        col.names = TRUE, quote = FALSE
+      )
+    } else {
+      current_coordinates <- tmp[, 2:3, drop = FALSE]
+      if (is.null(coordinates)) {
+        coordinates <- current_coordinates
+      } else if (!isTRUE(all.equal(coordinates, current_coordinates,
+        check.attributes = FALSE))) {
+        stop("Downloaded time points do not share the same spatial grid",
+          call. = FALSE
+        )
       }
-    )
+      resultados[[id]] <- tmp[, 4:5, drop = FALSE]
+    }
   }
 
   if (type == "csv") {
-    return(NULL)
+    return(invisible(NULL))
   }
-  attr(resultados, "lat_lon") <- tmp[, 2:3]
+  attr(resultados, "lat_lon") <- coordinates
   class(resultados) <- c("rWind_series", "list")
   return(resultados)
 }
@@ -374,7 +478,7 @@ wind.dl_2 <- function(time, lon1, lon2, lat1, lat2, type = "read-data", trace = 
 #' longitude notation obtained from GFS data into -180/180 longitude notation.
 #' Moreover, it cleans dates names and sorts the data by latitude.
 #'
-#' @param X downloaded data by wind.dl function from "rWind" package.
+#' @param tmpx downloaded data produced by \code{wind.dl}.
 #' @return data.frame
 #' @note This function is used internally by wind.dl
 #' @author Javier Fernández-López (jflopez.bio@@gmail.com)
