@@ -5,3 +5,4 @@
 ^cran-comments\.md$
 ^rWind\.Rcheck$
 ^rWind_.*\.tar\.gz$
+^development$
