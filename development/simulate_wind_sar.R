@@ -52,7 +52,7 @@ X <- focal(
 # Standardization makes the intercept and slope easy to interpret.
 values(X) <- as.numeric(scale(values(X)))
 names(X) <- "temperature"
-
+plot(X)
 
 # 3. Mean response determined by the environment --------------------------
 
@@ -85,11 +85,11 @@ wind_speed <- focal(
   fillvalue = NA
 )
 values(wind_speed) <- 4 + as.numeric(scale(values(wind_speed)))
-values(wind_speed) <- pmax(values(wind_speed), 0.5)
+values(wind_speed) <- 4 #pmax(values(wind_speed), 0.5)
 names(wind_speed) <- "speed"
 
 wind <- c(wind_direction, wind_speed)
-
+plot(wind)
 
 # 5. Directed connectivity matrix -----------------------------------------
 
@@ -135,8 +135,8 @@ stopifnot(max(abs(rowSums(W) - 1)) < 1e-10)
 # Because W is row-standardized, choosing abs(rho) < 1 gives a stable model.
 # sigma_innovation is the standard deviation of the independent local shocks.
 # It is not the marginal standard deviation of u after spatial propagation.
-rho <- 0.6
-sigma_innovation <- 1
+rho <- 0.7
+sigma_innovation <- 0.5
 
 epsilon <- rnorm(n, mean = 0, sd = sigma_innovation)
 
