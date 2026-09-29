@@ -204,7 +204,7 @@ test_that("historical downloading works through NOAA/NCEI", {
   dl2 <- wind.dl_2("2015/2/12 12:00:00", -7, -4, 34.5, 37.5,
     trace = 0
   )
-  reference <- readRDS(test_path("../../vignettes/w.rds"))
+  reference <- readRDS(test_path("fixtures", "historical_wind.rds"))
   expect_equal(dl1, dl2[[1]])
   expect_equal(dl1, reference, tolerance = 1e-6, check.attributes = FALSE)
 })
